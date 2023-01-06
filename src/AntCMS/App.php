@@ -1,5 +1,6 @@
 <?php
-use Michelf\Markdown;
+namespace AntCMS;
+use AntCMS\AntMarkdown;
 
 class AntCMS {
     public function renderPage($page, $params = null){
@@ -7,14 +8,14 @@ class AntCMS {
         if(!$content){
             $this->renderException("404");
         } else {
-            echo Markdown::defaultTransform($content);
+            echo AntMarkdown::renderMarkdown($content);
         }
     }
 
     public function renderException($exceptionCode){
         $content  = "# Error";
         $content .= "That request caused an $exceptionCode";
-        echo Markdown::defaultTransform($content);
+        echo AntMarkdown::renderMarkdown($content);
     }
 
     public function getPage($page){
@@ -24,12 +25,11 @@ class AntCMS {
             try {
                 $pageContents = file_get_contents($pagePath);
                 return $pageContents;
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 return false;
             }
         } else {
             return false;
         }
     }
-    
 }
