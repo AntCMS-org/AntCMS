@@ -3,7 +3,7 @@
 namespace AntCMS;
 
 use Michelf\MarkdownExtra;
-use PDO;
+use AntCMS\AntCache;
 
 class AntMarkdown
 {
@@ -53,6 +53,17 @@ class AntMarkdown
 
     public static function renderMarkdown($md)
     {
+        $cache = new AntCache();
+        $cacheKey = hash('sha3-512', $md).'markdown';
+
+        if ($cache->isCached($cacheKey)) {
+            $cachedContent = $cache->getCache($cacheKey);
+
+            if ($cachedContent !== false && !empty($cachedContent)) {
+                return $cachedContent;
+            }
+        }
+
         $result = MarkdownExtra::defaultTransform($md);
         $result = preg_replace('/(?:~~)([^~~]*)(?:~~)/', '<s>$1</s>', $result);
 
@@ -60,6 +71,7 @@ class AntMarkdown
             $result = str_replace($markdown, $unicode, $result);
         }
 
+        $cache->setCache($cacheKey, $result);
         return $result;
     }
 }

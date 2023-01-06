@@ -9,7 +9,7 @@ class AntKeywords
     public function generateKeywords($content = '', $count = 15)
     {
         $cache = new AntCache();
-        $cacheKey = hash('sha3-512', $content);
+        $cacheKey = hash('sha3-512', $content).'keywords';
 
         if ($cache->isCached($cacheKey)) {
             $cachedKeywords = $cache->getCache($cacheKey);

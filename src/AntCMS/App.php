@@ -30,6 +30,7 @@ class AntCMS
         $pageTemplate = str_replace('<!--AntCMS-Debug-->', '<p>Took ' . $elapsed_time . ' seconds to render the page.', $pageTemplate);
 
         echo $pageTemplate;
+        exit;
     }
 
     public function renderException($exceptionCode)
