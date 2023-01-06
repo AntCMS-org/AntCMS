@@ -7,7 +7,7 @@ class AntMarkdown{
     {
         $result = Markdown::defaultTransform($md);
         $result = preg_replace('/(?:~~)([^~~]*)(?:~~)/', '<s>$1</s>', $result);
-        echo $result;
+        return $result;
     }
 }
 ?>

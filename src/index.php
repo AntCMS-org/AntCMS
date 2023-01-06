@@ -4,7 +4,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 const appDir = __DIR__;
-require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/Vendor/autoload.php';
 require_once __DIR__ . '/AntCMS/App.php';
 require_once __DIR__ . '/AntCMS/Markdown.php';
 
