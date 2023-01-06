@@ -49,17 +49,27 @@ class AntCMS
             try {
                 $pageContent = file_get_contents($pagePath);
 
-                // Extract the AntCMS header using the regular expression
-                preg_match('/--AntCMS--\n(?:Title: (.*)\n)?(?:Author: (.*)\n)?(?:Description: (.*)\n)?(?:Keywords: (.*)\n)?--AntCMS--\n/', $pageContent, $matches);
-
+                preg_match('/--AntCMS--.*--AntCMS--/s', $pageContent, $matches);
                 // Remove the AntCMS section from the content
                 $pageContent = preg_replace('/--AntCMS--.*--AntCMS--/s', '', $pageContent);
 
-                // Extract the values from the $matches array and provide default values if the elements are missing
-                $title = $matches[1] ?? 'AntCMS';
-                $author = $matches[2] ?? 'AntCMS';
-                $description = $matches[3] ?? 'AntCMS';
-                $keywords = $matches[4] ?? $AntKeywords->generateKeywords($pageContent);
+                if ($matches) {
+                    $header = $matches[0];
+
+                    preg_match('/Title: (.*)/', $header, $matches);
+                    $title = trim($matches[1] ?? 'AntCMS');
+
+                    preg_match('/Author: (.*)/', $header, $matches);
+                    $author = trim($matches[1] ?? 'AntCMS');
+
+                    preg_match('/Description: (.*)/', $header, $matches);
+                    $description = trim($matches[1]) ?? 'AntCMS';
+
+                    preg_match('/Keywords: (.*)/', $header, $matches);
+                    $keywords = trim($matches[1] ?? $AntKeywords->generateKeywords($pageContent));
+                } else {
+                    [$title, $author, $description, $keywords] = ['AntCMS','AntCMS','AntCMS', trim($AntKeywords->generateKeywords($pageContent))];
+                }
 
                 $result = ['content' => $pageContent, 'title' => $title, 'author' => $author, 'description' => $description, 'keywords' => $keywords];
                 return $result;
