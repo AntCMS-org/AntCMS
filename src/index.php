@@ -5,11 +5,9 @@ ini_set('display_errors', 1);
 
 const AntDir = __DIR__;
 const AntCache = __DIR__ . '/Cache';
+const antConfig = __DIR__ . '/config.ymal';
 require_once __DIR__ . '/Vendor/autoload.php';
-require_once __DIR__ . '/AntCMS/App.php';
-require_once __DIR__ . '/AntCMS/Markdown.php';
-require_once __DIR__ . '/AntCMS/Keywords.php';
-require_once __DIR__ . '/AntCMS/Cache.php';
+require_once __DIR__ . '/Autoload.php';
 
 use AntCMS\AntCMS;
 
