@@ -36,7 +36,8 @@ class AntCMS
     public function renderException($exceptionCode)
     {
         $content  = "# Error";
-        $content .= "That request caused an $exceptionCode";
+        $content .= '<br>';
+        $content .= "That request caused an exception code ($exceptionCode)";
         echo AntMarkdown::renderMarkdown($content);
     }
 
@@ -44,6 +45,8 @@ class AntCMS
     {
         $page = strtolower($page);
         $pagePath = AntDir . "/Content/$page.md";
+        $pagePath = str_replace('//', '/', $pagePath);
+        die($pagePath);
         $AntKeywords = new AntKeywords();
         if (file_exists($pagePath)) {
             try {
