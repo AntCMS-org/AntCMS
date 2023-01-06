@@ -1,0 +1,23 @@
+{
+    "name": "belle/ant-cms",
+    "type": "project",
+    "description": "A simple CMS built with PHP and Markdown",
+    "minimum-stability": "stable",
+    "require": {
+        "michelf/php-markdown": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Belle\\AntCms\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Belle Aerni",
+            "email": "belleaerni@gmail.com"
+        }
+    ],
+    "config": {
+        "vendor-dir": "src/vendor"
+    }
+}
