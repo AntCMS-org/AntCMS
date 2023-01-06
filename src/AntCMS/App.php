@@ -3,6 +3,7 @@
 namespace AntCMS;
 
 use AntCMS\AntMarkdown;
+use AntCMS\AntKeywords;
 
 class AntCMS
 {
@@ -41,7 +42,8 @@ class AntCMS
     public function getPage($page)
     {
         $page = strtolower($page);
-        $pagePath = appDir . "/Content/$page.md";
+        $pagePath = AntDir . "/Content/$page.md";
+        $AntKeywords = new AntKeywords();
         if (file_exists($pagePath)) {
             try {
                 $pageContent = file_get_contents($pagePath);
@@ -49,14 +51,14 @@ class AntCMS
                 // Extract the AntCMS header using the regular expression
                 preg_match('/--AntCMS--\n(?:Title: (.*)\n)?(?:Author: (.*)\n)?(?:Description: (.*)\n)?(?:Keywords: (.*)\n)?--AntCMS--\n/', $pageContent, $matches);
 
+                // Remove the AntCMS section from the content
+                $pageContent = preg_replace('/--AntCMS--.*--AntCMS--/s', '', $pageContent);
+
                 // Extract the values from the $matches array and provide default values if the elements are missing
                 $title = $matches[1] ?? 'AntCMS';
                 $author = $matches[2] ?? 'AntCMS';
                 $description = $matches[3] ?? 'AntCMS';
-                $keywords = $matches[4] ?? 'AntCMS';
-
-                // Remove the AntCMS section from the content
-                $pageContent = preg_replace('/--AntCMS--.*--AntCMS--/s', '', $pageContent);
+                $keywords = $matches[4] ?? $AntKeywords->generateKeywords($pageContent);
 
                 $result = ['content' => $pageContent, 'title' => $title, 'author' => $author, 'description' => $description, 'keywords' => $keywords];
                 return $result;
@@ -70,7 +72,7 @@ class AntCMS
 
     public function getThemeContent()
     {
-        $themePath = appDir . "/Theme/default_layout.html";
+        $themePath = AntDir . "/Theme/default_layout.html";
         $themeContent = file_get_contents($themePath);
 
         if (!$themeContent) {
@@ -79,6 +81,9 @@ class AntCMS
             <html>
                 <head>
                     <title><!--AntCMS-Title--></title>
+                    <meta name="description" content="<!--AntCMS-Description-->">
+                    <meta name="author" content="<!--AntCMS-Author-->">
+                    <meta name="keywords" content="<!--AntCMS-Keywords-->">
                 </head>
                 <body>
                     <!--AntCMS-Body-->
