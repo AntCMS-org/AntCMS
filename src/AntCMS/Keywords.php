@@ -19,32 +19,38 @@ class AntKeywords
             }
         }
 
-        $stopWords = array('a', 'an', 'and', 'are', 'as', 'at', 'be', 'by', 'for', 'from', 'has', 'have', 'he', 'in', 'is', 'it', 'its', 'of', 'on', 'that', 'the', 'to', 'was', 'were', 'will', 'with');
-        $symbols = array('$', '€', '£', '¥', 'CHF', '₹', '+', '-', '×', '÷', '=', '>', '<', '.', ',', ';', ':', '!', '?', '"', '\'', '(', ')', '[', ']', '{', '}', '©', '™', '°', '§', '¶', '•');
+        // A bunch of characters we don't want to use for keyword generation
+        $stopWords = array(' a ', ' an ', ' and ', ' are ', ' as ', ' at ', ' be ', ' by ', ' for ', ' from ', ' has ', ' have ', ' he ', ' in ', ' is ', ' it ', ' its ', ' of ', ' on ', ' that ', ' the ', ' to ', ' was ', ' were ', ' will ', ' with ');
+        $symbols = array('$', '€', '£', '¥', 'CHF', '₹', '+', '-', '×', '÷', '=', '>', '<', '.', ',', ';', ':', '!', '?', '"', '\'', '(', ')', '[', ']', '{', '}', '©', '™', '°', '§', '¶', '•', '_', '/');
         $markdownSymbols = array('#', '##', '###', '####', '#####', '~~', '__', '**', '`', '``', '```', '*', '+', '>', '[', ']', '(', ')', '!', '&', '|');
+        $numbers = array('0','1','2','3','4','5','6','7','8','9');
 
+        //Strip the aforementioned characters away
+        $content = str_replace($stopWords, ' ', $content);
+        $content = str_replace($symbols, ' ', $content);
+        $content = str_replace($markdownSymbols, ' ', $content);
+        $content = str_replace($numbers, ' ', $content);
+
+        //Convert to an arrays
         $words = explode(' ', $content);
 
-        // Remove additional newlines and spaces
+        // Remove newlines
         $words = array_map(function ($key) {
-            $key = preg_replace('~[\r\n]+~', '', $key);
-            return trim(preg_replace('/\s\s+/', ' ', str_replace("\n", " ", $key)));
+            return preg_replace('~[\r\n]+~', ' ', $key);
         }, $words);
 
-        $words = array_diff($words, $stopWords);
-        $words = array_diff($words, $symbols);
-        $words = array_diff($words, $markdownSymbols);
+        // Handle potentially empty keys
+        $words = array_filter($words);
 
-        // Count the frequency of each word
+        // Then finally we count and sort the keywords, returning the top ones
         $word_counts = array_count_values($words);
 
-        // Sort the word counts in descending order
         arsort($word_counts);
 
-        // The most frequently occurring words are at the beginning of the array
         $count = (count($word_counts) < $count) ? count($word_counts) : $count;
         $keywords = array_slice(array_keys($word_counts), 0, $count);
         $keywords = implode(', ', $keywords);
+        $keywords = mb_substr($keywords, 3);
 
         $cache->setCache($cacheKey, $keywords);
         return $keywords;
