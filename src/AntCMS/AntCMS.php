@@ -39,14 +39,22 @@ class AntCMS
         $content .= '<br>';
         $content .= "That request caused an exception code ($exceptionCode)";
         echo AntMarkdown::renderMarkdown($content);
+        exit;
     }
 
     public function getPage($page)
     {
         $page = strtolower($page);
-        $pagePath = AntDir . "/Content/$page.md";
+        $pagePath = AntDir . "/Content/$page";
         $pagePath = str_replace('//', '/', $pagePath);
         $AntKeywords = new AntKeywords();
+
+        if(is_dir($pagePath)){
+            $pagePath = $pagePath . '/index.md';
+        } else {
+            $pagePath = $pagePath . '.md';
+        }
+
         if (file_exists($pagePath)) {
             try {
                 $pageContent = file_get_contents($pagePath);

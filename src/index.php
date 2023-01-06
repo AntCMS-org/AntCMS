@@ -43,7 +43,7 @@ if ($currentConfg['forceHTTPS'] && 'cli' !== PHP_SAPI){
 $requestedPage = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $indexes = ['/', '/index.php', '/index.html'];
 if (in_array($requestedPage, $indexes)) {
-    $antCms->renderPage('index');
+    $antCms->renderPage('/');
 } else {
     $antCms->renderPage($requestedPage);
 }
