@@ -46,7 +46,6 @@ class AntCMS
         $page = strtolower($page);
         $pagePath = AntDir . "/Content/$page.md";
         $pagePath = str_replace('//', '/', $pagePath);
-        die($pagePath);
         $AntKeywords = new AntKeywords();
         if (file_exists($pagePath)) {
             try {
