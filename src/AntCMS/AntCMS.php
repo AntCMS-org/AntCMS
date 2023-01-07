@@ -13,7 +13,6 @@ class AntCMS
     {
         $start_time = microtime(true);
         $content = $this->getPage($page);
-        $siteInfo = AntCMS::getSiteInfo();
         $currentConfig = AntConfig::currentConfig();
 
         if (!$content || !is_array($content)) {
@@ -21,19 +20,15 @@ class AntCMS
         }
 
         $markdown = AntMarkdown::renderMarkdown($content['content']);
-        $theme = $this->getThemeContent();
-        $pageTemplate = $theme['default_layout'];
+        
+        $pageTemplate = $this->getPageLayout();
 
         $pageTemplate = str_replace('<!--AntCMS-Description-->', $content['description'], $pageTemplate);
         $pageTemplate = str_replace('<!--AntCMS-Author-->', $content['author'], $pageTemplate);
         $pageTemplate = str_replace('<!--AntCMS-Keywords-->', $content['keywords'], $pageTemplate);
 
         $pageTemplate = str_replace('<!--AntCMS-Title-->', $content['title'], $pageTemplate);
-        $pageTemplate = str_replace('<!--AntCMS-Navigation-->', AntPages::generateNavigation($theme['nav_layout']), $pageTemplate);
         $pageTemplate = str_replace('<!--AntCMS-Body-->', $markdown, $pageTemplate);
-
-        $pageTemplate = str_replace('<!--AntCMS-SiteTitle-->', $siteInfo['siteTitle'], $pageTemplate);
-        $pageTemplate = str_replace('<!--AntCMS-SiteLink-->', '//' . $currentConfig['baseURL'], $pageTemplate);
 
         $end_time = microtime(true);
         $elapsed_time = round($end_time - $start_time, 4);
@@ -46,12 +41,29 @@ class AntCMS
         exit;
     }
 
-    public function renderException($exceptionCode)
+    public function getPageLayout($theme = null)
     {
-        $content  = "# Error";
-        $content .= '<br>';
-        $content .= "That request caused an exception code ($exceptionCode)";
-        echo AntMarkdown::renderMarkdown($content);
+        $theme = $this->getThemeContent($theme);
+        $siteInfo = AntCMS::getSiteInfo();
+        $currentConfig = AntConfig::currentConfig();
+
+        $pageTemplate = $theme['default_layout'];
+        $pageTemplate = str_replace('<!--AntCMS-Navigation-->', AntPages::generateNavigation($theme['nav_layout']), $pageTemplate);
+
+        $pageTemplate = str_replace('<!--AntCMS-SiteTitle-->', $siteInfo['siteTitle'], $pageTemplate);
+        $pageTemplate = str_replace('<!--AntCMS-SiteLink-->', '//' . $currentConfig['baseURL'], $pageTemplate);
+
+        return $pageTemplate;
+    }
+
+    public function renderException($exceptionCode)
+    { 
+        $pageTemplate = $this->getPageLayout();
+        
+        $pageTemplate = str_replace('<!--AntCMS-Title-->', 'An error ocurred', $pageTemplate);
+        $pageTemplate = str_replace('<!--AntCMS-Body-->', '<h1>An error ocurred</h1><p>That request caused an exception code (' . $exceptionCode . ')</p>', $pageTemplate);
+
+        echo $pageTemplate;
         exit;
     }
 
