@@ -10,10 +10,10 @@ class AntKeywords
     public function generateKeywords($content = '', $count = 15)
     {
         $cache = new AntCache();
-        $cacheKey = hash('sha3-512', $content).'keywords';
+        $cacheKey = $cache->createCacheKey($content, 'keywords');
         $currentConfig = AntConfig::currentConfig();
 
-        if(!$currentConfig['generateKeywords']){
+        if (!$currentConfig['generateKeywords']) {
             return '';
         }
 
@@ -29,7 +29,7 @@ class AntKeywords
         $stopWords = array(' a ', ' an ', ' and ', ' are ', ' as ', ' at ', ' be ', ' by ', ' for ', ' from ', ' has ', ' have ', ' he ', ' in ', ' is ', ' it ', ' its ', ' of ', ' on ', ' that ', ' the ', ' to ', ' was ', ' were ', ' will ', ' with ');
         $symbols = array('$', '€', '£', '¥', 'CHF', '₹', '+', '-', '×', '÷', '=', '>', '<', '.', ',', ';', ':', '!', '?', '"', '\'', '(', ')', '[', ']', '{', '}', '©', '™', '°', '§', '¶', '•', '_', '/');
         $markdownSymbols = array('#', '##', '###', '####', '#####', '~~', '__', '**', '`', '``', '```', '*', '+', '>', '[', ']', '(', ')', '!', '&', '|');
-        $numbers = array('0','1','2','3','4','5','6','7','8','9');
+        $numbers = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
 
         //Strip the aforementioned characters away
         $content = str_replace($stopWords, ' ', $content);

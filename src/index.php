@@ -18,19 +18,19 @@ use AntCMS\AntPages;
 
 $antCms = new AntCMS();
 
-if(!file_exists(antConfigFile)){
+if (!file_exists(antConfigFile)) {
     AntConfig::generateConfig();
 }
 
-if(!file_exists(antPagesList)){
+if (!file_exists(antPagesList)) {
     AntPages::generatePages();
 }
 
 $currentConfg = AntConfig::currentConfig();
 
-if ($currentConfg['forceHTTPS'] && 'cli' !== PHP_SAPI){
+if ($currentConfg['forceHTTPS'] && 'cli' !== PHP_SAPI) {
     $isHTTPS = false;
-    
+
     if (!empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off') {
         $isHTTPS = true;
     }
@@ -41,7 +41,7 @@ if ($currentConfg['forceHTTPS'] && 'cli' !== PHP_SAPI){
         $isHTTPS = true;
     }
 
-    if(!$isHTTPS){
+    if (!$isHTTPS) {
         $url = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
         header('Location: ' . $url);
         exit;

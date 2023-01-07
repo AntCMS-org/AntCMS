@@ -5,6 +5,7 @@ namespace AntCMS;
 use AntCMS\AntCMS;
 use AntCMS\AntYaml;
 use AntCMS\AntConfig;
+use AntCMS\AntCache;
 
 class AntPages
 {
@@ -43,18 +44,32 @@ class AntPages
     public static function generateNavigation($navTemplate = '')
     {
         $currentConfig = AntConfig::currentConfig();
-        $baseURL = $currentConfig['baseURL'];
+        $pages = AntPages::getPages();
+        $cache = new AntCache;
+
+        $theme = $currentConfig['activeTheme'];
+        $cacheKey = $cache->createCacheKey(json_encode($pages), $theme);
+
+        if ($cache->isCached($cacheKey)) {
+            $cachedContent = $cache->getCache($cacheKey);
+
+            if ($cachedContent !== false && !empty($cachedContent)) {
+                return $cachedContent;
+            }
+        }
 
         $navHTML = '';
-        foreach (AntPages::getPages() as $page) {
-            if(!$page['showInNav']){
+        $baseURL = $currentConfig['baseURL'];
+        foreach ($pages as $page) {
+            if (!$page['showInNav']) {
                 continue;
             }
-            $url = "//" . str_replace('//', '/',$baseURL . $page['functionalPagePath']);
+            $url = "//" . str_replace('//', '/', $baseURL . $page['functionalPagePath']);
             $navEntry = str_replace('<!--AntCMS-PageLink-->', $url, $navTemplate);
             $navEntry = str_replace('<!--AntCMS-PageTitle-->', $page['pageTitle'], $navEntry);
             $navHTML .= $navEntry;
         }
+        $cache->setCache($cacheKey, $navHTML);
         return $navHTML;
     }
 }

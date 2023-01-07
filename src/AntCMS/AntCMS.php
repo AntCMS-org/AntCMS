@@ -20,7 +20,7 @@ class AntCMS
         }
 
         $markdown = AntMarkdown::renderMarkdown($content['content']);
-        
+
         $pageTemplate = $this->getPageLayout();
 
         $pageTemplate = str_replace('<!--AntCMS-Description-->', $content['description'], $pageTemplate);
@@ -57,9 +57,9 @@ class AntCMS
     }
 
     public function renderException($exceptionCode)
-    { 
+    {
         $pageTemplate = $this->getPageLayout();
-        
+
         $pageTemplate = str_replace('<!--AntCMS-Title-->', 'An error ocurred', $pageTemplate);
         $pageTemplate = str_replace('<!--AntCMS-Body-->', '<h1>An error ocurred</h1><p>That request caused an exception code (' . $exceptionCode . ')</p>', $pageTemplate);
 

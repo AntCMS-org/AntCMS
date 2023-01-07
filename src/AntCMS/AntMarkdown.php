@@ -53,7 +53,7 @@ class AntMarkdown
     public static function renderMarkdown($md)
     {
         $cache = new AntCache();
-        $cacheKey = hash('sha3-512', $md).'markdown';
+        $cacheKey = $cache->createCacheKey($md, 'markdown');
 
         if ($cache->isCached($cacheKey)) {
             $cachedContent = $cache->getCache($cacheKey);
