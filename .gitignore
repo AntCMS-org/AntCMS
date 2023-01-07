@@ -1,3 +1,5 @@
 /src/Vendor/
 node_modules
 src/Cache/*
+src/config.yaml
+src/pages.yaml
