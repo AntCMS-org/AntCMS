@@ -47,9 +47,8 @@ class AntCMS
         $page = strtolower($page);
         $pagePath = AntDir . "/Content/$page";
         $pagePath = str_replace('//', '/', $pagePath);
-        $AntKeywords = new AntKeywords();
 
-        if(is_dir($pagePath)){
+        if (is_dir($pagePath)) {
             $pagePath = $pagePath . '/index.md';
         } else {
             $pagePath = $pagePath . '.md';
@@ -58,30 +57,10 @@ class AntCMS
         if (file_exists($pagePath)) {
             try {
                 $pageContent = file_get_contents($pagePath);
-
-                preg_match('/--AntCMS--.*--AntCMS--/s', $pageContent, $matches);
+                $pageHeaders = AntCMS::getPageHeaders($pageContent);
                 // Remove the AntCMS section from the content
                 $pageContent = preg_replace('/--AntCMS--.*--AntCMS--/s', '', $pageContent);
-
-                if ($matches) {
-                    $header = $matches[0];
-
-                    preg_match('/Title: (.*)/', $header, $matches);
-                    $title = trim($matches[1] ?? 'AntCMS');
-
-                    preg_match('/Author: (.*)/', $header, $matches);
-                    $author = trim($matches[1] ?? 'AntCMS');
-
-                    preg_match('/Description: (.*)/', $header, $matches);
-                    $description = trim($matches[1]) ?? 'AntCMS';
-
-                    preg_match('/Keywords: (.*)/', $header, $matches);
-                    $keywords = trim($matches[1] ?? $AntKeywords->generateKeywords($pageContent));
-                } else {
-                    [$title, $author, $description, $keywords] = ['AntCMS','AntCMS','AntCMS', trim($AntKeywords->generateKeywords($pageContent))];
-                }
-
-                $result = ['content' => $pageContent, 'title' => $title, 'author' => $author, 'description' => $description, 'keywords' => $keywords];
+                $result = ['content' => $pageContent, 'title' => $pageHeaders['title'], 'author' => $pageHeaders['author'], 'description' => $pageHeaders['description'], 'keywords' => $pageHeaders['keywords']];
                 return $result;
             } catch (\Exception $e) {
                 return false;
@@ -113,5 +92,39 @@ class AntCMS
         }
 
         return $themeContent;
+    }
+
+    public static function getPageHeaders($pageContent)
+    {
+        $AntKeywords = new AntKeywords();
+
+        preg_match('/--AntCMS--.*--AntCMS--/s', $pageContent, $matches);
+        // Remove the AntCMS section from the content
+        $pageContent = preg_replace('/--AntCMS--.*--AntCMS--/s', '', $pageContent);
+        $pageHeaders = [];
+
+        if ($matches) {
+            $header = $matches[0];
+
+            preg_match('/Title: (.*)/', $header, $matches);
+            $pageHeaders['title'] = trim($matches[1] ?? 'AntCMS');
+
+            preg_match('/Author: (.*)/', $header, $matches);
+            $pageHeaders['author'] = trim($matches[1] ?? 'AntCMS');
+
+            preg_match('/Description: (.*)/', $header, $matches);
+            $pageHeaders['description'] = trim($matches[1]) ?? 'AntCMS';
+
+            preg_match('/Keywords: (.*)/', $header, $matches);
+            $pageHeaders['keywords'] = trim($matches[1] ?? $AntKeywords->generateKeywords($pageContent));
+        } else {
+            $pageHeaders = [
+                'title' => 'AntCMS',
+                'author' => 'AntCMS',
+                'description' => 'AntCMS',
+                'keywords' => trim($AntKeywords->generateKeywords($pageContent)),
+            ];
+        }
+        return $pageHeaders;
     }
 }

@@ -6,16 +6,23 @@ ini_set('display_errors', 1);
 const AntDir = __DIR__;
 const AntCachePath = __DIR__ . '/Cache';
 const antConfigFile = __DIR__ . '/config.ymal';
+const antPagesList = __DIR__ . '/pages.ymal';
+const antContentPath = __DIR__ . '/Content';
 require_once __DIR__ . '/Vendor/autoload.php';
 require_once __DIR__ . '/Autoload.php';
 
 use AntCMS\AntCMS;
 use AntCMS\AntConfig;
+use AntCMS\AntPages;
 
 $antCms = new AntCMS();
 
 if(!file_exists(antConfigFile)){
     AntConfig::generateConfig();
+}
+
+if(!file_exists(antPagesList)){
+    AntPages::generatePages();
 }
 
 $currentConfg = AntConfig::currentConfig();
