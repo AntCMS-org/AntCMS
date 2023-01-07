@@ -8,6 +8,7 @@ class AntTools
     {
         $dir = new \RecursiveDirectoryIterator(antThemePath);
         $iterator = new \RecursiveIteratorIterator($dir);
+        $files=array();
         foreach ($iterator as $file) {
             if (pathinfo($file, PATHINFO_EXTENSION) == $extension || $extension == null) {
                 $files[] = ($returnPath) ? $file->getPathname() : $file->getFilename();
