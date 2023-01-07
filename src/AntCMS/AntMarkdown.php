@@ -42,7 +42,6 @@ class AntMarkdown
         ':flushed:' => '😳',
         ':frowning:' => '😦',
         ':anguished:' => '😧',
-        ':fearful:' => '😨',
         ':weary:' => '😩',
         ':exploding_head:' => '🤯',
         ':grimacing:' => '😬',

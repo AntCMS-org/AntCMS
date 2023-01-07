@@ -120,7 +120,7 @@ class AntCMS
             $pageHeaders['author'] = trim($matches[1] ?? 'AntCMS');
 
             preg_match('/Description: (.*)/', $header, $matches);
-            $pageHeaders['description'] = trim($matches[1]) ?? 'AntCMS';
+            $pageHeaders['description'] = trim($matches[1] ?? 'AntCMS');
 
             preg_match('/Keywords: (.*)/', $header, $matches);
             $pageHeaders['keywords'] = trim($matches[1] ?? $AntKeywords->generateKeywords($pageContent));

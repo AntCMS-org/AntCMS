@@ -16,5 +16,8 @@
     ],
     "config": {
         "vendor-dir": "src/Vendor"
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^1.9"
     }
 }
