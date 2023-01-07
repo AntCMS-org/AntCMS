@@ -6,7 +6,7 @@ class AntTools
 {
     public static function getFileList($dir, $extension = null, $returnPath = false)
     {
-        $dir = new \RecursiveDirectoryIterator(antThemePath);
+        $dir = new \RecursiveDirectoryIterator($dir);
         $iterator = new \RecursiveIteratorIterator($dir);
         $files=array();
         foreach ($iterator as $file) {

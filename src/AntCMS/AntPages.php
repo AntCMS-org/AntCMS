@@ -6,20 +6,13 @@ use AntCMS\AntCMS;
 use AntCMS\AntYaml;
 use AntCMS\AntConfig;
 use AntCMS\AntCache;
+use AntCMS\AntTools;
 
 class AntPages
 {
     public static function generatePages()
     {
-        $dir = new \RecursiveDirectoryIterator(antContentPath);
-        $iterator = new \RecursiveIteratorIterator($dir);
-        $pages = array();
-        $pageList = array();
-        foreach ($iterator as $file) {
-            if (pathinfo($file, PATHINFO_EXTENSION) == "md") {
-                $pages[] = $file->getPathname();
-            }
-        }
+        $pages = AntTools::getFileList(antContentPath, 'md', true);
 
         foreach ($pages as $page) {
             $pageContent = file_get_contents($page);
