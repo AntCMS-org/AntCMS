@@ -28,6 +28,7 @@ For example, this is what the default theme folder structure looks like:
 
 - `/Themes`
   - `/Default`
-    - `default_layout.html`
+    - `/Templates`
+      - `default_layout.html`
 
 Changing the theme is easy, simply edit `Config.yaml` and set the `activeTheme` to match the folder name of your custom theme.
