@@ -13,6 +13,7 @@ class AntPages
     public static function generatePages()
     {
         $pages = AntTools::getFileList(antContentPath, 'md', true);
+        $pageList = array();
 
         foreach ($pages as $page) {
             $pageContent = file_get_contents($page);
