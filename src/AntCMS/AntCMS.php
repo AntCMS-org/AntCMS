@@ -4,6 +4,7 @@ namespace AntCMS;
 
 use AntCMS\AntMarkdown;
 use AntCMS\AntKeywords;
+use AntCMS\AntPages;
 
 class AntCMS
 {
@@ -24,6 +25,7 @@ class AntCMS
         $pageTemplate = str_replace('<!--AntCMS-Description-->', $content['description'], $pageTemplate);
         $pageTemplate = str_replace('<!--AntCMS-Author-->', $content['author'], $pageTemplate);
         $pageTemplate = str_replace('<!--AntCMS-Keywords-->', $content['keywords'], $pageTemplate);
+        $pageTemplate = str_replace('<!--AntCMS-Navigation-->', AntPages::generateNavigation(null), $pageTemplate);
 
         $end_time = microtime(true);
         $elapsed_time = round($end_time - $start_time, 4);
@@ -51,7 +53,7 @@ class AntCMS
         if (is_dir($pagePath)) {
             $pagePath = $pagePath . '/index.md';
         } else {
-            $pagePath = $pagePath . '.md';
+            $pagePath = (file_exists($pagePath)) ? $pagePath : $pagePath . '.md';
         }
 
         if (file_exists($pagePath)) {

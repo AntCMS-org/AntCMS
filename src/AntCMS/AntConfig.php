@@ -18,6 +18,7 @@ class AntConfig
                 'username' => '',
             ),
             'debug' => true,
+            'baseURL' => $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']),
         );
 
         AntYaml::saveFile(antConfigFile, $defaultOptions);

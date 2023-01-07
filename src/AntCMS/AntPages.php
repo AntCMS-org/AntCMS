@@ -4,6 +4,7 @@ namespace AntCMS;
 
 use AntCMS\AntCMS;
 use AntCMS\AntYaml;
+use AntCMS\AntConfig;
 
 class AntPages
 {
@@ -35,5 +36,24 @@ class AntPages
 
     public static function getPages()
     {
+        return AntYaml::parseFile(antPagesList);
+    }
+
+    public static function generateNavigation($navTemplate = null)
+    {
+        $currentConfig = AntConfig::currentConfig();
+        $baseURL = $currentConfig['baseURL'];
+        $navTemplate =
+            '<li class="nav-item active">
+        <a class="nav-link" href="<!--AntCMS-PageLink-->"><!--AntCMS-PageTitle--></a>
+        </li>';
+        $navHTML = '';
+        foreach (AntPages::getPages() as $page) {
+            $url = $_SERVER['REQUEST_SCHEME'] . "://" . str_replace('//', '/',$baseURL . $page['functionalPagePath']);
+            $navEntry = str_replace('<!--AntCMS-PageLink-->', $url, $navTemplate);
+            $navEntry = str_replace('<!--AntCMS-PageTitle-->', $page['pageTitle'], $navEntry);
+            $navHTML .= $navEntry;
+        }
+        return $navHTML;
     }
 }
