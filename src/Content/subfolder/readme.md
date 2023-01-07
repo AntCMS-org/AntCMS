@@ -10,7 +10,7 @@ A tiny and fast CMS system for static websites.
 
 ## What is AntCMS
 
-AntCMS is a lightweight CMS system designed for simplicity, speed, and small size. It is a flat file CMS, meaning it lacks advanced features but benefits from improved speed and reduced complexity.
+AntCMS is a lightweight CMS system designed for simplicity, speed, and small size. It is a flat-file CMS, meaning it lacks advanced features but benefits from improved speed and reduced complexity.
 
 ### How fast is AntCMS?
 
@@ -22,7 +22,7 @@ AntCMS is very straightforward to use. First, you need a template in HTML with s
 
 ### Themeing with AntCMS
 
-AntCMS stores it's themes under `/Themes`. Each theme is extremely simple, just a simple page layout template.
+AntCMS stores its themes under `/Themes`. Each theme is extremely simple, just a simple page layout template.
 A theme may also have a `/Themes/Example/Assets` folder, these files can be accessed directly from the server. Files stored in any other location will be inaccessible otherwise.
 For example, this is what the default theme folder structure looks like:
 
@@ -31,4 +31,4 @@ For example, this is what the default theme folder structure looks like:
     - `/Templates`
       - `default_layout.html`
 
-Changing the theme is easy, simply edit `Config.yaml` and set the `activeTheme` to match the folder name of your custom theme.
+Changing the theme is easy, simply edit `config.yaml` and set the `activeTheme` to match the folder name of your custom theme.
