@@ -44,6 +44,7 @@ class AntPages
     {
         $currentConfig = AntConfig::currentConfig();
         $baseURL = $currentConfig['baseURL'];
+
         $navHTML = '';
         foreach (AntPages::getPages() as $page) {
             if(!$page['showInNav']){

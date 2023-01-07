@@ -1,1 +1,3 @@
 /src/Vendor/
+node_modules
+src/Cache/*
