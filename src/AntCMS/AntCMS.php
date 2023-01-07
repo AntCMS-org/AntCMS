@@ -5,6 +5,7 @@ namespace AntCMS;
 use AntCMS\AntMarkdown;
 use AntCMS\AntKeywords;
 use AntCMS\AntPages;
+use AntCMS\AntConfig;
 
 class AntCMS
 {
@@ -12,6 +13,7 @@ class AntCMS
     {
         $start_time = microtime(true);
         $content = $this->getPage($page);
+        $siteInfo = AntCMS::getSiteInfo();
 
         if (!$content || !is_array($content)) {
             $this->renderException("404");
@@ -20,12 +22,15 @@ class AntCMS
         $markdown = AntMarkdown::renderMarkdown($content['content']);
         $pageTemplate = $this->getThemeContent();
 
-        $pageTemplate = str_replace('<!--AntCMS-Body-->', $markdown, $pageTemplate);
-        $pageTemplate = str_replace('<!--AntCMS-Title-->', $content['title'], $pageTemplate);
         $pageTemplate = str_replace('<!--AntCMS-Description-->', $content['description'], $pageTemplate);
         $pageTemplate = str_replace('<!--AntCMS-Author-->', $content['author'], $pageTemplate);
         $pageTemplate = str_replace('<!--AntCMS-Keywords-->', $content['keywords'], $pageTemplate);
+
+        $pageTemplate = str_replace('<!--AntCMS-Title-->', $content['title'], $pageTemplate);
         $pageTemplate = str_replace('<!--AntCMS-Navigation-->', AntPages::generateNavigation(null), $pageTemplate);
+        $pageTemplate = str_replace('<!--AntCMS-Body-->', $markdown, $pageTemplate);
+
+        $pageTemplate = str_replace('<!--AntCMS-SiteTitle-->', $siteInfo['siteTitle'], $pageTemplate);
 
         $end_time = microtime(true);
         $elapsed_time = round($end_time - $start_time, 4);
@@ -128,5 +133,10 @@ class AntCMS
             ];
         }
         return $pageHeaders;
+    }
+
+    public static function getSiteInfo(){
+        $currentConfig = AntConfig::currentConfig();
+        return $currentConfig['SiteInfo'];
     }
 }

@@ -9,6 +9,9 @@ class AntConfig
     public static function generateConfig()
     {
         $defaultOptions = array(
+            'SiteInfo' => array(
+                'siteTitle' => 'AntCMS',
+            ),
             'forceHTTPS' => true,
             'activeTheme' => 'default',
             'generateKeywords' => true,
