@@ -18,6 +18,10 @@ jobs:
       - run: |
           sudo apt-get install zip -y
           zip -r AntCMS.zip .
+      - run: |
+          npm install -D tailwindcss
+          rm -f ./src/Themes/Default/Assets/Dist/tailwind.css
+          npx tailwindcss -i ./src/Themes/Default/Assets/tailwind.css -o ./src/Themes/Default/Assets/Dist/tailwind.css --minify
         working-directory: ./src
       - uses: ncipollo/release-action@v1
         with:
