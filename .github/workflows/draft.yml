@@ -1,0 +1,25 @@
+name: Publish a Release Preview
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+      - uses: php-actions/composer@v6
+      - run: |
+          sudo apt-get install zip -y
+          zip -r AntCMS.zip src
+      - uses: ncipollo/release-action@v1
+        with:
+          artifacts: "AntCMS.zip"
+          prerelease: true
+          allowUpdates: true
+          artifactErrorsFailBuild: true
+          generateReleaseNotes: true
+          name: "Preview Build"

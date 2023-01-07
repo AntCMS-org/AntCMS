@@ -38,7 +38,7 @@ class AntCMS
         $end_time = microtime(true);
         $elapsed_time = round($end_time - $start_time, 4);
 
-        if($currentConfig['debug']){
+        if ($currentConfig['debug']) {
             $pageTemplate = str_replace('<!--AntCMS-Debug-->', '<p>Took ' . $elapsed_time . ' seconds to render the page. </p>', $pageTemplate);
         }
 
@@ -88,7 +88,11 @@ class AntCMS
         $currentConfig = AntConfig::currentConfig();
         $themePath = antThemePath . '/' . $currentConfig['activeTheme'];
         $themeContent['default_layout'] = file_get_contents($themePath . '/default_layout.html');
-        $themeContent['nav_layout'] = file_get_contents($themePath . '/nav_layout.html') ?? '';
+        $themeContent['nav_layout'] = file_get_contents($themePath . '/nav_layout.html');
+
+        if (!$themeContent['nav_layout']) {
+            $themeContent['default_layout'] = '';
+        }
 
         if (!$themeContent['default_layout']) {
             $themeContent['default_layout'] = '
@@ -143,7 +147,8 @@ class AntCMS
         return $pageHeaders;
     }
 
-    public static function getSiteInfo(){
+    public static function getSiteInfo()
+    {
         $currentConfig = AntConfig::currentConfig();
         return $currentConfig['SiteInfo'];
     }
