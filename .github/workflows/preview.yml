@@ -23,3 +23,4 @@ jobs:
           artifactErrorsFailBuild: true
           generateReleaseNotes: true
           name: "Preview Build"
+          tag: "latest-preview"
