@@ -18,7 +18,7 @@ AntCMS is very straightforward to use. First, you need a template in HTML with s
 
 ### Themeing with AntCMS
 
-AntCMS stores it's themes under `/Themes`. Each theme is extremely simple, just a simple page layout template and if needed, assets associated with that theme.
+AntCMS stores it's themes under `/Themes`. Each theme is extremely simple, just a simple page layout template.
 A theme may also have a `/Themes/Example/Assets` folder, these files can be accessed directly from the server. Files stored in any other location will be inaccessible otherwise.
 For example, this is what the default theme folder structure looks like:
 
