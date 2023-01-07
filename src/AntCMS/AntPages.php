@@ -28,6 +28,7 @@ class AntPages
                 'pageTitle' => $pageHeader['title'],
                 'fullPagePath' => $page,
                 'functionalPagePath' => $pageFunctionalPath,
+                'showInNav' => true,
             );
             $pageList[] = $currentPage;
         }
@@ -49,7 +50,10 @@ class AntPages
         </li>';
         $navHTML = '';
         foreach (AntPages::getPages() as $page) {
-            $url = $_SERVER['REQUEST_SCHEME'] . "://" . str_replace('//', '/',$baseURL . $page['functionalPagePath']);
+            if(!$page['showInNav']){
+                continue;
+            }
+            $url = "//" . str_replace('//', '/',$baseURL . $page['functionalPagePath']);
             $navEntry = str_replace('<!--AntCMS-PageLink-->', $url, $navTemplate);
             $navEntry = str_replace('<!--AntCMS-PageTitle-->', $page['pageTitle'], $navEntry);
             $navHTML .= $navEntry;

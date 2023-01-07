@@ -3,6 +3,7 @@
 namespace AntCMS;
 
 use AntCMS\AntCache;
+use AntCMS\AntConfig;
 
 class AntKeywords
 {
@@ -10,6 +11,11 @@ class AntKeywords
     {
         $cache = new AntCache();
         $cacheKey = hash('sha3-512', $content).'keywords';
+        $currentConfig = AntConfig::currentConfig();
+
+        if(!$currentConfig['generateKeywords']){
+            return '';
+        }
 
         if ($cache->isCached($cacheKey)) {
             $cachedKeywords = $cache->getCache($cacheKey);

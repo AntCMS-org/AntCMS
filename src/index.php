@@ -5,9 +5,10 @@ ini_set('display_errors', '1');
 
 const AntDir = __DIR__;
 const AntCachePath = __DIR__ . '/Cache';
-const antConfigFile = __DIR__ . '/config.ymal';
-const antPagesList = __DIR__ . '/pages.ymal';
+const antConfigFile = __DIR__ . '/config.yaml';
+const antPagesList = __DIR__ . '/pages.yaml';
 const antContentPath = __DIR__ . '/Content';
+const antThemePath = __DIR__ . '/Themes';
 require_once __DIR__ . '/Vendor/autoload.php';
 require_once __DIR__ . '/Autoload.php';
 

@@ -1,2 +1,7 @@
 RewriteEngine On
-RewriteRule ^(.*)$ index.php [QSA,L]
+
+# If the requested file is an asset, serve it directly
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^Theme/[^/]+/Assets/.+$ - [L]
+
+RewriteRule ^(.+)$ index.php [L,QSA]

@@ -14,6 +14,7 @@ class AntCMS
         $start_time = microtime(true);
         $content = $this->getPage($page);
         $siteInfo = AntCMS::getSiteInfo();
+        $currentConfig = AntConfig::currentConfig();
 
         if (!$content || !is_array($content)) {
             $this->renderException("404");
@@ -31,10 +32,14 @@ class AntCMS
         $pageTemplate = str_replace('<!--AntCMS-Body-->', $markdown, $pageTemplate);
 
         $pageTemplate = str_replace('<!--AntCMS-SiteTitle-->', $siteInfo['siteTitle'], $pageTemplate);
+        $pageTemplate = str_replace('<!--AntCMS-SiteLink-->', '//' . $currentConfig['baseURL'], $pageTemplate);
 
         $end_time = microtime(true);
         $elapsed_time = round($end_time - $start_time, 4);
-        $pageTemplate = str_replace('<!--AntCMS-Debug-->', '<p>Took ' . $elapsed_time . ' seconds to render the page.', $pageTemplate);
+
+        if($currentConfig['debug']){
+            $pageTemplate = str_replace('<!--AntCMS-Debug-->', '<p>Took ' . $elapsed_time . ' seconds to render the page. </p>', $pageTemplate);
+        }
 
         echo $pageTemplate;
         exit;
@@ -79,7 +84,8 @@ class AntCMS
 
     public function getThemeContent()
     {
-        $themePath = AntDir . "/Theme/default_layout.html";
+        $currentConfig = AntConfig::currentConfig();
+        $themePath = antThemePath . '/' . $currentConfig['activeTheme'] . "/default_layout.html";
         $themeContent = file_get_contents($themePath);
 
         if (!$themeContent) {

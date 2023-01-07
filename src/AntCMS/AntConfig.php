@@ -13,7 +13,7 @@ class AntConfig
                 'siteTitle' => 'AntCMS',
             ),
             'forceHTTPS' => true,
-            'activeTheme' => 'default',
+            'activeTheme' => 'Default',
             'generateKeywords' => true,
             'enableCache' => true,
             'admin' =>  array(
