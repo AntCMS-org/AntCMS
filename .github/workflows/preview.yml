@@ -17,10 +17,11 @@ jobs:
           php_version: "8.0"
       - run: |
           sudo apt-get install zip -y
-          zip -r AntCMS.zip src/
+          zip -r AntCMS.zip .
+        working-directory: ./src
       - uses: ncipollo/release-action@v1
         with:
-          artifacts: "AntCMS.zip"
+          artifacts: "./src/AntCMS.zip"
           prerelease: true
           allowUpdates: true
           artifactErrorsFailBuild: true
