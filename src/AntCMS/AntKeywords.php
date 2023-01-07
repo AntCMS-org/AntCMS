@@ -26,16 +26,19 @@ class AntKeywords
         }
 
         // A bunch of characters we don't want to use for keyword generation
-        $stopWords = array(' a ', ' an ', ' and ', ' are ', ' as ', ' at ', ' be ', ' by ', ' for ', ' from ', ' has ', ' have ', ' he ', ' in ', ' is ', ' it ', ' its ', ' of ', ' on ', ' that ', ' the ', ' to ', ' was ', ' were ', ' will ', ' with ');
+        $stopWords = array(' a ', ' an ', ' and ', ' are ', ' as ', ' at ', ' be ', ' by ', ' for ', ' from ', ' has ', ' have ', ' in ', ' is ', ' it ', ' its ', ' of ', ' on ', ' that ', ' the ', ' to ', ' was ', ' were ', ' will ', ' with ');
         $symbols = array('$', '€', '£', '¥', 'CHF', '₹', '+', '-', '×', '÷', '=', '>', '<', '.', ',', ';', ':', '!', '?', '"', '\'', '(', ')', '[', ']', '{', '}', '©', '™', '°', '§', '¶', '•', '_', '/');
         $markdownSymbols = array('#', '##', '###', '####', '#####', '~~', '__', '**', '`', '``', '```', '*', '+', '>', '[', ']', '(', ')', '!', '&', '|');
         $numbers = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
+        $commonPronouns = array('he', 'him', 'his', 'she', 'her', 'hers', 'they', 'them', 'theirs');
 
         //Strip the aforementioned characters away
+        $content = strtolower($content);
         $content = str_replace($stopWords, ' ', $content);
         $content = str_replace($symbols, ' ', $content);
         $content = str_replace($markdownSymbols, ' ', $content);
         $content = str_replace($numbers, ' ', $content);
+        $content = str_replace($commonPronouns, ' ', $content);
 
         //Convert to an arrays
         $words = explode(' ', $content);

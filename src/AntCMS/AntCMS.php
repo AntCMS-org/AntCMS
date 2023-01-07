@@ -43,12 +43,11 @@ class AntCMS
 
     public function getPageLayout($theme = null)
     {
-        $theme = $this->getThemeContent($theme);
         $siteInfo = AntCMS::getSiteInfo();
         $currentConfig = AntConfig::currentConfig();
 
-        $pageTemplate = $theme['default_layout'];
-        $pageTemplate = str_replace('<!--AntCMS-Navigation-->', AntPages::generateNavigation($theme['nav_layout']), $pageTemplate);
+        $pageTemplate = $this->getThemeTemplate('default_layout', $theme);
+        $pageTemplate = str_replace('<!--AntCMS-Navigation-->', AntPages::generateNavigation($this->getThemeTemplate('nav_layout', $theme)), $pageTemplate);
 
         $pageTemplate = str_replace('<!--AntCMS-SiteTitle-->', $siteInfo['siteTitle'], $pageTemplate);
         $pageTemplate = str_replace('<!--AntCMS-SiteLink-->', '//' . $currentConfig['baseURL'], $pageTemplate);
@@ -95,21 +94,23 @@ class AntCMS
         }
     }
 
-    public function getThemeContent($theme = null)
+    public function getThemeTemplate($layout = 'default_layout', $theme = null)
     {
         $currentConfig = AntConfig::currentConfig();
-        $theme = ($theme) ? $theme : $currentConfig['activeTheme'];
-        $themePath = antThemePath . '/' . $theme;
-        $templatePath = $themePath . '/' . 'Templates';
-        $themeContent['default_layout'] = file_get_contents($templatePath . '/default_layout.html');
-        $themeContent['nav_layout'] = file_get_contents($templatePath . '/nav_layout.html');
+        $theme = $theme ?? $currentConfig['activeTheme'];
+        $templatePath = antThemePath . '/' . $theme . '/' . 'Templates';
+        $defaultTemplates = antThemePath . '/Default/Templates';
 
-        if (!$themeContent['nav_layout']) {
-            $themeContent['default_layout'] = '';
+        $templates = AntTools::getFileList($templatePath, 'html');
+
+        if (in_array($layout . '.html', $templates)) {
+            $template = file_get_contents($templatePath . '/' . $layout . '.html');
+        } else {
+            $template = file_get_contents($defaultTemplates . '/' . $layout . '.html');
         }
 
-        if (!$themeContent['default_layout']) {
-            $themeContent['default_layout'] = '
+        if ($layout == 'default_layout' && !$template) {
+            $template = '
             <!DOCTYPE html>
             <html>
                 <head>
@@ -124,15 +125,17 @@ class AntCMS
             </html>';
         }
 
-        return $themeContent;
+        return $template;
     }
 
     public static function getPageHeaders($pageContent)
     {
         $AntKeywords = new AntKeywords();
 
+        // First get the AntCMS header and store it in the matches varible
         preg_match('/--AntCMS--.*--AntCMS--/s', $pageContent, $matches);
-        // Remove the AntCMS section from the content
+
+        // Then remove it from the page content so it doesn't cause issues if we try to generate the keywords
         $pageContent = preg_replace('/--AntCMS--.*--AntCMS--/s', '', $pageContent);
         $pageHeaders = [];
 
