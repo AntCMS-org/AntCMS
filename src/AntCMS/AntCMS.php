@@ -87,8 +87,9 @@ class AntCMS
     {
         $currentConfig = AntConfig::currentConfig();
         $themePath = antThemePath . '/' . $currentConfig['activeTheme'];
-        $themeContent['default_layout'] = file_get_contents($themePath . '/default_layout.html');
-        $themeContent['nav_layout'] = file_get_contents($themePath . '/nav_layout.html');
+        $templatePath = $themePath . '/' . 'Templates';
+        $themeContent['default_layout'] = file_get_contents($templatePath . '/default_layout.html');
+        $themeContent['nav_layout'] = file_get_contents($templatePath . '/nav_layout.html');
 
         if (!$themeContent['nav_layout']) {
             $themeContent['default_layout'] = '';
