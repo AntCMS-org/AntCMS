@@ -83,10 +83,11 @@ class AntCMS
         }
     }
 
-    public function getThemeContent()
+    public function getThemeContent($theme = null)
     {
         $currentConfig = AntConfig::currentConfig();
-        $themePath = antThemePath . '/' . $currentConfig['activeTheme'];
+        $theme = ($theme) ? $theme : $currentConfig['activeTheme'];
+        $themePath = antThemePath . '/' . $theme;
         $templatePath = $themePath . '/' . 'Templates';
         $themeContent['default_layout'] = file_get_contents($templatePath . '/default_layout.html');
         $themeContent['nav_layout'] = file_get_contents($templatePath . '/nav_layout.html');
