@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: php-actions/composer@v6
         with:
-          dev: false
+          dev: no
           php_version: "8.0"
       - run: |
           sudo apt-get install zip -y
@@ -27,3 +27,4 @@ jobs:
           generateReleaseNotes: true
           name: "Preview Build"
           tag: "latest-preview"
+          body: "A rolling preview release of AntCMS that is updated with each commit."
