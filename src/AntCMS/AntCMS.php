@@ -21,14 +21,15 @@ class AntCMS
         }
 
         $markdown = AntMarkdown::renderMarkdown($content['content']);
-        $pageTemplate = $this->getThemeContent();
+        $theme = $this->getThemeContent();
+        $pageTemplate = $theme['default_layout'];
 
         $pageTemplate = str_replace('<!--AntCMS-Description-->', $content['description'], $pageTemplate);
         $pageTemplate = str_replace('<!--AntCMS-Author-->', $content['author'], $pageTemplate);
         $pageTemplate = str_replace('<!--AntCMS-Keywords-->', $content['keywords'], $pageTemplate);
 
         $pageTemplate = str_replace('<!--AntCMS-Title-->', $content['title'], $pageTemplate);
-        $pageTemplate = str_replace('<!--AntCMS-Navigation-->', AntPages::generateNavigation(null), $pageTemplate);
+        $pageTemplate = str_replace('<!--AntCMS-Navigation-->', AntPages::generateNavigation($theme['nav_layout']), $pageTemplate);
         $pageTemplate = str_replace('<!--AntCMS-Body-->', $markdown, $pageTemplate);
 
         $pageTemplate = str_replace('<!--AntCMS-SiteTitle-->', $siteInfo['siteTitle'], $pageTemplate);
@@ -85,11 +86,12 @@ class AntCMS
     public function getThemeContent()
     {
         $currentConfig = AntConfig::currentConfig();
-        $themePath = antThemePath . '/' . $currentConfig['activeTheme'] . "/default_layout.html";
-        $themeContent = file_get_contents($themePath);
+        $themePath = antThemePath . '/' . $currentConfig['activeTheme'];
+        $themeContent['default_layout'] = file_get_contents($themePath . '/default_layout.html');
+        $themeContent['nav_layout'] = file_get_contents($themePath . '/nav_layout.html') ?? '';
 
-        if (!$themeContent) {
-            $themeContent = '
+        if (!$themeContent['default_layout']) {
+            $themeContent['default_layout'] = '
             <!DOCTYPE html>
             <html>
                 <head>

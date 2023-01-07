@@ -40,14 +40,10 @@ class AntPages
         return AntYaml::parseFile(antPagesList);
     }
 
-    public static function generateNavigation($navTemplate = null)
+    public static function generateNavigation($navTemplate = '')
     {
         $currentConfig = AntConfig::currentConfig();
         $baseURL = $currentConfig['baseURL'];
-        $navTemplate =
-            '<li class="nav-item active">
-        <a class="nav-link" href="<!--AntCMS-PageLink-->"><!--AntCMS-PageTitle--></a>
-        </li>';
         $navHTML = '';
         foreach (AntPages::getPages() as $page) {
             if(!$page['showInNav']){
