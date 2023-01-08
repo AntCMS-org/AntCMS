@@ -51,12 +51,11 @@ class AdminPlugin extends AntPlugin
                     header('Location: //' . $currentConfig['baseURL'] . "plugin/admin/config/");
                 }
                 $yaml = AntYaml::parseYaml($_POST['textarea']);
-                if(is_array($yaml)){
+                if (is_array($yaml)) {
                     AntYaml::saveFile(antConfigFile, $yaml);
                 }
                 header('Location: //' . $currentConfig['baseURL'] . "plugin/admin/config/");
                 exit;
-                break;
 
             default:
                 $HTMLTemplate = "<h1>AntCMS Configuration</h1>\n";
@@ -98,12 +97,11 @@ class AdminPlugin extends AntPlugin
                 AntPages::generatePages();
                 header('Location: //' . $currentConfig['baseURL'] . "plugin/admin/pages/");
                 exit;
-                break;
 
             case 'edit':
                 array_shift($route);
                 $pagePath = implode('/', $route);
-                $page = file_get_contents(antContentPath . '/' .$pagePath);
+                $page = file_get_contents(antContentPath . '/' . $pagePath);
                 $HTMLTemplate = str_replace('<!--AntCMS-ActionURL-->', '//' . $currentConfig['baseURL'] . "plugin/admin/pages/save/$pagePath", $HTMLTemplate);
                 $HTMLTemplate = str_replace('<!--AntCMS-TextAreaContent-->', htmlspecialchars($page), $HTMLTemplate);
                 break;
@@ -117,7 +115,6 @@ class AdminPlugin extends AntPlugin
                 file_put_contents($pagePath, $_POST['textarea']);
                 header('Location: //' . $currentConfig['baseURL'] . "plugin/admin/pages/");
                 exit;
-                break;
 
             default:
                 $HTMLTemplate = "<h1>Page Management</h1>\n";
