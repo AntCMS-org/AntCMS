@@ -17,8 +17,8 @@ class AntConfig
             'generateKeywords' => true,
             'enableCache' => true,
             'admin' =>  array(
+                'username' => 'Admin',
                 'password' => '',
-                'username' => '',
             ),
             'debug' => true,
             'baseURL' => $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']),

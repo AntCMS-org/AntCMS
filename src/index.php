@@ -9,12 +9,14 @@ const antConfigFile = __DIR__ . '/config.yaml';
 const antPagesList = __DIR__ . '/pages.yaml';
 const antContentPath = __DIR__ . '/Content';
 const antThemePath = __DIR__ . '/Themes';
+const antPluginPath = __DIR__ . '/Plugins';
 require_once __DIR__ . '/Vendor/autoload.php';
 require_once __DIR__ . '/Autoload.php';
 
 use AntCMS\AntCMS;
 use AntCMS\AntConfig;
 use AntCMS\AntPages;
+use AntCMS\AntPluginLoader;
 
 $antCms = new AntCMS();
 
@@ -48,15 +50,35 @@ if ($currentConfg['forceHTTPS'] && 'cli' !== PHP_SAPI) {
     }
 }
 
-$requestedPage = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$requestedPage = strtolower(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
 $segments = explode('/', $requestedPage);
 
 if ($segments[0] === '') {
     array_shift($segments);
 }
 
-if ($segments[0] === 'Themes' && $segments[2] === 'Assets') {
+if ($segments[0] === 'themes' && $segments[2] === 'assets') {
     $antCms->serveContent(AntDir . $requestedPage);
+    exit;
+}
+
+if ($segments[0] === 'plugin') {
+    $pluginName = $segments[1];
+    $pluginLoader = new AntPluginLoader();
+    $plugins = $pluginLoader->loadPlugins();
+
+    //Drop the first two elements of the array so the remaining segments are specific to the plugin.
+    array_splice($segments, 0, 2);
+
+    foreach ($plugins as $plugin) {
+        if (strtolower($plugin->getName()) === strtolower($pluginName)) {
+            $plugin->handlePluginRoute($segments);
+            exit;
+        }
+    }
+    // plugin not found
+    header("HTTP/1.0 404 Not Found");
+    echo ("Error 404");
     exit;
 }
 
