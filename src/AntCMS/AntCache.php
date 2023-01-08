@@ -17,7 +17,7 @@ class AntCache
      */
     public function setCache($key, $content)
     {
-        $cachePath = AntCachePath . "/$key.cache";
+        $cachePath = AntCachePath . DIRECTORY_SEPARATOR . "$key.cache";
         $config = AntConfig::currentConfig();
         if ($config['enableCache']) {
             try {
@@ -40,7 +40,7 @@ class AntCache
      */
     public function getCache($key)
     {
-        $cachePath = AntCachePath . "/$key.cache";
+        $cachePath = AntCachePath . DIRECTORY_SEPARATOR . "$key.cache";
         $config = AntConfig::currentConfig();
         if ($config['enableCache']) {
             try {
@@ -65,7 +65,7 @@ class AntCache
     {
         $config = AntConfig::currentConfig();
         if ($config['enableCache']) {
-            $cachePath = AntCachePath . "/$key.cache";
+            $cachePath = AntCachePath . DIRECTORY_SEPARATOR . "$key.cache";
             return file_exists($cachePath);
         } else {
             return false;
