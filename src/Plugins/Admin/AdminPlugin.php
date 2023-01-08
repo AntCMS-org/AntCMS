@@ -10,7 +10,9 @@ class AdminPlugin extends AntPlugin
 {
     public function handlePluginRoute(array $route)
     {
-        switch ($route[0]) {
+        $currentStep = $route[0];
+        array_shift($route);
+        switch ($currentStep) {
             case 'config':
                 $this->configureAntCMS($route);
                 break;
@@ -20,7 +22,7 @@ class AdminPlugin extends AntPlugin
                 break;
 
             default:
-                echo "Unrecognized route: " . $route[0];
+                echo "Unrecognized route: " . $currentStep;
                 break;
         }
     }
@@ -64,8 +66,16 @@ class AdminPlugin extends AntPlugin
         $antCMS = new AntCMS;
         $pageTemplate = $antCMS->getPageLayout();
         $pages = AntPages::getPages();
+        $currentConfig = AntConfig::currentConfig();
+
+        if($route[0] == 'regenerate'){
+            AntPages::generatePages();
+            header('Location: //' . $currentConfig['baseURL'] . "plugin/admin/pages/");
+            exit;
+        }
 
         $markdown = "# Page Management \r\n";
+        $markdown.= "[Click here to regenerate the page list](" . '//' . $currentConfig['baseURL'] . "plugin/admin/pages/regenerate) \r\n" ;
 
         foreach ($pages as $page) {
             $markdown .= '## ' . $page['pageTitle'] . "\r\n";
