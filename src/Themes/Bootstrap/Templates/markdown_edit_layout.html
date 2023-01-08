@@ -1,0 +1,31 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <h3>Page Content</h3>
+      <form action="<!--AntCMS-ActionURL-->" method="post">
+        <textarea id="markdown-input" name="textarea" rows="100" style="width: 100%; height: 100%;"
+          class="form-control"><!--AntCMS-TextAreaContent--></textarea>
+        <input type="submit" value="Save">
+      </form>
+    </div>
+
+    <div class="col-md-6">
+      <h3>Page Preview</h3>
+      <div id="markdown-output"></div>
+      <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+      <script>
+        const input = document.getElementById("markdown-input");
+        const output = document.getElementById("markdown-output");
+
+        function parseMarkdown() {
+          const inputValue = input.value.replace(/--AntCMS--.*--AntCMS--/s, "");
+          output.innerHTML = marked.parse(inputValue);
+        }
+
+        parseMarkdown();
+
+        input.addEventListener("input", parseMarkdown);
+      </script>
+    </div>
+  </div>
+</div>

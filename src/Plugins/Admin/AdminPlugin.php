@@ -101,7 +101,7 @@ class AdminPlugin extends AntPlugin
     {
         $antCMS = new AntCMS;
         $pageTemplate = $antCMS->getPageLayout();
-        $HTMLTemplate = $antCMS->getThemeTemplate('textarea_edit_layout');
+        $HTMLTemplate = $antCMS->getThemeTemplate('markdown_edit_layout');
         $pages = AntPages::getPages();
         $currentConfig = AntConfig::currentConfig();
 
