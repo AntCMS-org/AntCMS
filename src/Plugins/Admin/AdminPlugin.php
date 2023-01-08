@@ -36,10 +36,10 @@ class AdminPlugin extends AntPlugin
     {
         $antCMS = new AntCMS;
         $pageTemplate = $antCMS->getPageLayout();
-        $currentConfig = AntConfig::currentConfig();
+        $currentConfig = file_get_contents(antConfigFile);
 
-        $markdown = "# AntCMS Configuration \r\n";
-
+        //$markdown = "# AntCMS Configuration \r\n";
+        /*
         foreach ($currentConfig as $key => $value) {
             if (is_array($value)) {
                 $markdown .= " - $key: \r\n";
@@ -52,10 +52,14 @@ class AdminPlugin extends AntPlugin
                 $markdown .= " - $key: $value \r\n";
             }
         }
+        */
 
+        $content = '<form>';
+        $content .= '<textarea cols="100" type="text" class="form-textarea">'. htmlspecialchars($currentConfig) . '</textarea>';
+        $content .= '</form>';              
 
         $pageTemplate = str_replace('<!--AntCMS-Title-->', 'AntCMS Configuration', $pageTemplate);
-        $pageTemplate = str_replace('<!--AntCMS-Body-->', AntMarkdown::renderMarkdown($markdown), $pageTemplate);
+        $pageTemplate = str_replace('<!--AntCMS-Body-->', $content, $pageTemplate);
 
         echo $pageTemplate;
         exit;
@@ -68,14 +72,14 @@ class AdminPlugin extends AntPlugin
         $pages = AntPages::getPages();
         $currentConfig = AntConfig::currentConfig();
 
-        if($route[0] == 'regenerate'){
+        if ($route[0] == 'regenerate') {
             AntPages::generatePages();
             header('Location: //' . $currentConfig['baseURL'] . "plugin/admin/pages/");
             exit;
         }
 
         $markdown = "# Page Management \r\n";
-        $markdown.= "[Click here to regenerate the page list](" . '//' . $currentConfig['baseURL'] . "plugin/admin/pages/regenerate) \r\n" ;
+        $markdown .= "[Click here to regenerate the page list](" . '//' . $currentConfig['baseURL'] . "plugin/admin/pages/regenerate) \r\n";
 
         foreach ($pages as $page) {
             $markdown .= '## ' . $page['pageTitle'] . "\r\n";
