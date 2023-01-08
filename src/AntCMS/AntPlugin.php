@@ -4,9 +4,9 @@ namespace AntCMS;
 
 abstract class AntPlugin
 {
-    public function displayRoute($route)
+    public function handlePluginRoute(array $route)
     {
-        die("Plugin did not define a displayRoute function");
+        die("Plugin did not define a handlePluginRoute function");
     }
 
     abstract function getName();

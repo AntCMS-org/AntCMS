@@ -11,7 +11,7 @@ class AntPluginLoader
         $plugins = array();
         $files = array();
 
-        $files = AntTools::getFileList(antPluginPath);
+        $files = AntTools::getFileList(antPluginPath, null, true);
 
         foreach ($files as $file) {
             if (substr($file, -10) === "Plugin.php") {

@@ -50,19 +50,19 @@ if ($currentConfg['forceHTTPS'] && 'cli' !== PHP_SAPI) {
     }
 }
 
-$requestedPage = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$requestedPage = strtolower(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
 $segments = explode('/', $requestedPage);
 
 if ($segments[0] === '') {
     array_shift($segments);
 }
 
-if ($segments[0] === 'Themes' && $segments[2] === 'Assets') {
+if ($segments[0] === 'themes' && $segments[2] === 'assets') {
     $antCms->serveContent(AntDir . $requestedPage);
     exit;
 }
 
-if ($segments[0] === 'Plugin') {
+if ($segments[0] === 'plugin') {
     $pluginName = $segments[1];
     $pluginLoader = new AntPluginLoader();
     $plugins = $pluginLoader->loadPlugins();
@@ -72,7 +72,7 @@ if ($segments[0] === 'Plugin') {
 
     foreach ($plugins as $plugin) {
         if (strtolower($plugin->getName()) === strtolower($pluginName)) {
-            $plugin->displayRoute(null);
+            $plugin->handlePluginRoute($segments);
             exit;
         }
     }
