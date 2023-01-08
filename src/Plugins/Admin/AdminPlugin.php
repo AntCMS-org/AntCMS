@@ -5,13 +5,20 @@ use AntCMS\AntPlugin;
 use AntCMS\AntConfig;
 use AntCMS\AntPages;
 use AntCMS\AntYaml;
+use AntCMS\AntAuth;
 
 class AdminPlugin extends AntPlugin
 {
     public function handlePluginRoute(array $route)
     {
-        $currentStep = $route[0];
+        AntAuth::checkAuth();
+
+        $currentStep = $route[0] ?? 'none';
+        $antCMS = new AntCMS;
+        $pageTemplate = $antCMS->getPageLayout();
+        $currentConfig = AntConfig::currentConfig();
         array_shift($route);
+
         switch ($currentStep) {
             case 'config':
                 $this->configureAntCMS($route);
@@ -22,7 +29,13 @@ class AdminPlugin extends AntPlugin
                 break;
 
             default:
-                echo "Unrecognized route: " . $currentStep;
+                $HTMLTemplate = "<h1>AntCMS Admin Plugin</h1>\n";
+                $HTMLTemplate .= "<a href='//" . $currentConfig['baseURL'] . "plugin/admin/config/'>AntCMS Configuration</a><br>\n";
+                $HTMLTemplate .= "<a href='//" . $currentConfig['baseURL'] . "plugin/admin/pages/'>Page management</a><br>\n";
+                $pageTemplate = str_replace('<!--AntCMS-Title-->', 'AntCMS Configuration', $pageTemplate);
+                $pageTemplate = str_replace('<!--AntCMS-Body-->', $HTMLTemplate, $pageTemplate);
+
+                echo $pageTemplate;
                 break;
         }
     }
@@ -40,7 +53,7 @@ class AdminPlugin extends AntPlugin
         $currentConfig = AntConfig::currentConfig();
         $currentConfigFile = file_get_contents(antConfigFile);
 
-        switch ($route[0]) {
+        switch ($route[0] ?? 'none') {
             case 'edit':
                 $HTMLTemplate = str_replace('<!--AntCMS-ActionURL-->', '//' . $currentConfig['baseURL'] . 'plugin/admin/config/save', $HTMLTemplate);
                 $HTMLTemplate = str_replace('<!--AntCMS-TextAreaContent-->', htmlspecialchars($currentConfigFile), $HTMLTemplate);
@@ -92,7 +105,7 @@ class AdminPlugin extends AntPlugin
         $pages = AntPages::getPages();
         $currentConfig = AntConfig::currentConfig();
 
-        switch ($route[0]) {
+        switch ($route[0] ?? 'none') {
             case 'regenerate':
                 AntPages::generatePages();
                 header('Location: //' . $currentConfig['baseURL'] . "plugin/admin/pages/");
