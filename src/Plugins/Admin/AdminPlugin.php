@@ -36,30 +36,48 @@ class AdminPlugin extends AntPlugin
     {
         $antCMS = new AntCMS;
         $pageTemplate = $antCMS->getPageLayout();
-        $currentConfig = file_get_contents(antConfigFile);
+        $configTemplate = $antCMS->getThemeTemplate('textarea_edit_layout');
+        $currentConfig = AntConfig::currentConfig();
+        $currentConfigFile = file_get_contents(antConfigFile);
 
-        //$markdown = "# AntCMS Configuration \r\n";
-        /*
-        foreach ($currentConfig as $key => $value) {
-            if (is_array($value)) {
-                $markdown .= " - $key: \r\n";
-                foreach ($value as $key => $value) {
-                    $value = is_bool($value) ? $this->boolToWord($value) : $value;
-                    $markdown .= "   - $key: $value \r\n";
+        switch ($route[0]) {
+            case 'edit':
+                $configTemplate = str_replace('<!--AntCMS-ActionURL-->', '//' . $currentConfig['baseURL'] . 'plugin/admin/config/save', $configTemplate);
+                $configTemplate = str_replace('<!--AntCMS-TextAreaContent-->', htmlspecialchars($currentConfigFile), $configTemplate);
+                break;
+
+            case 'save':
+                if (!$_POST['config']) {
+                    header('Location: //' . $currentConfig['baseURL'] . "plugin/admin/config/");
                 }
-            } else {
-                $value = is_bool($value) ? $this->boolToWord($value) : $value;
-                $markdown .= " - $key: $value \r\n";
-            }
+                //TODO: Properly validate that the yaml is correct before saving it
+                file_put_contents(antConfigFile, $_POST['config']);
+                header('Location: //' . $currentConfig['baseURL'] . "plugin/admin/config/");
+                exit;
+                break;
+
+            default:
+                $configTemplate = "<h1>AntCMS Configuration</h1>\n";
+                $configTemplate .= "<a href='//" . $currentConfig['baseURL'] . "plugin/admin/config/edit'>Click here to edit the config file</a><br>\n";
+                $configTemplate .= "<ul>\n";
+                foreach ($currentConfig as $key => $value) {
+                    if (is_array($value)) {
+                        $configTemplate .= "<li>$key:</li>\n";
+                        $configTemplate .= "<ul>\n";
+                        foreach ($value as $key => $value) {
+                            $value = is_bool($value) ? $this->boolToWord($value) : $value;
+                            $configTemplate .= "<li>$key: $value</li>\n";
+                        }
+                        $configTemplate .= "</ul>\n";
+                    } else {
+                        $value = is_bool($value) ? $this->boolToWord($value) : $value;
+                        $configTemplate .= "<li>$key: $value</li>\n";
+                    }
+                }
+                $configTemplate .= "</ul>\n";
         }
-        */
-
-        $content = '<form>';
-        $content .= '<textarea cols="100" type="text" class="form-textarea">'. htmlspecialchars($currentConfig) . '</textarea>';
-        $content .= '</form>';              
-
         $pageTemplate = str_replace('<!--AntCMS-Title-->', 'AntCMS Configuration', $pageTemplate);
-        $pageTemplate = str_replace('<!--AntCMS-Body-->', $content, $pageTemplate);
+        $pageTemplate = str_replace('<!--AntCMS-Body-->', $configTemplate, $pageTemplate);
 
         echo $pageTemplate;
         exit;
