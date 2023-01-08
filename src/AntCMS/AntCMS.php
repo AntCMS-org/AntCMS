@@ -98,6 +98,11 @@ class AntCMS
     {
         $currentConfig = AntConfig::currentConfig();
         $theme = $theme ?? $currentConfig['activeTheme'];
+
+        if (!is_dir(antThemePath . '/' . $theme)) {
+            $theme = 'Default';
+        }
+
         $templatePath = antThemePath . '/' . $theme . '/' . 'Templates';
         $defaultTemplates = antThemePath . '/Default/Templates';
 
