@@ -2,6 +2,7 @@
 
 namespace AntCMS;
 
+use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
 
 class AntYaml
@@ -15,5 +16,13 @@ class AntYaml
     {
         $yaml = Yaml::dump($data);
         file_put_contents($file, $yaml);
+    }
+
+    public static function parseYaml($yaml){
+        try {
+            return Yaml::parse($yaml);
+        } catch (ParseException $exception) {
+            return null;
+        }
     }
 }
