@@ -169,4 +169,15 @@ class AntCMS
         $currentConfig = AntConfig::currentConfig();
         return $currentConfig['SiteInfo'];
     }
+
+    public function serveContent($path)
+    {
+        if (!file_exists($path)) {
+            $this->renderException('404');
+        } else {
+            $asset_mime_type = mime_content_type($path);
+            header('Content-Type: ' . $asset_mime_type);
+            readfile($path);
+        }
+    }
 }

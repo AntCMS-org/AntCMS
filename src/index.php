@@ -49,9 +49,22 @@ if ($currentConfg['forceHTTPS'] && 'cli' !== PHP_SAPI) {
 }
 
 $requestedPage = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$segments = explode('/', $requestedPage);
+
+if ($segments[0] === '') {
+    array_shift($segments);
+}
+
+if ($segments[0] === 'Themes' && $segments[2] === 'Assets') {
+    $antCms->serveContent(AntDir . $requestedPage);
+    exit;
+}
+
 $indexes = ['/', '/index.php', '/index.html'];
-if (in_array($requestedPage, $indexes)) {
+if (in_array($segments[0], $indexes)) {
     $antCms->renderPage('/');
+    exit;
 } else {
     $antCms->renderPage($requestedPage);
+    exit;
 }

@@ -1,8 +1,4 @@
 RewriteEngine On
 
-# Don't rewrite requests for files in the /Themes/*/Assets/ directory
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_URI} !^/Themes/.*/Assets/.*$
-
 # Rewrite all other requests to index.php
 RewriteRule .* index.php [L]
