@@ -1,7 +1,8 @@
 RewriteEngine On
 
-# If the requested file is an asset, serve it directly
-RewriteCond %{REQUEST_FILENAME} -f
-RewriteRule ^Themes/[^/]+/Assets/.+$ - [L]
+# Don't rewrite requests for files in the /Themes/*/Assets/ directory
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI} !^/Themes/.*/Assets/.*$
 
-RewriteRule ^(.+)$ index.php [L,QSA]
+# Rewrite all other requests to index.php
+RewriteRule .* index.php [L]
