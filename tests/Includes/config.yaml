@@ -1,0 +1,11 @@
+SiteInfo:
+    siteTitle: 'AntCMS'
+forceHTTPS: true
+activeTheme: Tailwind
+generateKeywords: true
+enableCache: true
+admin:
+    username: Admin
+    password: $2y$10$omNAQ5luPsFYOny0HA3i.O7Ce3XPult8Qn6uamT0b1cFWz.5WkGYO
+debug: true
+baseURL: antcms.org/

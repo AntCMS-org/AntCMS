@@ -3,15 +3,9 @@
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
-const AntDir = __DIR__;
-const AntCachePath   = __DIR__ . DIRECTORY_SEPARATOR . 'Cache';
-const antConfigFile  = __DIR__ . DIRECTORY_SEPARATOR . 'config.yaml';
-const antPagesList   = __DIR__ . DIRECTORY_SEPARATOR . 'pages.yaml';
-const antContentPath = __DIR__ . DIRECTORY_SEPARATOR . 'Content';
-const antThemePath   = __DIR__ . DIRECTORY_SEPARATOR . 'Themes';
-const antPluginPath  = __DIR__ . DIRECTORY_SEPARATOR . 'Plugins';
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'Vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'Autoload.php';
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'Constants.php';
 
 use AntCMS\AntCMS;
 use AntCMS\AntConfig;

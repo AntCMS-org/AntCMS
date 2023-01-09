@@ -1,6 +1,7 @@
 {
     "name": "belle/ant-cms",
     "type": "project",
+    "license": "Apache-2.0",
     "description": "A simple CMS built with PHP and Markdown",
     "minimum-stability": "stable",
     "require": {
@@ -19,6 +20,7 @@
         "vendor-dir": "src/Vendor"
     },
     "require-dev": {
-        "phpstan/phpstan": "^1.9"
+        "phpstan/phpstan": "^1.9",
+        "phpunit/phpunit": "^9.5"
     }
 }
