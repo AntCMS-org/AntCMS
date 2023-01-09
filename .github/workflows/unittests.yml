@@ -16,6 +16,7 @@ jobs:
       - run: |
           cp ./tests/Includes/config.yaml ./src/config.yaml
       - uses: php-actions/phpunit@v3
-        with: 
+        with:
+          bootstrap: src/Vendor/autoload.php
           php_version: "8.0"
           args: "tests"
