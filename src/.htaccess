@@ -4,4 +4,7 @@ RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} -f
 RewriteRule ^Themes/[^/]+/Assets/.+$ - [L]
 
+# Allow access to the robots.txt file
+RewriteRule ^robots\.txt$ - [L]
+
 RewriteRule ^(.+)$ index.php [L,QSA]
