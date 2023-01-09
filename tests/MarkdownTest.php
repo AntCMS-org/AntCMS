@@ -17,18 +17,24 @@ class MarkdownTest extends TestCase
     public function testMarkdownIsFast()
     {
         $markdown = file_get_contents(antContentPath . DIRECTORY_SEPARATOR . 'index.md');
+        $totalTime = 0;
 
-        $start = microtime(true);
-        AntMarkdown::renderMarkdown($markdown);
-        $end = microtime(true);
-        $time = $end - $start;
+        for ($i = 0; $i < 10; $i++) {
+            $start = microtime(true);
+            AntMarkdown::renderMarkdown($markdown);
+            $end = microtime(true);
+            $totalTime += $end - $start;
+        }
 
-        $constraint = new Callback(function ($time) {
-            return $time < 0.5;
+        $averageTime = $totalTime / 5;
+
+        $constraint = new Callback(function ($averageTime) {
+            return $averageTime < 0.015;
         });
 
-        $this->assertThat($time, $constraint, 'AntMarkdown::renderMarkdown took too long!');
+        $this->assertThat($averageTime, $constraint, 'AntMarkdown::renderMarkdown took too long on average!');
     }
+
 
     /*public function testMarkdownCacheWorks()
     {
