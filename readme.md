@@ -1,6 +1,7 @@
 # AntCMS
 
 [![PHPStan](https://github.com/BelleNottelling/AntCMS/actions/workflows/phpstan.yml/badge.svg)](https://github.com/BelleNottelling/AntCMS/actions/workflows/phpstan.yml)
+[![Unit Tests](https://github.com/AntCMS-org/AntCMS/actions/workflows/unittests.yml/badge.svg)](https://github.com/AntCMS-org/AntCMS/actions/workflows/unittests.yml)
 
 A tiny and fast CMS system for static websites.
 

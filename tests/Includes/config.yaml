@@ -1,7 +1,7 @@
 SiteInfo:
     siteTitle: 'AntCMS'
 forceHTTPS: true
-activeTheme: Tailwind
+activeTheme: Default
 generateKeywords: true
 enableCache: true
 admin:
