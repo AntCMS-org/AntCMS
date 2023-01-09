@@ -70,7 +70,7 @@ class AntCMS
     {
         $page = strtolower($page);
         $pagePath = AntDir . "/Content/$page";
-        $pagePath = str_replace('//', '/', $pagePath);
+        $pagePath = AntTools::repairFilePath($pagePath);
 
         if (is_dir($pagePath)) {
             $pagePath = $pagePath . '/index.md';
@@ -103,15 +103,15 @@ class AntCMS
             $theme = 'Default';
         }
 
-        $templatePath = antThemePath . '/' . $theme . '/' . 'Templates';
-        $defaultTemplates = antThemePath . '/Default/Templates';
+        $templatePath = AntTools::repairFilePath(antThemePath . '/' . $theme . '/' . 'Templates');
+        $defaultTemplates = AntTools::repairFilePath(antThemePath . '/Default/Templates');
 
         $templates = AntTools::getFileList($templatePath, 'html');
 
         if (in_array($layout . '.html', $templates)) {
-            $template = file_get_contents($templatePath . '/' . $layout . '.html');
+            $template = file_get_contents(AntTools::repairFilePath($templatePath . '/' . $layout . '.html'));
         } else {
-            $template = file_get_contents($defaultTemplates . '/' . $layout . '.html');
+            $template = file_get_contents(AntTools::repairFilePath($defaultTemplates . '/' . $layout . '.html'));
         }
 
         if ($layout == 'default_layout' && !$template) {

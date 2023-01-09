@@ -15,7 +15,7 @@ class AntPluginLoader
 
         foreach ($files as $file) {
             if (substr($file, -10) === "Plugin.php") {
-                include_once $file;
+                include_once AntTools::repairFilePath($file);
                 $className = pathinfo($file, PATHINFO_FILENAME);
                 $plugins[] = new $className();
             }

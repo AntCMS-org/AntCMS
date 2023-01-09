@@ -16,6 +16,7 @@ class AntPages
         $pageList = array();
 
         foreach ($pages as $page) {
+            $page = AntTools::repairFilePath($page);
             $pageContent = file_get_contents($page);
             $pageHeader = AntCMS::getPageHeaders($pageContent);
             $pageFunctionalPath = str_replace(antContentPath, "", $page);

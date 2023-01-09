@@ -6,6 +6,7 @@ use AntCMS\AntConfig;
 use AntCMS\AntPages;
 use AntCMS\AntYaml;
 use AntCMS\AntAuth;
+use AntCMS\AntTools;
 
 class AdminPlugin extends AntPlugin
 {
@@ -112,9 +113,20 @@ class AdminPlugin extends AntPlugin
                 exit;
 
             case 'edit':
-                array_shift($route);
-                $pagePath = implode('/', $route);
-                $page = file_get_contents(antContentPath . '/' . $pagePath);
+                if (!isset($_POST['newpage'])) {
+                    array_shift($route);
+                    $pagePath = implode('/', $route);
+                    $page = file_get_contents(antContentPath . '/' . $pagePath);
+                } else {
+                    $pagePath = '/' . $_POST['newpage'];
+                    if (substr($pagePath, -3) !== ".md") {
+                        $pagePath .= '.md';
+                    }
+                    $page = "--AntCMS--\nTitle: New Page Title\nAuthor: Author\nDescription: Description of this page.\nKeywords: Keywords\n--AntCMS--\n";
+                }
+
+                $pagePath = AntTools::repairFilePath($pagePath);
+
                 $HTMLTemplate = str_replace('<!--AntCMS-ActionURL-->', '//' . $currentConfig['baseURL'] . "plugin/admin/pages/save/$pagePath", $HTMLTemplate);
                 $HTMLTemplate = str_replace('<!--AntCMS-TextAreaContent-->', htmlspecialchars($page), $HTMLTemplate);
                 break;
@@ -122,16 +134,28 @@ class AdminPlugin extends AntPlugin
             case 'save':
                 array_shift($route);
                 $pagePath = antContentPath . '/' . implode('/', $route);
-                if (!$_POST['textarea']) {
+                if (!isset($_POST['textarea'])) {
                     header('Location: //' . $currentConfig['baseURL'] . "plugin/admin/pages/");
                 }
                 file_put_contents($pagePath, $_POST['textarea']);
                 header('Location: //' . $currentConfig['baseURL'] . "plugin/admin/pages/");
                 exit;
 
+            case 'create':
+                $HTMLTemplate = "<h1>Page Management</h1>\n";
+                $HTMLTemplate .= "<p>Create new page</p>\n";
+                $HTMLTemplate .= '<form method="post" action="' . '//' . $currentConfig['baseURL'] . 'plugin/admin/pages/edit">';
+                $HTMLTemplate .=
+                    '<div style="display:flex; flex-direction: row; justify-content: center; align-items: center">
+                <label for="input">URL for new page: ' . $currentConfig['baseURL'] . ' </label> <input type="text" name="newpage" id="input">
+                <input type="submit" value="Submit">
+                </div></form>';
+                break;
+
             default:
                 $HTMLTemplate = "<h1>Page Management</h1>\n";
                 $HTMLTemplate .= "<a href='//" . $currentConfig['baseURL'] . "plugin/admin/pages/regenerate'>Click here to regenerate the page list</a><br>\n";
+                $HTMLTemplate .= "<a href='//" . $currentConfig['baseURL'] . "plugin/admin/pages/create'>Click here to create a new page</a><br>\n";
                 $HTMLTemplate .= "<ul>\n";
                 foreach ($pages as $page) {
                     $HTMLTemplate .= "<li>\n";
