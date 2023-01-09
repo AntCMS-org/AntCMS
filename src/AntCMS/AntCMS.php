@@ -14,6 +14,7 @@ class AntCMS
         $start_time = microtime(true);
         $content = $this->getPage($page);
         $currentConfig = AntConfig::currentConfig();
+        $antTwig = new AntTwig;
 
         if (!$content || !is_array($content)) {
             $this->renderException("404");
@@ -23,12 +24,14 @@ class AntCMS
 
         $pageTemplate = $this->getPageLayout();
 
-        $pageTemplate = str_replace('<!--AntCMS-Description-->', $content['description'], $pageTemplate);
-        $pageTemplate = str_replace('<!--AntCMS-Author-->', $content['author'], $pageTemplate);
-        $pageTemplate = str_replace('<!--AntCMS-Keywords-->', $content['keywords'], $pageTemplate);
-
-        $pageTemplate = str_replace('<!--AntCMS-Title-->', $content['title'], $pageTemplate);
+        $params = array(
+            'AntCMSTitle' => $content['title'],
+            'AntCMSDescription' => $content['description'],
+            'AntCMSAuthor' => $content['author'],
+            'AntCMSKeywords' => $content['keywords'],
+        );
         $pageTemplate = str_replace('<!--AntCMS-Body-->', $markdown, $pageTemplate);
+        $pageTemplate = $antTwig->renderWithTiwg($pageTemplate, $params);
 
         $end_time = microtime(true);
         $elapsed_time = round($end_time - $start_time, 4);

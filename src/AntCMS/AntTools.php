@@ -29,4 +29,13 @@ class AntTools
 
         return $newPath;
     }
+
+    public static function repairURL($url)
+    {
+        $newURL = str_replace('\\\\', '/', $url);
+        $newURL = str_replace('\\', '/', $newURL);
+        $newURL = str_replace('//', '/', $newURL);
+
+        return $newURL;
+    }
 }
