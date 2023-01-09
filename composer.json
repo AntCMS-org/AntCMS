@@ -8,7 +8,9 @@
         "symfony/yaml": "^6.0",
         "php": ">=7.4",
         "league/commonmark": "^2.3",
-        "elgigi/commonmark-emoji": "^2.0"
+        "elgigi/commonmark-emoji": "^2.0",
+        "twig/twig": "^3.5",
+        "shapecode/twig-string-loader": "^1.1"
     },
     "authors": [
         {

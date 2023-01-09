@@ -29,4 +29,21 @@ class AntTools
 
         return $newPath;
     }
+
+
+/**
+ * Repairs a URL by replacing backslashes with forward slashes and removing duplicate slashes.
+ *
+ * @param string $url The URL to repair. Note: this function will not work correctly if the URL provided has its own protocol (like HTTS://).
+ * @return string The repaired URL
+ */
+public static function repairURL($url)
+{
+    $newURL = str_replace('\\\\', '/', $url);
+    $newURL = str_replace('\\', '/', $newURL);
+    $newURL = str_replace('//', '/', $newURL);
+
+    return $newURL;
+}
+
 }

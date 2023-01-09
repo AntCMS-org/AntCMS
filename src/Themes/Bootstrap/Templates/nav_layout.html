@@ -1,3 +1,5 @@
+{% for page in pages %}
 <li class="nav-item active">
-    <a class="nav-link" href="<!--AntCMS-PageLink-->"><!--AntCMS-PageTitle--></a>
+    <a class="nav-link" href="{{ page.url }}">{{ page.pageTitle }}</a>
 </li>
+{% endfor %}

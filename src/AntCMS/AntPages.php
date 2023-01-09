@@ -7,6 +7,7 @@ use AntCMS\AntYaml;
 use AntCMS\AntConfig;
 use AntCMS\AntCache;
 use AntCMS\AntTools;
+use AntCMS\AntTwig;
 
 class AntPages
 {
@@ -53,17 +54,15 @@ class AntPages
             }
         }
 
-        $navHTML = '';
         $baseURL = $currentConfig['baseURL'];
-        foreach ($pages as $page) {
-            if (!$page['showInNav']) {
-                continue;
-            }
-            $url = "//" . str_replace('//', '/', $baseURL . $page['functionalPagePath']);
-            $navEntry = str_replace('<!--AntCMS-PageLink-->', $url, $navTemplate);
-            $navEntry = str_replace('<!--AntCMS-PageTitle-->', $page['pageTitle'], $navEntry);
-            $navHTML .= $navEntry;
+        foreach ($pages as $key => $page) {
+            $url = "//" . AntTools::repairURL($baseURL . $page['functionalPagePath']);
+            $pages[$key]['url'] = $url;
         }
+
+        $antTwig = new AntTwig;
+        $navHTML = $antTwig->renderWithTiwg($navTemplate, array('pages' =>$pages));
+
         $cache->setCache($cacheKey, $navHTML);
         return $navHTML;
     }
