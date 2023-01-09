@@ -1,6 +1,7 @@
 <?php
 
 use AntCMS\AntCMS;
+use AntCMS\AntPages;
 use PHPUnit\Framework\TestCase;
 
 include_once 'Includes' . DIRECTORY_SEPARATOR . 'Include.php';
@@ -28,6 +29,9 @@ class CMSTest extends TestCase
 
     public function testGetPageLayout()
     {
+        //We need to generate the pages.yaml file so that the nav list can be generated.
+        AntPages::generatePages();
+
         $antCMS = new AntCMS;
         $result = $antCMS->getPageLayout();
 
@@ -47,6 +51,15 @@ class CMSTest extends TestCase
         $this->assertArrayHasKey('author', $result);
         $this->assertArrayHasKey('description', $result);
         $this->assertArrayHasKey('keywords', $result);
+    }
+
+    public function testGetPageFailed()
+    {
+        $antCMS = new AntCMS;
+        $result = $antCMS->getPage('/thisdoesnotexist.md');
+
+        $this->assertEquals(false, $result);
+        $this->assertIsBool($result);
     }
 
     public function testGetThemeTemplate()
