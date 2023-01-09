@@ -17,7 +17,10 @@ class CMSTest extends TestCase
         $this->assertEquals('AntCMS', $siteInfo['siteTitle']);
     }
 
-    public function testRenderPage(){
+    public function testRenderPage()
+    {
+        AntPages::generatePages();
+
         $antCMS = new AntCMS;
         $pagePath = '/index.md';
         $result = $antCMS->renderPage($pagePath);
