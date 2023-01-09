@@ -63,17 +63,6 @@ class AntPages
         $antTwig = new AntTwig;
         $navHTML = $antTwig->renderWithTiwg($navTemplate, array('pages' =>$pages));
 
-        /*$navHTML = '';
-        $baseURL = $currentConfig['baseURL'];
-        foreach ($pages as $page) {
-            if (!$page['showInNav']) {
-                continue;
-            }
-            $url = "//" . str_replace('//', '/', $baseURL . $page['functionalPagePath']);
-            $navEntry = str_replace('<!--AntCMS-PageLink-->', $url, $navTemplate);
-            $navEntry = str_replace('<!--AntCMS-PageTitle-->', $page['pageTitle'], $navEntry);
-            $navHTML .= $navEntry;
-        }*/
         $cache->setCache($cacheKey, $navHTML);
         return $navHTML;
     }
