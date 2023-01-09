@@ -37,8 +37,7 @@ class AntCMS
             $pageTemplate = str_replace('<!--AntCMS-Debug-->', '<p>Took ' . $elapsed_time . ' seconds to render the page. </p>', $pageTemplate);
         }
 
-        echo $pageTemplate;
-        exit;
+        return $pageTemplate;
     }
 
     public function getPageLayout($theme = null)
@@ -108,26 +107,36 @@ class AntCMS
 
         $templates = AntTools::getFileList($templatePath, 'html');
 
-        if (in_array($layout . '.html', $templates)) {
-            $template = file_get_contents(AntTools::repairFilePath($templatePath . '/' . $layout . '.html'));
-        } else {
-            $template = file_get_contents(AntTools::repairFilePath($defaultTemplates . '/' . $layout . '.html'));
+        try {
+            if (in_array($layout . '.html', $templates)) {
+                $template = file_get_contents(AntTools::repairFilePath($templatePath . '/' . $layout . '.html'));
+            } else {
+                $template = file_get_contents(AntTools::repairFilePath($defaultTemplates . '/' . $layout . '.html'));
+            }
+        } catch (\Exception $e) {
         }
 
-        if ($layout == 'default_layout' && !$template) {
-            $template = '
-            <!DOCTYPE html>
-            <html>
-                <head>
-                    <title><!--AntCMS-Title--></title>
-                    <meta name="description" content="<!--AntCMS-Description-->">
-                    <meta name="author" content="<!--AntCMS-Author-->">
-                    <meta name="keywords" content="<!--AntCMS-Keywords-->">
-                </head>
-                <body>
-                    <!--AntCMS-Body-->
-                </body>
-            </html>';
+        if (empty($template)) {
+            if ($layout == 'default_layout') {
+                $template = '
+                <!DOCTYPE html>
+                <html>
+                    <head>
+                        <title><!--AntCMS-Title--></title>
+                        <meta name="description" content="<!--AntCMS-Description-->">
+                        <meta name="author" content="<!--AntCMS-Author-->">
+                        <meta name="keywords" content="<!--AntCMS-Keywords-->">
+                    </head>
+                    <body>
+                        <p>AntCMS had an error when fetching the page template, please contact the site administrator.</p>
+                        <!--AntCMS-Body-->
+                    </body>
+                </html>';
+            } else {
+                $template = '
+                <h1>There was an error</h1>
+                <p>AntCMS had an error when fetching the page template, please contact the site administrator.</p>';
+            }
         }
 
         return $template;

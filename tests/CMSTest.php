@@ -17,7 +17,6 @@ class CMSTest extends TestCase
         $this->assertEquals('AntCMS', $siteInfo['siteTitle']);
     }
 
-    /* Since this function echos the page and exists processing, we don't get the chance to test the return. Will revist.
     public function testRenderPage(){
         $antCMS = new AntCMS;
         $pagePath = '/index.md';
@@ -25,7 +24,7 @@ class CMSTest extends TestCase
 
         $this->assertNotEmpty($result);
         $this->assertIsString($result);
-    }*/
+    }
 
     public function testGetPageLayout()
     {
@@ -66,6 +65,15 @@ class CMSTest extends TestCase
     {
         $antCMS = new AntCMS;
         $result = $antCMS->getThemeTemplate();
+
+        $this->assertNotEmpty($result);
+        $this->assertIsString($result);
+    }
+
+    public function testGetThemeTemplateFallback()
+    {
+        $antCMS = new AntCMS;
+        $result = $antCMS->getThemeTemplate('atemplatethatjusdoesntexist');
 
         $this->assertNotEmpty($result);
         $this->assertIsString($result);

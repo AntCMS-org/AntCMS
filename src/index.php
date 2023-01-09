@@ -78,9 +78,9 @@ if ($segments[0] === 'plugin') {
 
 $indexes = ['/', '/index.php', '/index.html'];
 if (in_array($segments[0], $indexes)) {
-    $antCms->renderPage('/');
+    echo $antCms->renderPage('/');
     exit;
 } else {
-    $antCms->renderPage($requestedPage);
+    echo $antCms->renderPage($requestedPage);
     exit;
 }

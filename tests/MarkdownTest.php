@@ -1,6 +1,7 @@
 <?php
 
 use AntCMS\AntMarkdown;
+use AntCMS\AntConfig;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Constraint\Callback;
 
@@ -26,7 +27,7 @@ class MarkdownTest extends TestCase
             $totalTime += $end - $start;
         }
 
-        $averageTime = $totalTime / 5;
+        $averageTime = $totalTime / 10;
 
         $constraint = new Callback(function ($averageTime) {
             return $averageTime < 0.015;
@@ -36,20 +37,40 @@ class MarkdownTest extends TestCase
     }
 
 
-    /*public function testMarkdownCacheWorks()
+    public function testMarkdownCacheWorks()
     {
         $markdown = file_get_contents(antContentPath . DIRECTORY_SEPARATOR . 'index.md');
+        $currentConfig = AntConfig::currentConfig();
 
-        $start = microtime(true);
-        AntMarkdown::renderMarkdown($markdown);
-        $end = microtime(true);
-        $firstTime = $end - $start;
+        //Disable cache
+        $currentConfig['enableCache'] = false;
+        AntConfig::saveConfig($currentConfig);
 
-        $start = microtime(true);
-        AntMarkdown::renderMarkdown($markdown);
-        $end = microtime(true);
-        $secondTime = $end - $start;
+        $totalTime = 0;
+        for ($i = 0; $i < 10; $i++) {
+            $start = microtime(true);
+            AntMarkdown::renderMarkdown($markdown);
+            $end = microtime(true);
+            $totalTime += $end - $start;
+        }
 
-        $this->assertLessThan($secondTime, $firstTime, 'Cache didn\'t speed up rendering!');
-    }*/
+        $withoutCache = $totalTime / 10;
+
+        //Enable cache
+        $currentConfig['enableCache'] = true;
+        AntConfig::saveConfig($currentConfig);
+
+        $totalTime = 0;
+        for ($i = 0; $i < 10; $i++) {
+            $start = microtime(true);
+            AntMarkdown::renderMarkdown($markdown);
+            $end = microtime(true);
+            $totalTime += $end - $start;
+        }
+
+        $withCache = $totalTime / 10;
+        
+        echo "\n Markdown rendering speed with cache: $withCache VS without: $withoutCache \n\n";
+        $this->assertLessThan($withoutCache, $withCache, 'Cache didn\'t speed up rendering!');
+    }
 }
