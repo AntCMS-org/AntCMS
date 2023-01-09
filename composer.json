@@ -4,9 +4,10 @@
     "description": "A simple CMS built with PHP and Markdown",
     "minimum-stability": "stable",
     "require": {
-        "michelf/php-markdown": "^2.0",
         "symfony/yaml": "^6.0",
-        "php": ">=7.4"
+        "php": ">=7.4",
+        "league/commonmark": "^2.3",
+        "elgigi/commonmark-emoji": "^2.0"
     },
     "authors": [
         {
