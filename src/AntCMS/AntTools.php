@@ -22,7 +22,8 @@ class AntTools
         $newPath = realpath($path);
         if (!$newPath) {
             $newPath = str_replace('//', '/', $path);
-            $newPath = str_replace('\\\\', '/', $path);
+            $newPath = str_replace('\\\\', '/', $newPath);
+            $newPath = str_replace('\\', '/', $newPath);
             $newPath = str_replace('/', DIRECTORY_SEPARATOR, $newPath);
         }
 

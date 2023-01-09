@@ -18,8 +18,7 @@ class ToolsTest extends TestCase
         );
         $expectedPaths = array(
             "path" . DIRECTORY_SEPARATOR . "to" . DIRECTORY_SEPARATOR . "file",
-            "path" . DIRECTORY_SEPARATOR . "to" . DIRECTORY_SEPARATOR . "file",
-            DIRECTORY_SEPARATOR . "path" . DIRECTORY_SEPARATOR . "to" . DIRECTORY_SEPARATOR . "file",
+            "path" . DIRECTORY_SEPARATOR . "to" . DIRECTORY_SEPARATOR . "file", DIRECTORY_SEPARATOR . "path" . DIRECTORY_SEPARATOR . "to" . DIRECTORY_SEPARATOR . "file",
             "C:" . DIRECTORY_SEPARATOR . "path" . DIRECTORY_SEPARATOR . "to" . DIRECTORY_SEPARATOR . "file",
             "~" . DIRECTORY_SEPARATOR . "path" . DIRECTORY_SEPARATOR . "to" . DIRECTORY_SEPARATOR . "file"
         );
