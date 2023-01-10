@@ -7,6 +7,7 @@ use AntCMS\AntPages;
 use AntCMS\AntYaml;
 use AntCMS\AntAuth;
 use AntCMS\AntTools;
+use AntCMS\AntTwig;
 
 class AdminPlugin extends AntPlugin
 {
@@ -30,11 +31,19 @@ class AdminPlugin extends AntPlugin
                 break;
 
             default:
+                $antTwig = new AntTwig;
+                $params = array(
+                    'AntCMSTitle' => 'AntCMS Admin Dashboard',
+                    'AntCMSDescription' => 'The AntCMS admin dashboard',
+                    'AntCMSAuthor' => 'AntCMS',
+                    'AntCMSKeywords' => 'N/A',
+                );
+
                 $HTMLTemplate = "<h1>AntCMS Admin Plugin</h1>\n";
                 $HTMLTemplate .= "<a href='//" . $currentConfig['baseURL'] . "plugin/admin/config/'>AntCMS Configuration</a><br>\n";
                 $HTMLTemplate .= "<a href='//" . $currentConfig['baseURL'] . "plugin/admin/pages/'>Page management</a><br>\n";
-                $pageTemplate = str_replace('<!--AntCMS-Title-->', 'AntCMS Configuration', $pageTemplate);
                 $pageTemplate = str_replace('<!--AntCMS-Body-->', $HTMLTemplate, $pageTemplate);
+                $pageTemplate = $antTwig->renderWithTiwg($pageTemplate, $params);
 
                 echo $pageTemplate;
                 break;
@@ -53,6 +62,13 @@ class AdminPlugin extends AntPlugin
         $HTMLTemplate = $antCMS->getThemeTemplate('textarea_edit_layout');
         $currentConfig = AntConfig::currentConfig();
         $currentConfigFile = file_get_contents(antConfigFile);
+        $antTwig = new AntTwig;
+        $params = array(
+            'AntCMSTitle' => 'AntCMS Configuration',
+            'AntCMSDescription' => 'The AntCMS configuration screen',
+            'AntCMSAuthor' => 'AntCMS',
+            'AntCMSKeywords' => 'N/A',
+        );
 
         switch ($route[0] ?? 'none') {
             case 'edit':
@@ -91,8 +107,8 @@ class AdminPlugin extends AntPlugin
                 }
                 $HTMLTemplate .= "</ul>\n";
         }
-        $pageTemplate = str_replace('<!--AntCMS-Title-->', 'AntCMS Configuration', $pageTemplate);
         $pageTemplate = str_replace('<!--AntCMS-Body-->', $HTMLTemplate, $pageTemplate);
+        $pageTemplate = $antTwig->renderWithTiwg($pageTemplate, $params);
 
         echo $pageTemplate;
         exit;
@@ -105,6 +121,13 @@ class AdminPlugin extends AntPlugin
         $HTMLTemplate = $antCMS->getThemeTemplate('markdown_edit_layout');
         $pages = AntPages::getPages();
         $currentConfig = AntConfig::currentConfig();
+        $antTwig = new AntTwig;
+        $params = array(
+            'AntCMSTitle' => 'AntCMS Page Management',
+            'AntCMSDescription' => 'The AntCMS page management screen',
+            'AntCMSAuthor' => 'AntCMS',
+            'AntCMSKeywords' => 'N/A',
+        );
 
         switch ($route[0] ?? 'none') {
             case 'regenerate':
@@ -171,8 +194,8 @@ class AdminPlugin extends AntPlugin
                 $HTMLTemplate .= "</ul>\n";
         }
 
-        $pageTemplate = str_replace('<!--AntCMS-Title-->', 'AntCMS Page Management', $pageTemplate);
         $pageTemplate = str_replace('<!--AntCMS-Body-->', $HTMLTemplate, $pageTemplate);
+        $pageTemplate = $antTwig->renderWithTiwg($pageTemplate, $params);
 
         echo $pageTemplate;
         exit;

@@ -125,10 +125,10 @@ class AntCMS
                 <!DOCTYPE html>
                 <html>
                     <head>
-                        <title><!--AntCMS-Title--></title>
-                        <meta name="description" content="<!--AntCMS-Description-->">
-                        <meta name="author" content="<!--AntCMS-Author-->">
-                        <meta name="keywords" content="<!--AntCMS-Keywords-->">
+                        <title>{{ AntCMSTitle }}</title>
+                        <meta name="description" content="{{ AntCMSDescription }}">
+                        <meta name="author" content="{{ AntCMSAuthor }}">
+                        <meta name="keywords" content="{{ AntCMSKeywords }}">
                     </head>
                     <body>
                         <p>AntCMS had an error when fetching the page template, please contact the site administrator.</p>
