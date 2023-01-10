@@ -111,10 +111,10 @@ class AntCMS
         $templates = AntTools::getFileList($templatePath, 'html');
 
         try {
-            if (in_array($layout . '.html', $templates)) {
-                $template = file_get_contents(AntTools::repairFilePath($templatePath . '/' . $layout . '.html'));
+            if (in_array($layout . '.html.twig', $templates)) {
+                $template = file_get_contents(AntTools::repairFilePath($templatePath . '/' . $layout . '.html.twig'));
             } else {
-                $template = file_get_contents(AntTools::repairFilePath($defaultTemplates . '/' . $layout . '.html'));
+                $template = file_get_contents(AntTools::repairFilePath($defaultTemplates . '/' . $layout . '.html.twig'));
             }
         } catch (\Exception $e) {
         }
