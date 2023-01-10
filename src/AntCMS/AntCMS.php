@@ -108,7 +108,7 @@ class AntCMS
         $templatePath = AntTools::repairFilePath(antThemePath . '/' . $theme . '/' . 'Templates');
         $defaultTemplates = AntTools::repairFilePath(antThemePath . '/Default/Templates');
 
-        $templates = AntTools::getFileList($templatePath, 'html');
+        $templates = AntTools::getFileList($templatePath, 'twig');
 
         try {
             if (in_array($layout . '.html.twig', $templates)) {
