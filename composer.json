@@ -6,7 +6,7 @@
     "minimum-stability": "stable",
     "require": {
         "symfony/yaml": "^6.0",
-        "php": ">=7.4",
+        "php": ">=8.0",
         "league/commonmark": "^2.3",
         "elgigi/commonmark-emoji": "^2.0",
         "twig/twig": "^3.5",
