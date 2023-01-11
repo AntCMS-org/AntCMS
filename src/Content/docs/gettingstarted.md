@@ -33,12 +33,14 @@ Writing content for AntCMS is easy as it uses [markdown](https://www.markdowngui
 All content is stored in the `/Content` directory as `.md` files. Subfolders can be used. For example: `/Content/docs/gettingstarted.md` will be accessible by going to example.com/docs/gettingstarted.md
 
 All pages must include a page header, this is used by AntCMS to get important page data. Please see this example for a page header:
+
+(Note: the below header has a '-' removed from the end of the start and end header, this is to ensure the page is displayed correctly from within AntCMS.)
 ```
---AntCMS--
+--AntCMS-
 Title: An Example!
 Author: The AntCMS Team
 Description: Getting started with AntCMS.
---AntCMS--
+--AntCMS-
 ```
 
 When creating your page header, be sure to put a space after the ':', omitting it will cause issues when AntCMS tries to fetch the header info.
