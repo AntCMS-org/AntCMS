@@ -39,11 +39,10 @@ class AntPages
 
     public static function generateNavigation($navTemplate = '')
     {
-        $currentConfig = AntConfig::currentConfig();
         $pages = AntPages::getPages();
         $cache = new AntCache;
 
-        $theme = $currentConfig['activeTheme'];
+        $theme = AntConfig::currentConfig('activeTheme');
         $cacheKey = $cache->createCacheKey(json_encode($pages), $theme);
 
         if ($cache->isCached($cacheKey)) {
@@ -54,7 +53,7 @@ class AntPages
             }
         }
 
-        $baseURL = $currentConfig['baseURL'];
+        $baseURL = AntConfig::currentConfig('baseURL');
         foreach ($pages as $key => $page) {
             $url = "//" . AntTools::repairURL($baseURL . $page['functionalPagePath']);
             $pages[$key]['url'] = $url;

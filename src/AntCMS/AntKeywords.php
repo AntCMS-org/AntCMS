@@ -11,9 +11,8 @@ class AntKeywords
     {
         $cache = new AntCache();
         $cacheKey = $cache->createCacheKey($content, 'keywords');
-        $currentConfig = AntConfig::currentConfig();
 
-        if (!$currentConfig['generateKeywords']) {
+        if (!AntConfig::currentConfig('generateKeywords')) {
             return '';
         }
 
