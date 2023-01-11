@@ -11,6 +11,10 @@ use AntCMS\AntTwig;
 
 class AdminPlugin extends AntPlugin
 {
+    /**
+     * @param array<string> $route 
+     * @return void
+     */
     public function handlePluginRoute(array $route)
     {
         AntAuth::checkAuth();
@@ -23,11 +27,9 @@ class AdminPlugin extends AntPlugin
         switch ($currentStep) {
             case 'config':
                 $this->configureAntCMS($route);
-                break;
 
             case 'pages':
                 $this->managePages($route);
-                break;
 
             default:
                 $antTwig = new AntTwig;
@@ -49,11 +51,16 @@ class AdminPlugin extends AntPlugin
         }
     }
 
+    /** @return string  */
     public function getName()
     {
         return 'Admin';
     }
 
+    /**
+     * @param array<string> $route 
+     * @return never 
+     */
     private function configureAntCMS(array $route)
     {
         $antCMS = new AntCMS;
@@ -113,6 +120,10 @@ class AdminPlugin extends AntPlugin
         exit;
     }
 
+    /**
+     * @param array<string> $route 
+     * @return never 
+     */
     private function managePages(array $route)
     {
         $antCMS = new AntCMS;
@@ -199,7 +210,11 @@ class AdminPlugin extends AntPlugin
         exit;
     }
 
-    private function boolToWord($value)
+    /**
+     * @param bool $value 
+     * @return string 
+     */
+    private function boolToWord(bool $value)
     {
         return boolval($value) ? 'true' : 'false';
     }

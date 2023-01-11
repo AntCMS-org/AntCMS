@@ -4,7 +4,13 @@ namespace AntCMS;
 
 class AntTools
 {
-    public static function getFileList($dir, $extension = null, $returnPath = false)
+    /**
+     * @param string $dir 
+     * @param (null|string)|null $extension 
+     * @param null|bool $returnPath 
+     * @return array<string> 
+     */
+    public static function getFileList(string $dir, ?string $extension = null, ?bool $returnPath = false)
     {
         $dir = new \RecursiveDirectoryIterator($dir);
         $iterator = new \RecursiveIteratorIterator($dir);
@@ -17,7 +23,11 @@ class AntTools
         return $files;
     }
 
-    public static function repairFilePath($path)
+    /**
+     * @param string $path 
+     * @return string 
+     */
+    public static function repairFilePath(string $path)
     {
         $newPath = realpath($path);
         if (!$newPath) {
@@ -30,20 +40,18 @@ class AntTools
         return $newPath;
     }
 
+    /**
+     * Repairs a URL by replacing backslashes with forward slashes and removing duplicate slashes.
+     *
+     * @param string $url The URL to repair. Note: this function will not work correctly if the URL provided has its own protocol (like HTTS://).
+     * @return string The repaired URL
+     */
+    public static function repairURL(string $url)
+    {
+        $newURL = str_replace('\\\\', '/', $url);
+        $newURL = str_replace('\\', '/', $newURL);
+        $newURL = str_replace('//', '/', $newURL);
 
-/**
- * Repairs a URL by replacing backslashes with forward slashes and removing duplicate slashes.
- *
- * @param string $url The URL to repair. Note: this function will not work correctly if the URL provided has its own protocol (like HTTS://).
- * @return string The repaired URL
- */
-public static function repairURL($url)
-{
-    $newURL = str_replace('\\\\', '/', $url);
-    $newURL = str_replace('\\', '/', $newURL);
-    $newURL = str_replace('//', '/', $newURL);
-
-    return $newURL;
-}
-
+        return $newURL;
+    }
 }

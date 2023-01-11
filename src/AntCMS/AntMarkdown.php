@@ -15,7 +15,11 @@ use ElGigi\CommonMarkEmoji\EmojiExtension;
 
 class AntMarkdown
 {
-    public static function renderMarkdown($md)
+    /**
+     * @param string $md 
+     * @return string 
+     */
+    public static function renderMarkdown(string $md)
     {
         $cache = new AntCache();
         $cacheKey = $cache->createCacheKey($md, 'markdown');

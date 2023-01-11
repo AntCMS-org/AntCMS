@@ -6,6 +6,7 @@ use AntCMS\AntTools;
 
 class AntPluginLoader
 {
+    /** @return array<mixed>  */
     public function loadPlugins()
     {
         $plugins = array();

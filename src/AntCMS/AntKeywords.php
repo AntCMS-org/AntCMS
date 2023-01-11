@@ -7,7 +7,12 @@ use AntCMS\AntConfig;
 
 class AntKeywords
 {
-    public function generateKeywords($content = '', $count = 15)
+    /**
+     * @param string $content 
+     * @param int $count 
+     * @return string 
+     */
+    public function generateKeywords(string $content = '', int $count = 15)
     {
         $cache = new AntCache();
         $cacheKey = $cache->createCacheKey($content, 'keywords');

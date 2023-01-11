@@ -9,7 +9,13 @@ use AntCMS\AntConfig;
 
 class AntCMS
 {
-    public function renderPage($page, $params = null)
+    /**
+     * Renders a page based on the provided page name.
+     *
+     * @param string $page The name of the page to be rendered
+     * @return string The rendered HTML of the page
+     */
+    public function renderPage(string $page)
     {
         $start_time = microtime(true);
         $content = $this->getPage($page);
@@ -42,7 +48,13 @@ class AntCMS
         return $pageTemplate;
     }
 
-    public function getPageLayout($theme = null)
+    /**
+     * Returns the default layout of the active theme unless otherwise specified.
+     * 
+     * @param string|null $theme optional - the theme to get the page layout for.
+     * @return string the default page layout
+     */
+    public function getPageLayout(string $theme = null)
     {
         $siteInfo = AntCMS::getSiteInfo();
 
@@ -55,7 +67,13 @@ class AntCMS
         return $pageTemplate;
     }
 
-    public function renderException($exceptionCode)
+    /**
+     * Render an exception page with the provided exception code.
+     * 
+     * @param string $exceptionCode The exception code to be displayed on the error page
+     * @return never 
+     */
+    public function renderException(string $exceptionCode)
     {
         $pageTemplate = $this->getPageLayout();
 
@@ -66,7 +84,11 @@ class AntCMS
         exit;
     }
 
-    public function getPage($page)
+    /**
+     * @param string $page 
+     * @return array<mixed>|false 
+     */
+    public function getPage(string $page)
     {
         $page = strtolower($page);
         $pagePath = AntDir . "/Content/$page";
@@ -94,7 +116,12 @@ class AntCMS
         }
     }
 
-    public function getThemeTemplate($layout = 'default_layout', $theme = null)
+    /**
+     * @param string $layout 
+     * @param string|null $theme 
+     * @return string 
+     */
+    public function getThemeTemplate(string $layout = 'default_layout', string $theme = null)
     {
         $theme = $theme ?? AntConfig::currentConfig('activeTheme');
 
@@ -142,7 +169,11 @@ class AntCMS
         return $template;
     }
 
-    public static function getPageHeaders($pageContent)
+    /**
+     * @param string $pageContent 
+     * @return array<mixed> 
+     */
+    public static function getPageHeaders(string $pageContent)
     {
         $AntKeywords = new AntKeywords();
 
@@ -178,12 +209,19 @@ class AntCMS
         return $pageHeaders;
     }
 
+    /**
+     * @return mixed
+     */
     public static function getSiteInfo()
     {
         return AntConfig::currentConfig('SiteInfo');
     }
 
-    public function serveContent($path)
+    /**
+     * @param string $path 
+     * @return void 
+     */
+    public function serveContent(string $path)
     {
         if (!file_exists($path)) {
             $this->renderException('404');

@@ -37,7 +37,7 @@ class AntConfig
      * @param string|null $key The key of the configuration item to retrieve. Use dot notation to specify nested keys.
      * @return mixed The configuration array or a specific value if the key is specified.
      */
-    public static function currentConfig($key = null)
+    public static function currentConfig(?string $key = null)
     {
         $config = AntYaml::parseFile(antConfigFile);
         if (is_null($key)) {
@@ -49,7 +49,12 @@ class AntConfig
     }
 
 
-    private static function getArrayValue($array, $keys)
+    /**
+     * @param array<mixed> $array 
+     * @param array<mixed> $keys 
+     * @return mixed 
+     */
+    private static function getArrayValue(array $array, array $keys)
     {
         foreach ($keys as $k) {
             if (isset($array[$k])) {
@@ -64,10 +69,10 @@ class AntConfig
     /**
      * Saves the AntCMS configuration
      * 
-     * @param array $config The config data to be saved.
+     * @param array<mixed> $config The config data to be saved.
      * @return void
      */
-    public static function saveConfig($config)
+    public static function saveConfig(array $config)
     {
         AntYaml::saveFile(antConfigFile, $config);
     }
