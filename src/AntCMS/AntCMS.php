@@ -105,7 +105,7 @@ class AntCMS
                 $pageContent = file_get_contents($pagePath);
                 $pageHeaders = AntCMS::getPageHeaders($pageContent);
                 // Remove the AntCMS section from the content
-                $pageContent = preg_replace('/--AntCMS--.*--AntCMS--/s', '', $pageContent);
+                $pageContent = preg_replace('/\A--AntCMS--[^-]*--AntCMS--/sm', '', $pageContent);
                 $result = ['content' => $pageContent, 'title' => $pageHeaders['title'], 'author' => $pageHeaders['author'], 'description' => $pageHeaders['description'], 'keywords' => $pageHeaders['keywords']];
                 return $result;
             } catch (\Exception $e) {
@@ -178,10 +178,10 @@ class AntCMS
         $AntKeywords = new AntKeywords();
 
         // First get the AntCMS header and store it in the matches varible
-        preg_match('/--AntCMS--.*--AntCMS--/s', $pageContent, $matches);
+        preg_match('/\A--AntCMS--[^-]*--AntCMS--/sm', $pageContent, $matches);
 
         // Then remove it from the page content so it doesn't cause issues if we try to generate the keywords
-        $pageContent = preg_replace('/--AntCMS--.*--AntCMS--/s', '', $pageContent);
+        $pageContent = str_replace($pageContent, '', $matches[0]);
         $pageHeaders = [];
 
         if ($matches) {

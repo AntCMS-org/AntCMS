@@ -18,7 +18,7 @@
         const output = document.getElementById("markdown-output");
 
         function parseMarkdown() {
-          const inputValue = input.value.replace(/--AntCMS--.*--AntCMS--/s, "");
+          const inputValue = input.value.replace(/\A--AntCMS--[^-]*--AntCMS--/sm, "");
           output.innerHTML = marked.parse(inputValue);
         }
 

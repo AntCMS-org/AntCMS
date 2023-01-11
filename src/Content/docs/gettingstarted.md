@@ -34,13 +34,12 @@ All content is stored in the `/Content` directory as `.md` files. Subfolders can
 
 All pages must include a page header, this is used by AntCMS to get important page data. Please see this example for a page header:
 
-(Note: the below header has a '-' removed from the end of the start and end header, this is to ensure the page is displayed correctly from within AntCMS.)
 ```
---AntCMS-
+--AntCMS--
 Title: An Example!
 Author: The AntCMS Team
 Description: Getting started with AntCMS.
---AntCMS-
+--AntCMS--
 ```
 
 When creating your page header, be sure to put a space after the ':', omitting it will cause issues when AntCMS tries to fetch the header info.
