@@ -22,9 +22,7 @@ if (!file_exists(antPagesList)) {
     AntPages::generatePages();
 }
 
-$currentConfg = AntConfig::currentConfig();
-
-if ($currentConfg['forceHTTPS'] && 'cli' !== PHP_SAPI) {
+if (AntConfig::currentConfig('forceHTTPS') && 'cli' !== PHP_SAPI) {
     $isHTTPS = false;
 
     if (!empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off') {

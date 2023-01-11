@@ -13,7 +13,6 @@ class AntCMS
     {
         $start_time = microtime(true);
         $content = $this->getPage($page);
-        $currentConfig = AntConfig::currentConfig();
         $antTwig = new AntTwig;
 
         if (!$content || !is_array($content)) {
@@ -36,7 +35,7 @@ class AntCMS
         $end_time = microtime(true);
         $elapsed_time = round($end_time - $start_time, 4);
 
-        if ($currentConfig['debug']) {
+        if (AntConfig::currentConfig('debug')) {
             $pageTemplate = str_replace('<!--AntCMS-Debug-->', '<p>Took ' . $elapsed_time . ' seconds to render the page. </p>', $pageTemplate);
         }
 
@@ -46,13 +45,12 @@ class AntCMS
     public function getPageLayout($theme = null)
     {
         $siteInfo = AntCMS::getSiteInfo();
-        $currentConfig = AntConfig::currentConfig();
 
         $pageTemplate = $this->getThemeTemplate('default_layout', $theme);
         $pageTemplate = str_replace('<!--AntCMS-Navigation-->', AntPages::generateNavigation($this->getThemeTemplate('nav_layout', $theme)), $pageTemplate);
 
         $pageTemplate = str_replace('<!--AntCMS-SiteTitle-->', $siteInfo['siteTitle'], $pageTemplate);
-        $pageTemplate = str_replace('<!--AntCMS-SiteLink-->', '//' . $currentConfig['baseURL'], $pageTemplate);
+        $pageTemplate = str_replace('<!--AntCMS-SiteLink-->', '//' . AntConfig::currentConfig('baseURL'), $pageTemplate);
 
         return $pageTemplate;
     }
@@ -98,8 +96,7 @@ class AntCMS
 
     public function getThemeTemplate($layout = 'default_layout', $theme = null)
     {
-        $currentConfig = AntConfig::currentConfig();
-        $theme = $theme ?? $currentConfig['activeTheme'];
+        $theme = $theme ?? AntConfig::currentConfig('activeTheme');
 
         if (!is_dir(antThemePath . '/' . $theme)) {
             $theme = 'Default';
@@ -183,8 +180,7 @@ class AntCMS
 
     public static function getSiteInfo()
     {
-        $currentConfig = AntConfig::currentConfig();
-        return $currentConfig['SiteInfo'];
+        return AntConfig::currentConfig('SiteInfo');
     }
 
     public function serveContent($path)

@@ -8,9 +8,8 @@ class AntTwig
 {
     public function renderWithTiwg(string $content = '', array $params = array(), string $theme = null)
     {
-        $currentConfig = AntConfig::currentConfig();
-        $twigCache = $currentConfig['enableCache'] ? AntCachePath : false;
-        $theme = $theme ?? $currentConfig['activeTheme'];
+        $twigCache = AntConfig::currentConfig('enableCache') ? AntCachePath : false;
+        $theme = $theme ?? AntConfig::currentConfig('activeTheme');
 
         if (!is_dir(antThemePath . '/' . $theme)) {
             $theme = 'Default';
@@ -23,7 +22,7 @@ class AntTwig
         $loader = new \Twig\Loader\ChainLoader([$loaderString, $loaderFilesystem]);
         $twig = new \Twig\Environment($loader, [
             'cache' => $twigCache,
-            'debug' => $currentConfig['debug'],
+            'debug' => AntConfig::currentConfig('debug'),
         ]);
 
         return $twig->render($content, $params);

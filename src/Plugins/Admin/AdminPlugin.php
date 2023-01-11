@@ -18,7 +18,6 @@ class AdminPlugin extends AntPlugin
         $currentStep = $route[0] ?? 'none';
         $antCMS = new AntCMS;
         $pageTemplate = $antCMS->getPageLayout();
-        $currentConfig = AntConfig::currentConfig();
         array_shift($route);
 
         switch ($currentStep) {
@@ -40,8 +39,8 @@ class AdminPlugin extends AntPlugin
                 );
 
                 $HTMLTemplate = "<h1>AntCMS Admin Plugin</h1>\n";
-                $HTMLTemplate .= "<a href='//" . $currentConfig['baseURL'] . "plugin/admin/config/'>AntCMS Configuration</a><br>\n";
-                $HTMLTemplate .= "<a href='//" . $currentConfig['baseURL'] . "plugin/admin/pages/'>Page management</a><br>\n";
+                $HTMLTemplate .= "<a href='//" . AntConfig::currentConfig('baseURL') . "plugin/admin/config/'>AntCMS Configuration</a><br>\n";
+                $HTMLTemplate .= "<a href='//" . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/'>Page management</a><br>\n";
                 $pageTemplate = str_replace('<!--AntCMS-Body-->', $HTMLTemplate, $pageTemplate);
                 $pageTemplate = $antTwig->renderWithTiwg($pageTemplate, $params);
 
@@ -120,7 +119,6 @@ class AdminPlugin extends AntPlugin
         $pageTemplate = $antCMS->getPageLayout();
         $HTMLTemplate = $antCMS->getThemeTemplate('markdown_edit_layout');
         $pages = AntPages::getPages();
-        $currentConfig = AntConfig::currentConfig();
         $antTwig = new AntTwig;
         $params = array(
             'AntCMSTitle' => 'AntCMS Page Management',
@@ -132,7 +130,7 @@ class AdminPlugin extends AntPlugin
         switch ($route[0] ?? 'none') {
             case 'regenerate':
                 AntPages::generatePages();
-                header('Location: //' . $currentConfig['baseURL'] . "plugin/admin/pages/");
+                header('Location: //' . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/");
                 exit;
 
             case 'edit':
@@ -150,7 +148,7 @@ class AdminPlugin extends AntPlugin
 
                 $pagePath = AntTools::repairFilePath($pagePath);
 
-                $HTMLTemplate = str_replace('<!--AntCMS-ActionURL-->', '//' . $currentConfig['baseURL'] . "plugin/admin/pages/save/$pagePath", $HTMLTemplate);
+                $HTMLTemplate = str_replace('<!--AntCMS-ActionURL-->', '//' . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/save/$pagePath", $HTMLTemplate);
                 $HTMLTemplate = str_replace('<!--AntCMS-TextAreaContent-->', htmlspecialchars($page), $HTMLTemplate);
                 break;
 
@@ -158,32 +156,32 @@ class AdminPlugin extends AntPlugin
                 array_shift($route);
                 $pagePath = antContentPath . '/' . implode('/', $route);
                 if (!isset($_POST['textarea'])) {
-                    header('Location: //' . $currentConfig['baseURL'] . "plugin/admin/pages/");
+                    header('Location: //' . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/");
                 }
                 file_put_contents($pagePath, $_POST['textarea']);
-                header('Location: //' . $currentConfig['baseURL'] . "plugin/admin/pages/");
+                header('Location: //' . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/");
                 exit;
 
             case 'create':
                 $HTMLTemplate = "<h1>Page Management</h1>\n";
                 $HTMLTemplate .= "<p>Create new page</p>\n";
-                $HTMLTemplate .= '<form method="post" action="' . '//' . $currentConfig['baseURL'] . 'plugin/admin/pages/edit">';
+                $HTMLTemplate .= '<form method="post" action="' . '//' . AntConfig::currentConfig('baseURL') . 'plugin/admin/pages/edit">';
                 $HTMLTemplate .=
                     '<div style="display:flex; flex-direction: row; justify-content: center; align-items: center">
-                <label for="input">URL for new page: ' . $currentConfig['baseURL'] . ' </label> <input type="text" name="newpage" id="input">
+                <label for="input">URL for new page: ' . AntConfig::currentConfig('baseURL') . ' </label> <input type="text" name="newpage" id="input">
                 <input type="submit" value="Submit">
                 </div></form>';
                 break;
 
             default:
                 $HTMLTemplate = "<h1>Page Management</h1>\n";
-                $HTMLTemplate .= "<a href='//" . $currentConfig['baseURL'] . "plugin/admin/pages/regenerate'>Click here to regenerate the page list</a><br>\n";
-                $HTMLTemplate .= "<a href='//" . $currentConfig['baseURL'] . "plugin/admin/pages/create'>Click here to create a new page</a><br>\n";
+                $HTMLTemplate .= "<a href='//" . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/regenerate'>Click here to regenerate the page list</a><br>\n";
+                $HTMLTemplate .= "<a href='//" . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/create'>Click here to create a new page</a><br>\n";
                 $HTMLTemplate .= "<ul>\n";
                 foreach ($pages as $page) {
                     $HTMLTemplate .= "<li>\n";
                     $HTMLTemplate .= "<h2>" . $page['pageTitle'] . "</h2>\n";
-                    $HTMLTemplate .= "<a href='//" . $currentConfig['baseURL'] . "plugin/admin/pages/edit" . $page['functionalPagePath'] . "'>Edit this page</a><br>\n";
+                    $HTMLTemplate .= "<a href='//" . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/edit" . $page['functionalPagePath'] . "'>Edit this page</a><br>\n";
                     $HTMLTemplate .= "<ul>\n";
                     $HTMLTemplate .= "<li>Full page path: " . $page['fullPagePath'] . "</li>\n";
                     $HTMLTemplate .= "<li>Functional page path: " . $page['functionalPagePath'] . "</li>\n";
