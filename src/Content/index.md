@@ -1,6 +1,6 @@
 --AntCMS--
 Title: AntCMS Readme
-Author: Belle Nottelling
+Author: The AntCMS Team
 Description: The ReadMe file for AntCMS, rendered quickly and simply using AntCMS.
 --AntCMS--
 
