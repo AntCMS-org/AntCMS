@@ -11,6 +11,7 @@ use AntCMS\AntTwig;
 
 class AntPages
 {
+    /** @return void  */
     public static function generatePages()
     {
         $pages = AntTools::getFileList(antContentPath, 'md', true);
@@ -32,12 +33,17 @@ class AntPages
         AntYaml::saveFile(antPagesList, $pageList);
     }
 
+    /** @return array<mixed>  */
     public static function getPages()
     {
         return AntYaml::parseFile(antPagesList);
     }
 
-    public static function generateNavigation($navTemplate = '')
+    /**
+     * @param string $navTemplate 
+     * @return string 
+     */
+    public static function generateNavigation(string $navTemplate = '')
     {
         $pages = AntPages::getPages();
         $cache = new AntCache;

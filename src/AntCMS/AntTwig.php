@@ -6,6 +6,12 @@ use AntCMS\AntConfig;
 
 class AntTwig
 {
+    /**
+     * @param string $content 
+     * @param array<mixed> $params 
+     * @param string|null $theme 
+     * @return string 
+     */
     public function renderWithTiwg(string $content = '', array $params = array(), string $theme = null)
     {
         $twigCache = AntConfig::currentConfig('enableCache') ? AntCachePath : false;

@@ -6,6 +6,13 @@ use AntCMS\AntConfig;
 
 class AntAuth
 {
+    /**
+     * Check if the user is authenticated using the credentials in the config file.
+     * If the plain text password in the config file is still present, it will be hashed and the config file will be updated.
+     * If the user is not authenticated, it will call AntAuth::requireAuth()
+     *
+     * @return void
+     */
     public static function checkAuth()
     {
         $currentConfig = AntConfig::currentConfig();
@@ -23,13 +30,18 @@ class AntAuth
 
             //Now, we can perform the check as normal
             if ($currentConfig['admin']['username'] == $_SERVER['PHP_AUTH_USER'] && password_verify($_SERVER['PHP_AUTH_PW'], $currentConfig['admin']['password'])) {
-                return true;
+                return;
             }
         }
 
         AntAuth::requireAuth();
     }
 
+    /**
+     * Send an authentication challenge to the browser, with the realm set to the site title in config.
+     *
+     * @return void
+     */
     private static function requireAuth()
     {
         $currentConfig = AntConfig::currentConfig();
