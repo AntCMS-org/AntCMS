@@ -214,7 +214,7 @@ class AntCMS
      */
     public static function getSiteInfo()
     {
-        return AntConfig::currentConfig('SiteInfo');
+        return AntConfig::currentConfig('siteInfo');
     }
 
     /**

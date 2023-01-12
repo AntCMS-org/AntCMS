@@ -41,7 +41,7 @@ AntCMS stores its configuration in the human-readable "yaml" file format. The ma
 
 #### Options in `Config/config.yaml`
 
-- `SiteInfo:`
+- `siteInfo:`
   - `siteTitle: AntCMS` - This configuration sets the title of your AntCMS website.
 - `forceHTTPS: true` - Set to 'true' by default, enables HTTPs redirection.
 - `activeTheme: Default` - Sets what theme AntCMS should use. should match the folder name of the theme you want to use.

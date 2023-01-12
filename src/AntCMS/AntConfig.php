@@ -13,7 +13,7 @@ class AntConfig
     public static function generateConfig()
     {
         $defaultOptions = array(
-            'SiteInfo' => array(
+            'siteInfo' => array(
                 'siteTitle' => 'AntCMS',
             ),
             'forceHTTPS' => true,

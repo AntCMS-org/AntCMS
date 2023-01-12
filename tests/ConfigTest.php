@@ -12,7 +12,7 @@ class ConfigTest extends TestCase
         $config = AntConfig::currentConfig();
 
         $expectedKeys = array(
-            'SiteInfo',
+            'siteInfo',
             'forceHTTPS',
             'activeTheme',
             'generateKeywords',

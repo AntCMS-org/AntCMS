@@ -1,4 +1,5 @@
 RewriteEngine On
+CGIPassAuth On
 
 # If the requested file is an asset, serve it directly
 RewriteCond %{REQUEST_FILENAME} -f
