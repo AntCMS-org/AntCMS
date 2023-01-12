@@ -34,7 +34,7 @@ class AntYaml
     public static function parseYaml(string $yaml){
         try {
             return Yaml::parse($yaml);
-        } catch (ParseException $exception) {
+        } catch (ParseException) {
             return null;
         }
     }

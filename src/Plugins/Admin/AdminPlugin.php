@@ -151,7 +151,7 @@ class AdminPlugin extends AntPlugin
                     $page = file_get_contents(antContentPath . '/' . $pagePath);
                 } else {
                     $pagePath = '/' . $_POST['newpage'];
-                    if (substr($pagePath, -3) !== ".md") {
+                    if (!str_ends_with($pagePath, ".md")) {
                         $pagePath .= '.md';
                     }
                     $page = "--AntCMS--\nTitle: New Page Title\nAuthor: Author\nDescription: Description of this page.\nKeywords: Keywords\n--AntCMS--\n";

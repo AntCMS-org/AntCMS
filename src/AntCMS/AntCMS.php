@@ -108,7 +108,7 @@ class AntCMS
                 $pageContent = preg_replace('/\A--AntCMS--[^-]*--AntCMS--/sm', '', $pageContent);
                 $result = ['content' => $pageContent, 'title' => $pageHeaders['title'], 'author' => $pageHeaders['author'], 'description' => $pageHeaders['description'], 'keywords' => $pageHeaders['keywords']];
                 return $result;
-            } catch (\Exception $e) {
+            } catch (\Exception) {
                 return false;
             }
         } else {
@@ -140,7 +140,7 @@ class AntCMS
             } else {
                 $template = file_get_contents(AntTools::repairFilePath($defaultTemplates . '/' . $layout . '.html.twig'));
             }
-        } catch (\Exception $e) {
+        } catch (\Exception) {
         }
 
         if (empty($template)) {

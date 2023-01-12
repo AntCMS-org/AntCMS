@@ -23,7 +23,7 @@ class AntCache
             try {
                 file_put_contents($cachePath, (string)$content);
                 return true;
-            } catch (\Exception $e) {
+            } catch (\Exception) {
                 return false;
             }
         } else {
@@ -46,7 +46,7 @@ class AntCache
             try {
                 $contents = file_get_contents($cachePath);
                 return $contents;
-            } catch (\Exception $e) {
+            } catch (\Exception) {
                 return false;
             }
         } else {
