@@ -1,9 +1,13 @@
 {
-    "name": "belle/ant-cms",
+    "name": "antcms/antcms",
     "type": "project",
     "license": "Apache-2.0",
     "description": "A simple CMS built with PHP and Markdown",
+    "homepage": "https://antcms.org/",
     "minimum-stability": "stable",
+    "support": {
+        "issues": "https://github.com/AntCMS-org/AntCMS/issues"
+    },
     "require": {
         "symfony/yaml": "^6.0",
         "php": ">=8.0",
