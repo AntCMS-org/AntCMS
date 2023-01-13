@@ -40,16 +40,17 @@ class AntPages
     }
 
     /**
-     * @param string $navTemplate 
+     * @param string $navTemplate
+     * @param string $currentPage optional - What page is the active page. Used for highlighting the active page in the navbar
      * @return string 
      */
-    public static function generateNavigation(string $navTemplate = '')
+    public static function generateNavigation(string $navTemplate = '', string $currentPage = '')
     {
         $pages = AntPages::getPages();
         $cache = new AntCache;
 
         $theme = AntConfig::currentConfig('activeTheme');
-        $cacheKey = $cache->createCacheKey(json_encode($pages), $theme);
+        $cacheKey = $cache->createCacheKey(json_encode($pages), $theme . $currentPage);
 
         if ($cache->isCached($cacheKey)) {
             $cachedContent = $cache->getCache($cacheKey);
@@ -59,14 +60,20 @@ class AntPages
             }
         }
 
+        $currentPage = strtolower($currentPage);
+        if (str_ends_with($currentPage, '/')) {
+            $currentPage = $currentPage . 'index.md';
+        }
+
         $baseURL = AntConfig::currentConfig('baseURL');
         foreach ($pages as $key => $page) {
             $url = "//" . AntTools::repairURL($baseURL . $page['functionalPagePath']);
             $pages[$key]['url'] = $url;
+            $pages[$key]['active'] = ($currentPage == strtolower($page['functionalPagePath'])) ? true : false;
         }
 
         $antTwig = new AntTwig;
-        $navHTML = $antTwig->renderWithTiwg($navTemplate, array('pages' =>$pages));
+        $navHTML = $antTwig->renderWithTiwg($navTemplate, array('pages' => $pages));
 
         $cache->setCache($cacheKey, $navHTML);
         return $navHTML;

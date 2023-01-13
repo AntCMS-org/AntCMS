@@ -27,7 +27,7 @@ class AntCMS
 
         $markdown = AntMarkdown::renderMarkdown($content['content']);
 
-        $pageTemplate = $this->getPageLayout();
+        $pageTemplate = $this->getPageLayout(null, $page);
 
         $params = array(
             'AntCMSTitle' => $content['title'],
@@ -52,14 +52,15 @@ class AntCMS
      * Returns the default layout of the active theme unless otherwise specified.
      * 
      * @param string|null $theme optional - the theme to get the page layout for.
+     * @param string $currentPage optional - What page is the active page.
      * @return string the default page layout
      */
-    public function getPageLayout(string $theme = null)
+    public function getPageLayout(string $theme = null, string $currentPage = '')
     {
         $siteInfo = AntCMS::getSiteInfo();
 
         $pageTemplate = $this->getThemeTemplate('default_layout', $theme);
-        $pageTemplate = str_replace('<!--AntCMS-Navigation-->', AntPages::generateNavigation($this->getThemeTemplate('nav_layout', $theme)), $pageTemplate);
+        $pageTemplate = str_replace('<!--AntCMS-Navigation-->', AntPages::generateNavigation($this->getThemeTemplate('nav_layout', $theme), $currentPage), $pageTemplate);
 
         $pageTemplate = str_replace('<!--AntCMS-SiteTitle-->', $siteInfo['siteTitle'], $pageTemplate);
         $pageTemplate = str_replace('<!--AntCMS-SiteLink-->', '//' . AntConfig::currentConfig('baseURL'), $pageTemplate);
