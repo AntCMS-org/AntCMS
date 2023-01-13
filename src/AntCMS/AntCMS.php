@@ -106,7 +106,7 @@ class AntCMS
                 $pageContent = file_get_contents($pagePath);
                 $pageHeaders = AntCMS::getPageHeaders($pageContent);
                 // Remove the AntCMS section from the content
-                $pageContent = preg_replace('/\A--AntCMS--[^-]*--AntCMS--/sm', '', $pageContent);
+                $pageContent = preg_replace('/\A--AntCMS--.*?--AntCMS--/sm', '', $pageContent);
                 $result = ['content' => $pageContent, 'title' => $pageHeaders['title'], 'author' => $pageHeaders['author'], 'description' => $pageHeaders['description'], 'keywords' => $pageHeaders['keywords']];
                 return $result;
             } catch (\Exception) {
@@ -177,16 +177,20 @@ class AntCMS
     public static function getPageHeaders(string $pageContent)
     {
         $AntKeywords = new AntKeywords();
+        $pageHeaders = [
+            'title' => 'AntCMS',
+            'author' => 'AntCMS',
+            'description' => 'AntCMS',
+            'keywords' => trim($AntKeywords->generateKeywords($pageContent)),
+        ];
 
         // First get the AntCMS header and store it in the matches varible
-        preg_match('/\A--AntCMS--[^-]*--AntCMS--/sm', $pageContent, $matches);
+        preg_match('/\A--AntCMS--.*?--AntCMS--/sm', $pageContent, $matches);
 
-        // Then remove it from the page content so it doesn't cause issues if we try to generate the keywords
-        $pageContent = str_replace($pageContent, '', $matches[0]);
-        $pageHeaders = [];
-
-        if ($matches) {
+        if (isset($matches[0])) {
             $header = $matches[0];
+            // Then remove it from the page content so it doesn't cause issues if we try to generate the keywords
+            $pageContent = str_replace($header, '', $pageContent);
 
             preg_match('/Title: (.*)/', $header, $matches);
             $pageHeaders['title'] = trim($matches[1] ?? 'AntCMS');
@@ -198,15 +202,10 @@ class AntCMS
             $pageHeaders['description'] = trim($matches[1] ?? 'AntCMS');
 
             preg_match('/Keywords: (.*)/', $header, $matches);
-            $pageHeaders['keywords'] = trim($matches[1] ?? $AntKeywords->generateKeywords($pageContent));
-        } else {
-            $pageHeaders = [
-                'title' => 'AntCMS',
-                'author' => 'AntCMS',
-                'description' => 'AntCMS',
-                'keywords' => trim($AntKeywords->generateKeywords($pageContent)),
-            ];
+            $keywods = $matches[1] ?? $AntKeywords->generateKeywords($pageContent);
+            $pageHeaders['keywords'] = trim($keywods);
         }
+
         return $pageHeaders;
     }
 
