@@ -41,8 +41,8 @@ if (AntConfig::currentConfig('forceHTTPS') && 'cli' !== PHP_SAPI) {
         exit;
     }
 }
-
-$requestedPage = strtolower(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+$req = $_SERVER['REQUEST_URI'] ?? '/';
+$requestedPage = strtolower(parse_url($req, PHP_URL_PATH));
 $segments = explode('/', $requestedPage);
 
 if ($segments[0] === '') {
