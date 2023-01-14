@@ -15,6 +15,9 @@ jobs:
       - uses: php-actions/composer@v6
       - run: |
           cp ./tests/Includes/config.yaml ./src/Config/config.yaml
+          sudo add-apt-repository ppa:ondrej/php
+          sudo apt update
+          apt install php-pcov
       - uses: php-actions/phpunit@v3
         with:
           bootstrap: src/Vendor/autoload.php
