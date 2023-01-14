@@ -54,9 +54,14 @@ if ($segments[0] === 'themes' && $segments[2] === 'assets') {
     exit;
 }
 
-if($segments[0] == 'sitemap.xml'){
+if ($segments[0] == 'sitemap.xml') {
     $segments[0] = 'plugin';
     $segments[1] = 'sitemap';
+}
+
+if ($segments[0] == 'robots.txt') {
+    $segments[0] = 'plugin';
+    $segments[1] = 'robotstxt';
 }
 
 if ($segments[0] === 'plugin') {
