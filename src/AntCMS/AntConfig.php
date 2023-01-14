@@ -18,7 +18,7 @@ class AntConfig
             ),
             'forceHTTPS' => true,
             'activeTheme' => 'Default',
-            'generateKeywords' => true,
+            'generateKeywords' => false,
             'enableCache' => true,
             'admin' =>  array(
                 'username' => 'Admin',
