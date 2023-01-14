@@ -25,5 +25,5 @@ jobs:
           configuration: "phpunit.xml"
           php_extensions: xdebug
       - uses: codecov/codecov-action@v3
-          with: 
-            files: coverage.txt
+        with:
+          files: coverage.txt
