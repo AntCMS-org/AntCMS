@@ -18,4 +18,8 @@
             <directory>src/Vendor</directory>
         </exclude>
     </coverage>
+
+    <php>
+        <server name="REQUEST_URI" value="/index.md" />
+    </php>
 </phpunit>
