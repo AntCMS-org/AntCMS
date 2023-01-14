@@ -21,9 +21,7 @@ jobs:
           bootstrap: src/Vendor/autoload.php
           php_version: "8.0"
           args: "tests --coverage-clover coverage.xml"
-          php_extensions: "xdebug"
-      - run: |
-          tree
+          php_extensions: "pcov"
       - uses: codecov/codecov-action@v3
         with:
           files: ./coverage.xml
