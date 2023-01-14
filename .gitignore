@@ -3,3 +3,4 @@ node_modules
 src/Cache/*
 src/Config/config.yaml
 src/Config/pages.yaml
+.phpunit.cache

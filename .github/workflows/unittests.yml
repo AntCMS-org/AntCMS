@@ -22,6 +22,7 @@ jobs:
           php_version: "8.0"
           args: "tests --coverage-clover coverage.xml"
           php_extensions: "pcov"
+          configuration: "phpunit.xml"
       - uses: codecov/codecov-action@v3
         with:
           files: ./coverage.xml
