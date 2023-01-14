@@ -27,4 +27,4 @@ jobs:
           php_extensions: xdebug
       - uses: codecov/codecov-action@v3
         with:
-          files: ./coverage.xml
+          files: coverage.xml
