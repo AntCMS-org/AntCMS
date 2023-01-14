@@ -19,4 +19,7 @@ jobs:
         with:
           bootstrap: src/Vendor/autoload.php
           php_version: "8.0"
-          args: "tests"
+          args: "tests --coverage-clover coverage.xml"
+      - uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage.xml
