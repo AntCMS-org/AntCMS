@@ -8,7 +8,7 @@
 
     <coverage cacheDirectory=".phpunit.cache/code-coverage" processUncoveredFiles="true">
         <report>
-            <xml outputFile="coverage.xml"/>
+            <text outputFile="coverage.txt"/>
         </report>
         <include>
             <directory suffix=".php">src</directory>
