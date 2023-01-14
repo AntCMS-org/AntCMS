@@ -22,9 +22,7 @@ jobs:
         with:
           bootstrap: src/Vendor/autoload.php
           php_version: "8.0"
-          args: "tests"
+          args: "--coverage-clover=coverage.xml"
           configuration: "phpunit.xml"
           php_extensions: xdebug
       - uses: codecov/codecov-action@v3
-        with:
-          files: coverage.xml
