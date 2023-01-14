@@ -54,6 +54,11 @@ if ($segments[0] === 'themes' && $segments[2] === 'assets') {
     exit;
 }
 
+if($segments[0] == 'sitemap.xml'){
+    $segments[0] = 'plugin';
+    $segments[1] = 'sitemap';
+}
+
 if ($segments[0] === 'plugin') {
     $pluginName = $segments[1];
     $pluginLoader = new AntPluginLoader();

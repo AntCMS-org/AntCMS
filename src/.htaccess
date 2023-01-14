@@ -8,7 +8,4 @@ RewriteRule ^Themes/[^/]+/Assets/.+$ - [L]
 # Allow access to the robots.txt file
 RewriteRule ^robots\.txt$ - [L]
 
-# Allow access to the sitemap.xml file
-RewriteRule ^sitemap\.xml$ - [L]
-
 RewriteRule ^(.+)$ index.php [L,QSA]
