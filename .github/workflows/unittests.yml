@@ -15,12 +15,15 @@ jobs:
       - uses: php-actions/composer@v6
       - run: |
           cp ./tests/Includes/config.yaml ./src/Config/config.yaml
+          sudo apt-get install tree
       - uses: php-actions/phpunit@v3
         with:
           bootstrap: src/Vendor/autoload.php
           php_version: "8.0"
           args: "tests --coverage-clover coverage.xml"
           php_extensions: "xdebug"
+      - run: |
+          tree
       - uses: codecov/codecov-action@v3
         with:
           files: ./coverage.xml
