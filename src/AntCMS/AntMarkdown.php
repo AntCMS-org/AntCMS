@@ -12,6 +12,8 @@ use League\CommonMark\Extension\Table\TableExtension;
 use League\CommonMark\Extension\TaskList\TaskListExtension;
 use League\CommonMark\MarkdownConverter;
 use ElGigi\CommonMarkEmoji\EmojiExtension;
+use League\CommonMark\Extension\Embed\Bridge\OscaroteroEmbedAdapter;
+use League\CommonMark\Extension\Embed\EmbedExtension;
 
 class AntMarkdown
 {
@@ -23,7 +25,16 @@ class AntMarkdown
     {
         $cache = new AntCache();
         $cacheKey = $cache->createCacheKey($md, 'markdown');
-        $environment = new Environment();
+
+        $mdConfig = [
+            'embed' => [
+                'adapter' => new OscaroteroEmbedAdapter(),
+                'allowed_domains' => ['youtube.com', 'twitter.com', 'github.com', 'vimeo.com', 'flickr.com', 'instagram.com', 'facebook.com'],
+                'fallback' => 'link',
+            ],
+        ];
+        $environment = new Environment($mdConfig);
+
         $environment->addExtension(new CommonMarkCoreExtension());
         $environment->addExtension(new AutolinkExtension());
         //$environment->addExtension(new DisallowedRawHtmlExtension());
@@ -31,6 +42,8 @@ class AntMarkdown
         $environment->addExtension(new TableExtension());
         $environment->addExtension(new TaskListExtension());
         $environment->addExtension(new EmojiExtension());
+        $environment->addExtension(new EmbedExtension());
+
         $converter = new MarkdownConverter($environment);
 
         if ($cache->isCached($cacheKey)) {
