@@ -26,6 +26,14 @@ class AntMarkdown
         $cache = new AntCache();
         $cacheKey = $cache->createCacheKey($md, 'markdown');
 
+        if ($cache->isCached($cacheKey)) {
+            $cachedContent = $cache->getCache($cacheKey);
+
+            if ($cachedContent !== false && !empty($cachedContent)) {
+                return $cachedContent;
+            }
+        }
+
         $mdConfig = [
             'embed' => [
                 'adapter' => new OscaroteroEmbedAdapter(),
@@ -45,14 +53,6 @@ class AntMarkdown
         $environment->addExtension(new EmbedExtension());
 
         $converter = new MarkdownConverter($environment);
-
-        if ($cache->isCached($cacheKey)) {
-            $cachedContent = $cache->getCache($cacheKey);
-
-            if ($cachedContent !== false && !empty($cachedContent)) {
-                return $cachedContent;
-            }
-        }
 
         $result = $converter->convert($md);
 
