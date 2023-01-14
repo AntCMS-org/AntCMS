@@ -24,5 +24,5 @@ jobs:
           php_version: "8.0"
           args: "--coverage-clover=coverage.xml"
           configuration: "phpunit.xml"
-          php_extensions: xdebug
+          php_extensions: xdebug3
       - uses: codecov/codecov-action@v3
