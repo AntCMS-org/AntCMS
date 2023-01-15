@@ -22,8 +22,8 @@ class ConfigTest extends TestCase
             'baseURL'
         );
 
-        foreach ($expectedKeys as $key) {
-            $this->assertArrayHasKey($key, $config, "Expected key '$key' not found in config array");
+        foreach ($expectedKeys as $expectedKey) {
+            $this->assertArrayHasKey($expectedKey, $config, "Expected key '{$expectedKey}' not found in config array");
         }
     }
 }

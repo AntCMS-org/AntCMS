@@ -30,6 +30,7 @@ class AntPages
             );
             $pageList[] = $currentPage;
         }
+        
         AntYaml::saveFile(antPagesList, $pageList);
     }
 
@@ -47,13 +48,13 @@ class AntPages
     public static function generateNavigation(string $navTemplate = '', string $currentPage = '')
     {
         $pages = AntPages::getPages();
-        $cache = new AntCache;
+        $antCache = new AntCache;
 
         $theme = AntConfig::currentConfig('activeTheme');
-        $cacheKey = $cache->createCacheKey(json_encode($pages), $theme . $currentPage);
+        $cacheKey = $antCache->createCacheKey(json_encode($pages), $theme . $currentPage);
 
-        if ($cache->isCached($cacheKey)) {
-            $cachedContent = $cache->getCache($cacheKey);
+        if ($antCache->isCached($cacheKey)) {
+            $cachedContent = $antCache->getCache($cacheKey);
 
             if ($cachedContent !== false && !empty($cachedContent)) {
                 return $cachedContent;
@@ -62,20 +63,20 @@ class AntPages
 
         $currentPage = strtolower($currentPage);
         if (str_ends_with($currentPage, '/')) {
-            $currentPage = $currentPage . 'index.md';
+            $currentPage .= 'index.md';
         }
 
         $baseURL = AntConfig::currentConfig('baseURL');
         foreach ($pages as $key => $page) {
             $url = "//" . AntTools::repairURL($baseURL . $page['functionalPagePath']);
             $pages[$key]['url'] = $url;
-            $pages[$key]['active'] = ($currentPage == strtolower($page['functionalPagePath'])) ? true : false;
+            $pages[$key]['active'] = $currentPage === strtolower($page['functionalPagePath']);
         }
 
         $antTwig = new AntTwig;
         $navHTML = $antTwig->renderWithTiwg($navTemplate, array('pages' => $pages));
 
-        $cache->setCache($cacheKey, $navHTML);
+        $antCache->setCache($cacheKey, $navHTML);
         return $navHTML;
     }
 }

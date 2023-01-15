@@ -35,10 +35,10 @@ class CMSTest extends TestCase
         AntPages::generatePages();
 
         $antCMS = new AntCMS;
-        $result = $antCMS->getPageLayout();
+        $pageLayout = $antCMS->getPageLayout();
 
-        $this->assertNotEmpty($result);
-        $this->assertIsString($result);
+        $this->assertNotEmpty($pageLayout);
+        $this->assertIsString($pageLayout);
     }
 
     public function testGetPage()

@@ -23,14 +23,14 @@ class AntTwig
 
         $templatePath = AntTools::repairFilePath(antThemePath . '/' . $theme . '/' . 'Templates');
 
-        $loaderFilesystem = new \Twig\Loader\FilesystemLoader($templatePath);
-        $loaderString = new \Shapecode\Twig\Loader\StringLoader();
-        $loader = new \Twig\Loader\ChainLoader([$loaderString, $loaderFilesystem]);
-        $twig = new \Twig\Environment($loader, [
+        $filesystemLoader = new \Twig\Loader\FilesystemLoader($templatePath);
+        $stringLoader = new \Shapecode\Twig\Loader\StringLoader();
+        $chainLoader = new \Twig\Loader\ChainLoader([$stringLoader, $filesystemLoader]);
+        $twigEnvironment = new \Twig\Environment($chainLoader, [
             'cache' => $twigCache,
             'debug' => AntConfig::currentConfig('debug'),
         ]);
 
-        return $twig->render($content, $params);
+        return $twigEnvironment->render($content, $params);
     }
 }

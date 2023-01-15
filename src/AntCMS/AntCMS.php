@@ -63,9 +63,8 @@ class AntCMS
         $pageTemplate = str_replace('<!--AntCMS-Navigation-->', AntPages::generateNavigation($this->getThemeTemplate('nav_layout', $theme), $currentPage), $pageTemplate);
 
         $pageTemplate = str_replace('<!--AntCMS-SiteTitle-->', $siteInfo['siteTitle'], $pageTemplate);
-        $pageTemplate = str_replace('<!--AntCMS-SiteLink-->', '//' . AntConfig::currentConfig('baseURL'), $pageTemplate);
 
-        return $pageTemplate;
+        return str_replace('<!--AntCMS-SiteLink-->', '//' . AntConfig::currentConfig('baseURL'), $pageTemplate);
     }
 
     /**
@@ -92,11 +91,11 @@ class AntCMS
     public function getPage(string $page)
     {
         $page = strtolower($page);
-        $pagePath = AntDir . "/Content/$page";
+        $pagePath = AntDir . "/Content/{$page}";
         $pagePath = AntTools::repairFilePath($pagePath);
 
         if (is_dir($pagePath)) {
-            $pagePath = $pagePath . '/index.md';
+            $pagePath .= '/index.md';
         } else {
             $pagePath = (file_exists($pagePath)) ? $pagePath : $pagePath . '.md';
         }
@@ -107,8 +106,7 @@ class AntCMS
                 $pageHeaders = AntCMS::getPageHeaders($pageContent);
                 // Remove the AntCMS section from the content
                 $pageContent = preg_replace('/\A--AntCMS--.*?--AntCMS--/sm', '', $pageContent);
-                $result = ['content' => $pageContent, 'title' => $pageHeaders['title'], 'author' => $pageHeaders['author'], 'description' => $pageHeaders['description'], 'keywords' => $pageHeaders['keywords']];
-                return $result;
+                return ['content' => $pageContent, 'title' => $pageHeaders['title'], 'author' => $pageHeaders['author'], 'description' => $pageHeaders['description'], 'keywords' => $pageHeaders['keywords']];
             } catch (\Exception) {
                 return false;
             }

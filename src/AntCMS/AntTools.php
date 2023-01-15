@@ -20,6 +20,7 @@ class AntTools
                 $files[] = ($returnPath) ? $file->getPathname() : $file->getFilename();
             }
         }
+        
         return $files;
     }
 
@@ -50,8 +51,7 @@ class AntTools
     {
         $newURL = str_replace('\\\\', '/', $url);
         $newURL = str_replace('\\', '/', $newURL);
-        $newURL = str_replace('//', '/', $newURL);
 
-        return $newURL;
+        return str_replace('//', '/', $newURL);
     }
 }

@@ -52,7 +52,7 @@ class AdminPlugin extends AntPlugin
     }
 
     /** @return string  */
-    public function getName()
+    public function getName(): string
     {
         return 'Admin';
     }
@@ -86,10 +86,12 @@ class AdminPlugin extends AntPlugin
                 if (!$_POST['textarea']) {
                     header('Location: //' . $currentConfig['baseURL'] . "plugin/admin/config/");
                 }
+                
                 $yaml = AntYaml::parseYaml($_POST['textarea']);
                 if (is_array($yaml)) {
                     AntYaml::saveFile(antConfigFile, $yaml);
                 }
+                
                 header('Location: //' . $currentConfig['baseURL'] . "plugin/admin/config/");
                 exit;
 
@@ -99,20 +101,23 @@ class AdminPlugin extends AntPlugin
                 $HTMLTemplate .= "<ul>\n";
                 foreach ($currentConfig as $key => $value) {
                     if (is_array($value)) {
-                        $HTMLTemplate .= "<li>$key:</li>\n";
+                        $HTMLTemplate .= "<li>{$key}:</li>\n";
                         $HTMLTemplate .= "<ul>\n";
                         foreach ($value as $key => $value) {
                             $value = is_bool($value) ? $this->boolToWord($value) : $value;
-                            $HTMLTemplate .= "<li>$key: $value</li>\n";
+                            $HTMLTemplate .= "<li>{$key}: {$value}</li>\n";
                         }
+                        
                         $HTMLTemplate .= "</ul>\n";
                     } else {
                         $value = is_bool($value) ? $this->boolToWord($value) : $value;
-                        $HTMLTemplate .= "<li>$key: $value</li>\n";
+                        $HTMLTemplate .= "<li>{$key}: {$value}</li>\n";
                     }
                 }
+                
                 $HTMLTemplate .= "</ul>\n";
         }
+        
         $pageTemplate = str_replace('<!--AntCMS-Body-->', $HTMLTemplate, $pageTemplate);
         $pageTemplate = $antTwig->renderWithTiwg($pageTemplate, $params);
 
@@ -154,12 +159,13 @@ class AdminPlugin extends AntPlugin
                     if (!str_ends_with($pagePath, ".md")) {
                         $pagePath .= '.md';
                     }
+                    
                     $page = "--AntCMS--\nTitle: New Page Title\nAuthor: Author\nDescription: Description of this page.\nKeywords: Keywords\n--AntCMS--\n";
                 }
 
                 $pagePath = AntTools::repairFilePath($pagePath);
 
-                $HTMLTemplate = str_replace('<!--AntCMS-ActionURL-->', '//' . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/save/$pagePath", $HTMLTemplate);
+                $HTMLTemplate = str_replace('<!--AntCMS-ActionURL-->', '//' . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/save/{$pagePath}", $HTMLTemplate);
                 $HTMLTemplate = str_replace('<!--AntCMS-TextAreaContent-->', htmlspecialchars($page), $HTMLTemplate);
                 break;
 
@@ -169,6 +175,7 @@ class AdminPlugin extends AntPlugin
                 if (!isset($_POST['textarea'])) {
                     header('Location: //' . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/");
                 }
+                
                 file_put_contents($pagePath, $_POST['textarea']);
                 header('Location: //' . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/");
                 exit;
@@ -200,6 +207,7 @@ class AdminPlugin extends AntPlugin
                     $HTMLTemplate .= "</ul>\n";
                     $HTMLTemplate .= "</li>\n";
                 }
+                
                 $HTMLTemplate .= "</ul>\n";
         }
 
@@ -216,6 +224,6 @@ class AdminPlugin extends AntPlugin
      */
     private function boolToWord(bool $value)
     {
-        return boolval($value) ? 'true' : 'false';
+        return (bool) $value ? 'true' : 'false';
     }
 }

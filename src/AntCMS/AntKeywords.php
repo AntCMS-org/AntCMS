@@ -15,15 +15,15 @@ class AntKeywords
      */
     public function generateKeywords(string $content = '', int $count = 15)
     {
-        $cache = new AntCache();
-        $cacheKey = $cache->createCacheKey($content, 'keywords');
+        $antCache = new AntCache();
+        $cacheKey = $antCache->createCacheKey($content, 'keywords');
 
         if (!AntConfig::currentConfig('generateKeywords')) {
             return '';
         }
 
-        if ($cache->isCached($cacheKey)) {
-            $cachedKeywords = $cache->getCache($cacheKey);
+        if ($antCache->isCached($cacheKey)) {
+            $cachedKeywords = $antCache->getCache($cacheKey);
 
             if ($cachedKeywords !== false && !empty($cachedKeywords)) {
                 return $cachedKeywords;
@@ -31,8 +31,9 @@ class AntKeywords
         }
 
         $keywords = RakePlus::create($content, 'en_US', $count)->keywords();
-        $keywords = implode(",", $keywords);    
-        $cache->setCache($cacheKey, $keywords);
+        $keywords = implode(",", $keywords);
+            
+        $antCache->setCache($cacheKey, $keywords);
         return $keywords;
     }
 }

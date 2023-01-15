@@ -18,7 +18,8 @@ class RobotstxtPlugin extends AntPlugin
         echo $robotstxt;
         exit;
     }
-    public function getName()
+    
+    public function getName(): string
     {
         return 'Robotstxt';
     }

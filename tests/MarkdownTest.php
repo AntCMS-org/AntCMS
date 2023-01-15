@@ -20,7 +20,7 @@ class MarkdownTest extends TestCase
         $markdown = file_get_contents(antContentPath . DIRECTORY_SEPARATOR . 'index.md');
         $totalTime = 0;
 
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 10; ++$i) {
             $start = microtime(true);
             AntMarkdown::renderMarkdown($markdown);
             $end = microtime(true);
@@ -29,11 +29,11 @@ class MarkdownTest extends TestCase
 
         $averageTime = $totalTime / 10;
 
-        $constraint = new Callback(function ($averageTime) {
+        $callback = new Callback(static function ($averageTime) {
             return $averageTime < 0.015;
         });
 
-        $this->assertThat($averageTime, $constraint, 'AntMarkdown::renderMarkdown took too long on average!');
+        $this->assertThat($averageTime, $callback, 'AntMarkdown::renderMarkdown took too long on average!');
     }
 
 
@@ -47,7 +47,7 @@ class MarkdownTest extends TestCase
         AntConfig::saveConfig($currentConfig);
 
         $totalTime = 0;
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 10; ++$i) {
             $start = microtime(true);
             AntMarkdown::renderMarkdown($markdown);
             $end = microtime(true);
@@ -61,7 +61,7 @@ class MarkdownTest extends TestCase
         AntConfig::saveConfig($currentConfig);
 
         $totalTime = 0;
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 10; ++$i) {
             $start = microtime(true);
             AntMarkdown::renderMarkdown($markdown);
             $end = microtime(true);
@@ -70,7 +70,7 @@ class MarkdownTest extends TestCase
 
         $withCache = $totalTime / 10;
         
-        echo "\n Markdown rendering speed with cache: $withCache VS without: $withoutCache \n\n";
-        $this->assertLessThan($withoutCache, $withCache, 'Cache didn\'t speed up rendering!');
+        echo "\n Markdown rendering speed with cache: {$withCache} VS without: {$withoutCache} \n\n";
+        $this->assertLessThan($withoutCache, $withCache, "Cache didn't speed up rendering!");
     }
 }
