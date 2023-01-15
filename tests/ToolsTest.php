@@ -26,7 +26,7 @@ class ToolsTest extends TestCase
 
         foreach ($badPaths as $index => $badPath) {
             $goodPath = AntTools::repairFilePath($badPath);
-            $this->assertEquals($expectedPaths[$index], $goodPath, "Expected '$expectedPaths[$index]' but got '$goodPath' for input '$badPath'");
+            $this->assertEquals($expectedPaths[$index], $goodPath, "Expected '$expectedPaths[$index]' but got '{$goodPath}' for input '{$badPath}'");
         }
     }
 
@@ -48,7 +48,7 @@ class ToolsTest extends TestCase
         $files = AntTools::getFileList($srcdir, 'md');
 
         foreach ($files as $file) {
-            $this->assertEquals('md', pathinfo($file, PATHINFO_EXTENSION), "Expected file extension to be 'md', but got '" . pathinfo($file, PATHINFO_EXTENSION) . "' for file '$file'");
+            $this->assertEquals('md', pathinfo($file, PATHINFO_EXTENSION), "Expected file extension to be 'md', but got '" . pathinfo($file, PATHINFO_EXTENSION) . "' for file '{$file}'");
         }
     }
 }

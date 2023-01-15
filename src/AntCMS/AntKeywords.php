@@ -31,7 +31,8 @@ class AntKeywords
         }
 
         $keywords = RakePlus::create($content, 'en_US', $count)->keywords();
-        $keywords = implode(",", $keywords);    
+        $keywords = implode(",", $keywords);
+            
         $cache->setCache($cacheKey, $keywords);
         return $keywords;
     }

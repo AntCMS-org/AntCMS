@@ -63,6 +63,7 @@ class AntConfig
                 return null;
             }
         }
+        
         return $array;
     }
 

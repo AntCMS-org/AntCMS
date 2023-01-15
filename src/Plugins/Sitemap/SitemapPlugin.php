@@ -47,6 +47,7 @@ class SitemapPlugin extends AntPlugin
             die("AntCMS is unable to generate a sitemap without having the DOM extension loadded in PHP.");
         }
     }
+    
     public function getName(): string
     {
         return 'Sitemap';

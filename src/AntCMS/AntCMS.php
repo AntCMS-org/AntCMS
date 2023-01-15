@@ -91,7 +91,7 @@ class AntCMS
     public function getPage(string $page)
     {
         $page = strtolower($page);
-        $pagePath = AntDir . "/Content/$page";
+        $pagePath = AntDir . "/Content/{$page}";
         $pagePath = AntTools::repairFilePath($pagePath);
 
         if (is_dir($pagePath)) {

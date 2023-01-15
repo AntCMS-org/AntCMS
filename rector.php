@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use Rector\CodeQuality\Rector\Class_\InlineConstructorDefaultToPropertyRector;
+use Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector;
+use Rector\CodingStyle\Rector\FuncCall\ConsistentPregDelimiterRector;
 use Rector\Config\RectorConfig;
 use Rector\Php80\Rector\FunctionLike\MixedTypeRector;
 use Rector\Php80\Rector\FunctionLike\UnionTypesRector;
-use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
 
 return static function (RectorConfig $rectorConfig): void {
@@ -19,10 +19,13 @@ return static function (RectorConfig $rectorConfig): void {
         __DIR__ . '/src/Cache',
         UnionTypesRector::class,
         MixedTypeRector::class,
+        EncapsedStringsToSprintfRector::class,
+        ConsistentPregDelimiterRector::class,
     ]);
 
     $rectorConfig->sets([
         SetList::PHP_80,
-        SetList::CODE_QUALITY
+        SetList::CODE_QUALITY,
+        SetList::CODING_STYLE,
     ]);
 };

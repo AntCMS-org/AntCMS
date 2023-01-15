@@ -30,6 +30,7 @@ class AntPages
             );
             $pageList[] = $currentPage;
         }
+        
         AntYaml::saveFile(antPagesList, $pageList);
     }
 

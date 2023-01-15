@@ -23,7 +23,7 @@ class ConfigTest extends TestCase
         );
 
         foreach ($expectedKeys as $key) {
-            $this->assertArrayHasKey($key, $config, "Expected key '$key' not found in config array");
+            $this->assertArrayHasKey($key, $config, "Expected key '{$key}' not found in config array");
         }
     }
 }

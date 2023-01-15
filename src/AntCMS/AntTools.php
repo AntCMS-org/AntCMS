@@ -20,6 +20,7 @@ class AntTools
                 $files[] = ($returnPath) ? $file->getPathname() : $file->getFilename();
             }
         }
+        
         return $files;
     }
 
