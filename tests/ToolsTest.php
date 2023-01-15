@@ -30,6 +30,32 @@ class ToolsTest extends TestCase
         }
     }
 
+    public function testUrlRepair()
+    {
+        $badUrls = array(
+            "example.com\path",
+            "example.com/path/",
+            "example.com//path",
+            "example.com/path/to//file",
+            "example.com\path\\to\\file",
+            "example.com\path\\to\\file?download=yes"
+        );
+        $expectedUrls = array(
+            "example.com/path",
+            "example.com/path/",
+            "example.com/path",
+            "example.com/path/to/file",
+            "example.com/path/to/file",
+            "example.com/path/to/file?download=yes"
+        );
+
+
+        foreach ($badUrls as $index => $badurl) {
+            $goodUrl = AntTools::repairURL($badurl);
+            $this->assertEquals($expectedUrls[$index], $goodUrl, "Expected '$expectedUrls[$index]' but got '{$goodUrl}' for input '{$badurl}'");
+        }
+    }
+
     public function testGetFileList()
     {
         $basedir = dirname(__DIR__, 1);

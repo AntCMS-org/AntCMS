@@ -19,6 +19,11 @@ class MarkdownTest extends TestCase
     {
         $markdown = file_get_contents(antContentPath . DIRECTORY_SEPARATOR . 'index.md');
         $totalTime = 0;
+        $currentConfig = AntConfig::currentConfig();
+
+        //Ensure cache is enabled
+        $currentConfig['enableCache'] = true;
+        AntConfig::saveConfig($currentConfig);
 
         for ($i = 0; $i < 10; ++$i) {
             $start = microtime(true);
@@ -69,7 +74,7 @@ class MarkdownTest extends TestCase
         }
 
         $withCache = $totalTime / 10;
-        
+
         echo "\n Markdown rendering speed with cache: {$withCache} VS without: {$withoutCache} \n\n";
         $this->assertLessThan($withoutCache, $withCache, "Cache didn't speed up rendering!");
     }
