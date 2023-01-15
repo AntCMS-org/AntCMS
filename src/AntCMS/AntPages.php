@@ -48,13 +48,13 @@ class AntPages
     public static function generateNavigation(string $navTemplate = '', string $currentPage = '')
     {
         $pages = AntPages::getPages();
-        $cache = new AntCache;
+        $antCache = new AntCache;
 
         $theme = AntConfig::currentConfig('activeTheme');
-        $cacheKey = $cache->createCacheKey(json_encode($pages), $theme . $currentPage);
+        $cacheKey = $antCache->createCacheKey(json_encode($pages), $theme . $currentPage);
 
-        if ($cache->isCached($cacheKey)) {
-            $cachedContent = $cache->getCache($cacheKey);
+        if ($antCache->isCached($cacheKey)) {
+            $cachedContent = $antCache->getCache($cacheKey);
 
             if ($cachedContent !== false && !empty($cachedContent)) {
                 return $cachedContent;
@@ -76,7 +76,7 @@ class AntPages
         $antTwig = new AntTwig;
         $navHTML = $antTwig->renderWithTiwg($navTemplate, array('pages' => $pages));
 
-        $cache->setCache($cacheKey, $navHTML);
+        $antCache->setCache($cacheKey, $navHTML);
         return $navHTML;
     }
 }

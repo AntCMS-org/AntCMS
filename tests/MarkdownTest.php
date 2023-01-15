@@ -29,11 +29,11 @@ class MarkdownTest extends TestCase
 
         $averageTime = $totalTime / 10;
 
-        $constraint = new Callback(static function ($averageTime) {
+        $callback = new Callback(static function ($averageTime) {
             return $averageTime < 0.015;
         });
 
-        $this->assertThat($averageTime, $constraint, 'AntMarkdown::renderMarkdown took too long on average!');
+        $this->assertThat($averageTime, $callback, 'AntMarkdown::renderMarkdown took too long on average!');
     }
 
 

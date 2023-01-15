@@ -15,12 +15,12 @@ class SitemapPlugin extends AntPlugin
         $pages = AntPages::getPages();
 
         if (extension_loaded('dom')) {
-            $doc = new DOMDocument();
-            $doc->formatOutput = true;
+            $domDocument = new DOMDocument();
+            $domDocument->formatOutput = true;
 
-            $root = $doc->createElement('urlset');
-            $root->setAttribute('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
-            $doc->appendChild($root);
+            $domElement = $domDocument->createElement('urlset');
+            $domElement->setAttribute('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
+            $domDocument->appendChild($domElement);
 
             $urls = array();
             foreach ($pages as $key => $value) {
@@ -29,19 +29,19 @@ class SitemapPlugin extends AntPlugin
             }
 
             foreach ($urls as $url) {
-                $element = $doc->createElement('url');
+                $element = $domDocument->createElement('url');
 
-                $loc = $doc->createElement('loc', $protocol . '://' . AntTools::repairURL($baseURL . $url['url']));
+                $loc = $domDocument->createElement('loc', $protocol . '://' . AntTools::repairURL($baseURL . $url['url']));
                 $element->appendChild($loc);
 
-                $lastmod = $doc->createElement('lastmod', $url['lastchange']);
+                $lastmod = $domDocument->createElement('lastmod', $url['lastchange']);
                 $element->appendChild($lastmod);
 
-                $root->appendChild($element);
+                $domElement->appendChild($element);
             }
 
             header('Content-Type: application/xml');
-            echo $doc->saveXML();
+            echo $domDocument->saveXML();
             exit;
         } else {
             die("AntCMS is unable to generate a sitemap without having the DOM extension loadded in PHP.");

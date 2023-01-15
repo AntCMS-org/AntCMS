@@ -23,11 +23,11 @@ class AntMarkdown
      */
     public static function renderMarkdown(string $md)
     {
-        $cache = new AntCache();
-        $cacheKey = $cache->createCacheKey($md, 'markdown');
+        $antCache = new AntCache();
+        $cacheKey = $antCache->createCacheKey($md, 'markdown');
 
-        if ($cache->isCached($cacheKey)) {
-            $cachedContent = $cache->getCache($cacheKey);
+        if ($antCache->isCached($cacheKey)) {
+            $cachedContent = $antCache->getCache($cacheKey);
 
             if ($cachedContent !== false && !empty($cachedContent)) {
                 return $cachedContent;
@@ -52,11 +52,11 @@ class AntMarkdown
         $environment->addExtension(new EmojiExtension());
         $environment->addExtension(new EmbedExtension());
 
-        $converter = new MarkdownConverter($environment);
+        $markdownConverter = new MarkdownConverter($environment);
 
-        $result = $converter->convert($md);
+        $renderedContent = $markdownConverter->convert($md);
 
-        $cache->setCache($cacheKey, $result);
-        return $result;
+        $antCache->setCache($cacheKey, $renderedContent);
+        return $renderedContent;
     }
 }

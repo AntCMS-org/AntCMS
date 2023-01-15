@@ -56,9 +56,9 @@ class AntConfig
      */
     private static function getArrayValue(array $array, array $keys)
     {
-        foreach ($keys as $k) {
-            if (isset($array[$k])) {
-                $array = $array[$k];
+        foreach ($keys as $key) {
+            if (isset($array[$key])) {
+                $array = $array[$key];
             } else {
                 return null;
             }

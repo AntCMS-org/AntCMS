@@ -27,5 +27,6 @@ return static function (RectorConfig $rectorConfig): void {
         SetList::PHP_80,
         SetList::CODE_QUALITY,
         SetList::CODING_STYLE,
+        SetList::NAMING,
     ]);
 };
