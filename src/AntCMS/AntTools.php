@@ -50,8 +50,7 @@ class AntTools
     {
         $newURL = str_replace('\\\\', '/', $url);
         $newURL = str_replace('\\', '/', $newURL);
-        $newURL = str_replace('//', '/', $newURL);
 
-        return $newURL;
+        return str_replace('//', '/', $newURL);
     }
 }

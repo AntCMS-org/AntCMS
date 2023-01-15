@@ -52,7 +52,7 @@ class AdminPlugin extends AntPlugin
     }
 
     /** @return string  */
-    public function getName()
+    public function getName(): string
     {
         return 'Admin';
     }
@@ -216,6 +216,6 @@ class AdminPlugin extends AntPlugin
      */
     private function boolToWord(bool $value)
     {
-        return boolval($value) ? 'true' : 'false';
+        return (bool) $value ? 'true' : 'false';
     }
 }

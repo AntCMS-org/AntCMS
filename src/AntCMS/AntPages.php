@@ -62,14 +62,14 @@ class AntPages
 
         $currentPage = strtolower($currentPage);
         if (str_ends_with($currentPage, '/')) {
-            $currentPage = $currentPage . 'index.md';
+            $currentPage .= 'index.md';
         }
 
         $baseURL = AntConfig::currentConfig('baseURL');
         foreach ($pages as $key => $page) {
             $url = "//" . AntTools::repairURL($baseURL . $page['functionalPagePath']);
             $pages[$key]['url'] = $url;
-            $pages[$key]['active'] = ($currentPage == strtolower($page['functionalPagePath'])) ? true : false;
+            $pages[$key]['active'] = $currentPage === strtolower($page['functionalPagePath']);
         }
 
         $antTwig = new AntTwig;
