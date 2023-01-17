@@ -1,8 +1,7 @@
 <?php
-$cacheFiles = glob(__DIR__ . DIRECTORY_SEPARATOR . 'Cache' . DIRECTORY_SEPARATOR . '*.*');
-foreach($cacheFiles as $cacheFile){
-  if(is_file($cacheFile)) {
-    unlink($cacheFile);
-  }
+$cacheDir = __DIR__ . DIRECTORY_SEPARATOR . 'Cache' . DIRECTORY_SEPARATOR;
+$di = new RecursiveDirectoryIterator($cacheDir, FilesystemIterator::SKIP_DOTS);
+$ri = new RecursiveIteratorIterator($di, RecursiveIteratorIterator::CHILD_FIRST);
+foreach ($ri as $file) {
+  $file->isDir() ?  rmdir($file->getRealPath()) : unlink($file->getRealPath());
 }
-?>
