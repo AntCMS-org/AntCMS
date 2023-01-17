@@ -26,4 +26,32 @@ class ConfigTest extends TestCase
             $this->assertArrayHasKey($expectedKey, $config, "Expected key '{$expectedKey}' not found in config array");
         }
     }
+
+    public function testSaveConfigFailed()
+    {
+        $Badconfig = [
+            'enableCache' => true,
+        ];
+
+        try {
+            $result = AntConfig::saveConfig($Badconfig);
+        } catch (Exception $exception) {
+            $result = $exception;
+        }
+
+        $this->assertNotTrue($result);
+    }
+
+    public function testSaveConfigPassed()
+    {
+        $currentConfig = AntConfig::currentConfig();
+
+        try {
+            $result = AntConfig::saveConfig($currentConfig);
+        } catch (Exception $exception) {
+            $result = $exception;
+        }
+
+        $this->assertTrue($result);
+    }
 }

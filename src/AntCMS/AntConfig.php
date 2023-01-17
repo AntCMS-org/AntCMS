@@ -3,19 +3,31 @@
 namespace AntCMS;
 
 use AntCMS\AntYaml;
+use Exception;
 
 class AntConfig
 {
+    private static $ConfigKeys = [
+        'siteInfo',
+        'forceHTTPS',
+        'activeTheme',
+        'generateKeywords',
+        'enableCache',
+        'admin',
+        'debug',
+        'baseURL',
+    ];
+
     /**
      * Generates the default config file and saves it.
      * @return void
      */
     public static function generateConfig()
     {
-        $defaultOptions = array(
-            'siteInfo' => array(
+        $defaultOptions = [
+            'siteInfo' => [
                 'siteTitle' => 'AntCMS',
-            ),
+            ],
             'forceHTTPS' => true,
             'activeTheme' => 'Default',
             'generateKeywords' => false,
@@ -26,9 +38,9 @@ class AntConfig
             ),
             'debug' => true,
             'baseURL' => $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']),
-        );
+        ];
 
-        AntYaml::saveFile(antConfigFile, $defaultOptions);
+        Self::saveConfig($defaultOptions);
     }
 
     /**
@@ -63,7 +75,7 @@ class AntConfig
                 return null;
             }
         }
-        
+
         return $array;
     }
 
@@ -71,10 +83,16 @@ class AntConfig
      * Saves the AntCMS configuration
      * 
      * @param array<mixed> $config The config data to be saved.
-     * @return void
+     * @return bool
+     * @throws exception
      */
     public static function saveConfig(array $config)
     {
-        AntYaml::saveFile(antConfigFile, $config);
+        foreach (self::$ConfigKeys as $defaultKey) {
+            if (!array_key_exists($defaultKey, $config)) {
+                throw new Exception("New config is missing the required {$defaultKey} key from it's array!");
+            }
+        }
+        return AntYaml::saveFile(antConfigFile, $config);
     }
 }
