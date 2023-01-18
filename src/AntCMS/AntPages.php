@@ -30,6 +30,10 @@ class AntPages
                 $pageFunctionalPath = '/';
             }
 
+            if(str_ends_with($pageFunctionalPath, 'index')){
+                $pageFunctionalPath = substr($pageFunctionalPath, 0, -5);
+            }
+
             $currentPage = array(
                 'pageTitle' => $pageHeader['title'],
                 'fullPagePath' => $page,
