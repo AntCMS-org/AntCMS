@@ -21,14 +21,26 @@ class AntPages
             $page = AntTools::repairFilePath($page);
             $pageContent = file_get_contents($page);
             $pageHeader = AntCMS::getPageHeaders($pageContent);
-            $pageFunctionalPath = str_replace(antContentPath, "", $page);
+
+            // Because we are only getting a list of files with the 'md' extension, we can blindly strip off the extension from each path.
+            // Doing this creates more profesional URLs as AntCMS will automatically add the 'md' extenstion during the page rendering process.
+            $pageFunctionalPath = substr(str_replace(antContentPath, "", $page), 0, -3);
+
+            if ($pageFunctionalPath == '/index') {
+                $pageFunctionalPath = '/';
+            }
+
             $currentPage = array(
                 'pageTitle' => $pageHeader['title'],
                 'fullPagePath' => $page,
                 'functionalPagePath' => $pageFunctionalPath,
                 'showInNav' => true,
             );
-            $pageList[] = $currentPage;
+            if ($pageFunctionalPath === '/') {
+                array_unshift($pageList, $currentPage);
+            } else {
+                $pageList[] = $currentPage;
+            }
         }
 
         AntYaml::saveFile(antPagesList, $pageList);
