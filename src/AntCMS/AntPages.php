@@ -30,7 +30,7 @@ class AntPages
             );
             $pageList[] = $currentPage;
         }
-        
+
         AntYaml::saveFile(antPagesList, $pageList);
     }
 
@@ -71,6 +71,11 @@ class AntPages
             $url = "//" . AntTools::repairURL($baseURL . $page['functionalPagePath']);
             $pages[$key]['url'] = $url;
             $pages[$key]['active'] = $currentPage === strtolower($page['functionalPagePath']);
+
+            //Remove pages that are hidden from the nav from the array before sending it to twig. 
+            if (!(bool)$page['showInNav']) {
+                unset($pages[$key]);
+            }
         }
 
         $antTwig = new AntTwig;

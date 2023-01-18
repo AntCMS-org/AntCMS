@@ -211,6 +211,20 @@ class AdminPlugin extends AntPlugin
                 header('Location: //' . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/");
                 break;
 
+            case 'togglevisibility':
+                array_shift($route);
+                $pagePath = AntTools::repairFilePath(antContentPath . '/' . implode('/', $route));
+
+                foreach ($pages as $key => $page) {
+                    if ($page['fullPagePath'] == $pagePath) {
+                        $pages[$key]['showInNav'] = !$page['showInNav'];
+                    }
+                }
+
+                AntYaml::saveFile(antPagesList, $pages);
+                header('Location: //' . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/");
+                break;
+
             default:
                 $HTMLTemplate = "<h1>Page Management</h1>\n";
                 $HTMLTemplate .= "<a href='//" . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/regenerate'>Click here to regenerate the page list</a><br>\n";
@@ -224,7 +238,7 @@ class AdminPlugin extends AntPlugin
                     $HTMLTemplate .= "<ul>\n";
                     $HTMLTemplate .= "<li>Full page path: " . $page['fullPagePath'] . "</li>\n";
                     $HTMLTemplate .= "<li>Functional page path: " . $page['functionalPagePath'] . "</li>\n";
-                    $HTMLTemplate .= "<li>Show in navbar: " . $this->boolToWord($page['showInNav']) . "</li>\n";
+                    $HTMLTemplate .= "<li>Show in navbar: <a href='//" . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/togglevisibility" . $page['functionalPagePath'] . "'>". $this->boolToWord($page['showInNav']) . "</a></li><br>\n";
                     $HTMLTemplate .= "</ul>\n";
                     $HTMLTemplate .= "</li>\n";
                 }
