@@ -11,6 +11,12 @@ use AntCMS\AntTwig;
 
 class AdminPlugin extends AntPlugin
 {
+    /** @return string  */
+    public function getName(): string
+    {
+        return 'Admin';
+    }
+
     /**
      * @param array<string> $route 
      * @return void
@@ -37,7 +43,7 @@ class AdminPlugin extends AntPlugin
                     'AntCMSTitle' => 'AntCMS Admin Dashboard',
                     'AntCMSDescription' => 'The AntCMS admin dashboard',
                     'AntCMSAuthor' => 'AntCMS',
-                    'AntCMSKeywords' => 'N/A',
+                    'AntCMSKeywords' => '',
                 );
 
                 $HTMLTemplate = "<h1>AntCMS Admin Plugin</h1>\n";
@@ -49,12 +55,6 @@ class AdminPlugin extends AntPlugin
                 echo $pageTemplate;
                 break;
         }
-    }
-
-    /** @return string  */
-    public function getName(): string
-    {
-        return 'Admin';
     }
 
     /**
@@ -86,12 +86,12 @@ class AdminPlugin extends AntPlugin
                 if (!$_POST['textarea']) {
                     header('Location: //' . $currentConfig['baseURL'] . "plugin/admin/config/");
                 }
-                
+
                 $yaml = AntYaml::parseYaml($_POST['textarea']);
                 if (is_array($yaml)) {
                     AntYaml::saveFile(antConfigFile, $yaml);
                 }
-                
+
                 header('Location: //' . $currentConfig['baseURL'] . "plugin/admin/config/");
                 exit;
 
@@ -107,17 +107,17 @@ class AdminPlugin extends AntPlugin
                             $value = is_bool($value) ? $this->boolToWord($value) : $value;
                             $HTMLTemplate .= "<li>{$key}: {$value}</li>\n";
                         }
-                        
+
                         $HTMLTemplate .= "</ul>\n";
                     } else {
                         $value = is_bool($value) ? $this->boolToWord($value) : $value;
                         $HTMLTemplate .= "<li>{$key}: {$value}</li>\n";
                     }
                 }
-                
+
                 $HTMLTemplate .= "</ul>\n";
         }
-        
+
         $pageTemplate = str_replace('<!--AntCMS-Body-->', $HTMLTemplate, $pageTemplate);
         $pageTemplate = $antTwig->renderWithTiwg($pageTemplate, $params);
 
@@ -159,7 +159,7 @@ class AdminPlugin extends AntPlugin
                     if (!str_ends_with($pagePath, ".md")) {
                         $pagePath .= '.md';
                     }
-                    
+
                     $page = "--AntCMS--\nTitle: New Page Title\nAuthor: Author\nDescription: Description of this page.\nKeywords: Keywords\n--AntCMS--\n";
                 }
 
@@ -171,11 +171,11 @@ class AdminPlugin extends AntPlugin
 
             case 'save':
                 array_shift($route);
-                $pagePath = antContentPath . '/' . implode('/', $route);
+                $pagePath = AntTools::repairFilePath(antContentPath . '/' . implode('/', $route));
                 if (!isset($_POST['textarea'])) {
                     header('Location: //' . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/");
                 }
-                
+
                 file_put_contents($pagePath, $_POST['textarea']);
                 header('Location: //' . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/");
                 exit;
@@ -191,6 +191,26 @@ class AdminPlugin extends AntPlugin
                 </div></form>';
                 break;
 
+            case 'delete':
+                array_shift($route);
+                $pagePath = AntTools::repairFilePath(antContentPath . '/' . implode('/', $route));
+
+                // Find the key associated with the functional page path, then remove it from our temp pages array
+                foreach ($pages as $key => $page) {
+                    if ($page['fullPagePath'] == $pagePath) {
+                        unset($pages[$key]);
+                    }
+                }
+
+                if (file_exists($pagePath)) {
+                    // If we were able to delete the page, update the pages list with the updated pages array.
+                    if (unlink($pagePath)) {
+                        AntYaml::saveFile(antPagesList, $pages);
+                    }
+                }
+                header('Location: //' . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/");
+                break;
+
             default:
                 $HTMLTemplate = "<h1>Page Management</h1>\n";
                 $HTMLTemplate .= "<a href='//" . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/regenerate'>Click here to regenerate the page list</a><br>\n";
@@ -200,6 +220,7 @@ class AdminPlugin extends AntPlugin
                     $HTMLTemplate .= "<li>\n";
                     $HTMLTemplate .= "<h2>" . $page['pageTitle'] . "</h2>\n";
                     $HTMLTemplate .= "<a href='//" . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/edit" . $page['functionalPagePath'] . "'>Edit this page</a><br>\n";
+                    $HTMLTemplate .= "<a href='//" . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/delete" . $page['functionalPagePath'] . "'>Delete this page</a><br>\n";
                     $HTMLTemplate .= "<ul>\n";
                     $HTMLTemplate .= "<li>Full page path: " . $page['fullPagePath'] . "</li>\n";
                     $HTMLTemplate .= "<li>Functional page path: " . $page['functionalPagePath'] . "</li>\n";
@@ -207,7 +228,7 @@ class AdminPlugin extends AntPlugin
                     $HTMLTemplate .= "</ul>\n";
                     $HTMLTemplate .= "</li>\n";
                 }
-                
+
                 $HTMLTemplate .= "</ul>\n";
         }
 
