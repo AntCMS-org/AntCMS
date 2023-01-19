@@ -94,8 +94,7 @@ class AntPages
             }
         }
 
-        $antTwig = new AntTwig;
-        $navHTML = $antTwig->renderWithTiwg($navTemplate, array('pages' => $pages));
+        $navHTML = AntTwig::renderWithTiwg($navTemplate, array('pages' => $pages));
 
         $antCache->setCache($cacheKey, $navHTML);
         return $navHTML;

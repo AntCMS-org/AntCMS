@@ -12,7 +12,7 @@ class AntTwig
      * @param string|null $theme 
      * @return string 
      */
-    public function renderWithTiwg(string $content = '', array $params = array(), string $theme = null)
+    public static function renderWithTiwg(string $content = '', array $params = array(), string $theme = null)
     {
         $twigCache = AntConfig::currentConfig('enableCache') ? AntCachePath : false;
         $theme = $theme ?? AntConfig::currentConfig('activeTheme');

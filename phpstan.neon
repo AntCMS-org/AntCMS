@@ -5,3 +5,4 @@ parameters:
 	excludePaths:
 		analyse:
 		- src/Vendor
+		- src/Cache

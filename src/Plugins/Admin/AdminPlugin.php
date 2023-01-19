@@ -38,7 +38,6 @@ class AdminPlugin extends AntPlugin
                 $this->managePages($route);
 
             default:
-                $antTwig = new AntTwig;
                 $params = array(
                     'AntCMSTitle' => 'AntCMS Admin Dashboard',
                     'AntCMSDescription' => 'The AntCMS admin dashboard',
@@ -50,7 +49,7 @@ class AdminPlugin extends AntPlugin
                 $HTMLTemplate .= "<a href='//" . AntConfig::currentConfig('baseURL') . "plugin/admin/config/'>AntCMS Configuration</a><br>\n";
                 $HTMLTemplate .= "<a href='//" . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/'>Page management</a><br>\n";
                 $pageTemplate = str_replace('<!--AntCMS-Body-->', $HTMLTemplate, $pageTemplate);
-                $pageTemplate = $antTwig->renderWithTiwg($pageTemplate, $params);
+                $pageTemplate = AntTwig::renderWithTiwg($pageTemplate, $params);
 
                 echo $pageTemplate;
                 break;
@@ -68,7 +67,6 @@ class AdminPlugin extends AntPlugin
         $HTMLTemplate = $antCMS->getThemeTemplate('textarea_edit_layout');
         $currentConfig = AntConfig::currentConfig();
         $currentConfigFile = file_get_contents(antConfigFile);
-        $antTwig = new AntTwig;
         $params = array(
             'AntCMSTitle' => 'AntCMS Configuration',
             'AntCMSDescription' => 'The AntCMS configuration screen',
@@ -119,7 +117,7 @@ class AdminPlugin extends AntPlugin
         }
 
         $pageTemplate = str_replace('<!--AntCMS-Body-->', $HTMLTemplate, $pageTemplate);
-        $pageTemplate = $antTwig->renderWithTiwg($pageTemplate, $params);
+        $pageTemplate = AntTwig::renderWithTiwg($pageTemplate, $params);
 
         echo $pageTemplate;
         exit;
@@ -135,7 +133,6 @@ class AdminPlugin extends AntPlugin
         $pageTemplate = $antCMS->getPageLayout();
         $HTMLTemplate = $antCMS->getThemeTemplate('markdown_edit_layout');
         $pages = AntPages::getPages();
-        $antTwig = new AntTwig;
         $params = array(
             'AntCMSTitle' => 'AntCMS Page Management',
             'AntCMSDescription' => 'The AntCMS page management screen',
@@ -247,7 +244,7 @@ class AdminPlugin extends AntPlugin
         }
 
         $pageTemplate = str_replace('<!--AntCMS-Body-->', $HTMLTemplate, $pageTemplate);
-        $pageTemplate = $antTwig->renderWithTiwg($pageTemplate, $params);
+        $pageTemplate = AntTwig::renderWithTiwg($pageTemplate, $params);
 
         echo $pageTemplate;
         exit;
