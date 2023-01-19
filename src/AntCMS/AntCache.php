@@ -86,7 +86,7 @@ class AntCache
          * If not, use MD4 since it's still quite fast.
          * Source: https://php.watch/articles/php-hash-benchmark
          */
-        if (in_array('xxh128', hash_algos())) {
+        if (defined('HAS_XXH128')) {
             return hash('xxh128', $content . $salt);
         } else {
             return hash('md4', $content . $salt);
