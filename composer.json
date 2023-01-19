@@ -14,7 +14,6 @@
         "league/commonmark": "^2.3",
         "elgigi/commonmark-emoji": "^2.0",
         "twig/twig": "^3.5",
-        "shapecode/twig-string-loader": "^1.1",
         "donatello-za/rake-php-plus": "^1.0",
         "embed/embed": "^4.4",
         "nyholm/psr7": "^1.5"
