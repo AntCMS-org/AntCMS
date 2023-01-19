@@ -24,12 +24,11 @@ class AntTwig
         $templatePath = AntTools::repairFilePath(antThemePath . '/' . $theme . '/' . 'Templates');
 
         $filesystemLoader = new \Twig\Loader\FilesystemLoader($templatePath);
-        $stringLoader = new \Twig\Extension\StringLoaderExtension();
+        $stringLoader = new \Shapecode\Twig\Loader\StringLoader();
         $chainLoader = new \Twig\Loader\ChainLoader([$stringLoader, $filesystemLoader]);
         $twigEnvironment = new \Twig\Environment($chainLoader, [
             'cache' => $twigCache,
             'debug' => AntConfig::currentConfig('debug'),
-            'strict_variables' => AntConfig::currentConfig('debug'),
         ]);
 
         return $twigEnvironment->render($content, $params);
