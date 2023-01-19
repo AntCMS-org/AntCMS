@@ -89,7 +89,7 @@ class AntCache
         if (in_array('xxh128', hash_algos())) {
             return hash('xxh128', $content . $salt);
         } else {
-            return hash('md5', $content . $salt);
+            return hash('md4', $content . $salt);
         }
     }
 }
