@@ -48,7 +48,6 @@ AntCMS stores its configuration in the human-readable yaml file format. The main
   - `siteTitle: AntCMS` - This configuration sets the title of your AntCMS website.
 - `forceHTTPS: true` - Set to 'true' by default, enables HTTPs redirection.
 - `activeTheme: Default` - Sets what theme AntCMS should use. should match the folder name of the theme you want to use.
-- `generateKeywords: true` - AntCMS will automatically attempt to generate keywords for each page if they don't have keywords defined. Set this to `false` to disable this. Note: this feature is very limited, we highly suggest manually creating keywords for your content.
 - `enableCache: true` - Enables or disables file caching in AntCMS.
 - `admin:`
   - `username: 'Admin'` - The username used to access any parts of AntCMS that may require authentication.

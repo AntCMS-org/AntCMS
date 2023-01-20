@@ -11,7 +11,6 @@ class AntConfig
         'siteInfo',
         'forceHTTPS',
         'activeTheme',
-        'generateKeywords',
         'enableCache',
         'admin',
         'debug',
@@ -30,7 +29,6 @@ class AntConfig
             ],
             'forceHTTPS' => true,
             'activeTheme' => 'Default',
-            'generateKeywords' => false,
             'enableCache' => true,
             'admin' =>  array(
                 'username' => 'Admin',

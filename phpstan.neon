@@ -6,3 +6,5 @@ parameters:
 		analyse:
 		- src/Vendor
 		- src/Cache
+		- src/AntCMS/AntKeywords.php
+

@@ -2,7 +2,6 @@ siteInfo:
     siteTitle: 'AntCMS'
 forceHTTPS: true
 activeTheme: Default
-generateKeywords: false
 enableCache: true
 admin:
     username: Admin

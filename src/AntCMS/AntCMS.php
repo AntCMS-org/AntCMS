@@ -178,7 +178,7 @@ class AntCMS
             'title' => 'AntCMS',
             'author' => 'AntCMS',
             'description' => 'AntCMS',
-            'keywords' => trim($AntKeywords->generateKeywords($pageContent)),
+            'keywords' => '',
         ];
 
         // First get the AntCMS header and store it in the matches varible
@@ -199,8 +199,7 @@ class AntCMS
             $pageHeaders['description'] = trim($matches[1] ?? 'AntCMS');
 
             preg_match('/Keywords: (.*)/', $header, $matches);
-            $keywods = $matches[1] ?? $AntKeywords->generateKeywords($pageContent);
-            $pageHeaders['keywords'] = trim($keywods);
+            $pageHeaders['keywords'] = trim($matches[1] ?? '');
         }
 
         return $pageHeaders;

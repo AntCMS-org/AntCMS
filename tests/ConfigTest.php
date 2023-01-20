@@ -15,7 +15,6 @@ class ConfigTest extends TestCase
             'siteInfo',
             'forceHTTPS',
             'activeTheme',
-            'generateKeywords',
             'enableCache',
             'admin',
             'debug',

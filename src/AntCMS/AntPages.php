@@ -23,7 +23,7 @@ class AntPages
             $pageHeader = AntCMS::getPageHeaders($pageContent);
 
             // Because we are only getting a list of files with the 'md' extension, we can blindly strip off the extension from each path.
-            // Doing this creates more profesional URLs as AntCMS will automatically add the 'md' extenstion during the page rendering process.
+            // Doing this creates more profesional looking URLs as AntCMS can automatically add the 'md' extenstion during the page rendering process.
             $pageFunctionalPath = substr(str_replace(antContentPath, "", $page), 0, -3);
 
             if ($pageFunctionalPath == '/index') {
@@ -40,6 +40,8 @@ class AntPages
                 'functionalPagePath' => $pageFunctionalPath,
                 'showInNav' => true,
             );
+
+            // Move the index page to the first item in the page list, so it appears as the first item in the navbar.
             if ($pageFunctionalPath === '/') {
                 array_unshift($pageList, $currentPage);
             } else {
