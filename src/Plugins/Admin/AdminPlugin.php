@@ -150,17 +150,24 @@ class AdminPlugin extends AntPlugin
                 if (!isset($_POST['newpage'])) {
                     array_shift($route);
                     $pagePath = implode('/', $route);
-                    $page = file_get_contents(antContentPath . '/' . $pagePath);
+                    $pagePath = AntTools::repairFilePath(antContentPath . '/' . $pagePath);
+
+                    if (empty($pagePath) || is_dir($pagePath)) {
+                        $pagePath .= '/index.md';
+                    }
+                    $pagePath = (file_exists($pagePath)) ? $pagePath : $pagePath . '.md';
+                    $pagePath = AntTools::repairFilePath($pagePath);
+
+                    $page = file_get_contents($pagePath);
                 } else {
                     $pagePath = '/' . $_POST['newpage'];
+
                     if (!str_ends_with($pagePath, ".md")) {
                         $pagePath .= '.md';
                     }
-
+                    $pagePath = AntTools::repairFilePath($pagePath);
                     $page = "--AntCMS--\nTitle: New Page Title\nAuthor: Author\nDescription: Description of this page.\nKeywords: Keywords\n--AntCMS--\n";
                 }
-
-                $pagePath = AntTools::repairFilePath($pagePath);
 
                 $HTMLTemplate = str_replace('<!--AntCMS-ActionURL-->', '//' . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/save/{$pagePath}", $HTMLTemplate);
                 $HTMLTemplate = str_replace('<!--AntCMS-TextAreaContent-->', htmlspecialchars($page), $HTMLTemplate);
@@ -235,7 +242,7 @@ class AdminPlugin extends AntPlugin
                     $HTMLTemplate .= "<ul>\n";
                     $HTMLTemplate .= "<li>Full page path: " . $page['fullPagePath'] . "</li>\n";
                     $HTMLTemplate .= "<li>Functional page path: " . $page['functionalPagePath'] . "</li>\n";
-                    $HTMLTemplate .= "<li>Show in navbar: <a href='//" . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/togglevisibility" . $page['functionalPagePath'] . "'>". $this->boolToWord($page['showInNav']) . "</a></li><br>\n";
+                    $HTMLTemplate .= "<li>Show in navbar: <a href='//" . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/togglevisibility" . $page['functionalPagePath'] . "'>" . $this->boolToWord($page['showInNav']) . "</a></li><br>\n";
                     $HTMLTemplate .= "</ul>\n";
                     $HTMLTemplate .= "</li>\n";
                 }
