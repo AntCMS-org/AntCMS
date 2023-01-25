@@ -149,14 +149,7 @@ class AdminPlugin extends AntPlugin
             case 'edit':
                 if (!isset($_POST['newpage'])) {
                     array_shift($route);
-                    $pagePath = implode('/', $route);
-                    $pagePath = AntTools::repairFilePath(antContentPath . '/' . $pagePath);
-
-                    if (empty($pagePath) || is_dir($pagePath)) {
-                        $pagePath .= '/index.md';
-                    }
-                    $pagePath = (file_exists($pagePath)) ? $pagePath : $pagePath . '.md';
-                    $pagePath = AntTools::repairFilePath($pagePath);
+                    $pagePath = AntTools::convertFunctionaltoFullpath(implode('/', $route));
 
                     $page = file_get_contents($pagePath);
 
@@ -179,6 +172,7 @@ class AdminPlugin extends AntPlugin
             case 'save':
                 array_shift($route);
                 $pagePath = AntTools::repairFilePath(antContentPath . '/' . implode('/', $route));
+
                 if (!isset($_POST['textarea'])) {
                     header('Location: //' . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/");
                 }
@@ -200,15 +194,7 @@ class AdminPlugin extends AntPlugin
 
             case 'delete':
                 array_shift($route);
-                $pagePath = AntTools::repairFilePath(antContentPath . '/' . implode('/', $route));
-
-                if (empty($pagePath) || is_dir($pagePath)) {
-                    $pagePath .= '/index.md';
-                }
-
-                if (!str_ends_with($pagePath, ".md")) {
-                    $pagePath .= '.md';
-                }
+                $pagePath = AntTools::convertFunctionaltoFullpath(implode('/', $route));
 
                 // Find the key associated with the functional page path, then remove it from our temp pages array
                 foreach ($pages as $key => $page) {
@@ -228,15 +214,7 @@ class AdminPlugin extends AntPlugin
 
             case 'togglevisibility':
                 array_shift($route);
-                $pagePath = AntTools::repairFilePath(antContentPath . '/' . implode('/', $route));
-
-                if (empty($pagePath) || is_dir($pagePath)) {
-                    $pagePath .= '/index.md';
-                }
-
-                if (!str_ends_with($pagePath, ".md")) {
-                    $pagePath .= '.md';
-                }
+                $pagePath = AntTools::convertFunctionaltoFullpath(implode('/', $route));
 
                 foreach ($pages as $key => $page) {
                     if ($page['fullPagePath'] == $pagePath) {

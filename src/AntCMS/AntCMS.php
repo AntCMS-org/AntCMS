@@ -3,7 +3,6 @@
 namespace AntCMS;
 
 use AntCMS\AntMarkdown;
-use AntCMS\AntKeywords;
 use AntCMS\AntPages;
 use AntCMS\AntConfig;
 
@@ -90,14 +89,7 @@ class AntCMS
     public function getPage(string $page)
     {
         $page = strtolower($page);
-        $pagePath = AntDir . "/Content/{$page}";
-        $pagePath = AntTools::repairFilePath($pagePath);
-
-        if (is_dir($pagePath)) {
-            $pagePath .= '/index.md';
-        } else {
-            $pagePath = (file_exists($pagePath)) ? $pagePath : $pagePath . '.md';
-        }
+        $pagePath = AntTools::convertFunctionaltoFullpath($page);
 
         if (file_exists($pagePath)) {
             try {
@@ -173,7 +165,6 @@ class AntCMS
      */
     public static function getPageHeaders(string $pageContent)
     {
-        $AntKeywords = new AntKeywords();
         $pageHeaders = [
             'title' => 'AntCMS',
             'author' => 'AntCMS',

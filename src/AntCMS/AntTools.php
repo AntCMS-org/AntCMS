@@ -20,7 +20,7 @@ class AntTools
                 $files[] = ($returnPath) ? $file->getPathname() : $file->getFilename();
             }
         }
-        
+
         return $files;
     }
 
@@ -53,5 +53,20 @@ class AntTools
         $newURL = str_replace('\\', '/', $newURL);
 
         return str_replace('//', '/', $newURL);
+    }
+
+    public static function convertFunctionaltoFullpath(string $path)
+    {
+        $pagePath = AntTools::repairFilePath(antContentPath . '/' . $path);
+
+        if (is_dir($pagePath)) {
+            $pagePath .= '/index.md';
+        }
+
+        if (!str_ends_with($pagePath, ".md")) {
+            $pagePath .= '.md';
+        }
+
+        return AntTools::repairFilePath($pagePath);
     }
 }
