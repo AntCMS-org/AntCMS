@@ -159,6 +159,9 @@ class AdminPlugin extends AntPlugin
                     $pagePath = AntTools::repairFilePath($pagePath);
 
                     $page = file_get_contents($pagePath);
+
+                    //Finally, we strip off the antContentPath for compatibility with the save function.
+                    $pagePath = str_replace(antContentPath, '', $pagePath);
                 } else {
                     $pagePath = '/' . $_POST['newpage'];
 
@@ -199,6 +202,14 @@ class AdminPlugin extends AntPlugin
                 array_shift($route);
                 $pagePath = AntTools::repairFilePath(antContentPath . '/' . implode('/', $route));
 
+                if (empty($pagePath) || is_dir($pagePath)) {
+                    $pagePath .= '/index.md';
+                }
+
+                if (!str_ends_with($pagePath, ".md")) {
+                    $pagePath .= '.md';
+                }
+
                 // Find the key associated with the functional page path, then remove it from our temp pages array
                 foreach ($pages as $key => $page) {
                     if ($page['fullPagePath'] == $pagePath) {
@@ -218,6 +229,14 @@ class AdminPlugin extends AntPlugin
             case 'togglevisibility':
                 array_shift($route);
                 $pagePath = AntTools::repairFilePath(antContentPath . '/' . implode('/', $route));
+
+                if (empty($pagePath) || is_dir($pagePath)) {
+                    $pagePath .= '/index.md';
+                }
+
+                if (!str_ends_with($pagePath, ".md")) {
+                    $pagePath .= '.md';
+                }
 
                 foreach ($pages as $key => $page) {
                     if ($page['fullPagePath'] == $pagePath) {
