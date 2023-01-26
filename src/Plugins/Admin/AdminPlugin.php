@@ -38,20 +38,19 @@ class AdminPlugin extends AntPlugin
                 $this->managePages($route);
 
             default:
+                $HTMLTemplate = "<h1>AntCMS Admin Plugin</h1>\n";
+                $HTMLTemplate .= "<a href='//" . AntConfig::currentConfig('baseURL') . "plugin/admin/config/'>AntCMS Configuration</a><br>\n";
+                $HTMLTemplate .= "<a href='//" . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/'>Page management</a><br>\n";
+
                 $params = array(
                     'AntCMSTitle' => 'AntCMS Admin Dashboard',
                     'AntCMSDescription' => 'The AntCMS admin dashboard',
                     'AntCMSAuthor' => 'AntCMS',
                     'AntCMSKeywords' => '',
+                    'AntCMSBody' => $HTMLTemplate,
                 );
 
-                $HTMLTemplate = "<h1>AntCMS Admin Plugin</h1>\n";
-                $HTMLTemplate .= "<a href='//" . AntConfig::currentConfig('baseURL') . "plugin/admin/config/'>AntCMS Configuration</a><br>\n";
-                $HTMLTemplate .= "<a href='//" . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/'>Page management</a><br>\n";
-                $pageTemplate = str_replace('<!--AntCMS-Body-->', $HTMLTemplate, $pageTemplate);
-                $pageTemplate = AntTwig::renderWithTiwg($pageTemplate, $params);
-
-                echo $pageTemplate;
+                echo AntTwig::renderWithTiwg($pageTemplate, $params);
                 break;
         }
     }
@@ -116,10 +115,8 @@ class AdminPlugin extends AntPlugin
                 $HTMLTemplate .= "</ul>\n";
         }
 
-        $pageTemplate = str_replace('<!--AntCMS-Body-->', $HTMLTemplate, $pageTemplate);
-        $pageTemplate = AntTwig::renderWithTiwg($pageTemplate, $params);
-
-        echo $pageTemplate;
+        $params['AntCMSBody'] = $HTMLTemplate;
+        echo AntTwig::renderWithTiwg($pageTemplate, $params);
         exit;
     }
 
@@ -247,10 +244,8 @@ class AdminPlugin extends AntPlugin
                 $HTMLTemplate .= "</ul>\n";
         }
 
-        $pageTemplate = str_replace('<!--AntCMS-Body-->', $HTMLTemplate, $pageTemplate);
-        $pageTemplate = AntTwig::renderWithTiwg($pageTemplate, $params);
-
-        echo $pageTemplate;
+        $params['AntCMSBody'] = $HTMLTemplate;
+        echo AntTwig::renderWithTiwg($pageTemplate, $params);
         exit;
     }
 

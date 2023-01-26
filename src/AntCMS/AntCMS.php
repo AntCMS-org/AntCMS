@@ -23,8 +23,6 @@ class AntCMS
             $this->renderException("404");
         }
 
-        $markdown = AntMarkdown::renderMarkdown($content['content']);
-
         $pageTemplate = $this->getPageLayout(null, $page);
 
         $params = array(
@@ -32,8 +30,8 @@ class AntCMS
             'AntCMSDescription' => $content['description'],
             'AntCMSAuthor' => $content['author'],
             'AntCMSKeywords' => $content['keywords'],
+            'AntCMSBody' => AntMarkdown::renderMarkdown($content['content']),
         );
-        $pageTemplate = str_replace('<!--AntCMS-Body-->', $markdown, $pageTemplate);
         $pageTemplate = AntTwig::renderWithTiwg($pageTemplate, $params);
 
         $end_time = microtime(true);
@@ -78,8 +76,8 @@ class AntCMS
         $exceptionString = $exceptionString . " (Code $exceptionCode)";
         $pageTemplate = self::getPageLayout();
 
-        $pageTemplate = str_replace('<!--AntCMS-Title-->', 'An error ocurred', $pageTemplate);
-        $pageTemplate = str_replace('<!--AntCMS-Body-->', '<h1>An error ocurred</h1><p>' . $exceptionString . '</p>', $pageTemplate);
+        $pageTemplate = str_replace('{{ AntCMSTitle }}', 'An error ocurred', $pageTemplate);
+        $pageTemplate = str_replace('{{ AntCMSBody | raw }} ', '<h1>An error ocurred</h1><p>' . $exceptionString . '</p>', $pageTemplate);
 
         http_response_code($httpCode);
         echo $pageTemplate;
@@ -150,7 +148,7 @@ class AntCMS
                     </head>
                     <body>
                         <p>AntCMS had an error when fetching the page template, please contact the site administrator.</p>
-                        <!--AntCMS-Body-->
+                        {{ AntCMSBody | raw }}
                     </body>
                 </html>';
             } else {
