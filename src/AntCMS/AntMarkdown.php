@@ -17,8 +17,7 @@ use League\CommonMark\Extension\Embed\EmbedExtension;
 
 class AntMarkdown
 {
-    /**
-     * @param string $md 
+    /** 
      * @return string 
      */
     public static function renderMarkdown(string $md)

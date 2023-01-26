@@ -73,7 +73,7 @@ class AntCMS
      */
     public static function renderException(string $exceptionCode, int $httpCode = 404, string $exceptionString = 'That request caused an exception to be thrown.')
     {
-        $exceptionString = $exceptionString . " (Code $exceptionCode)";
+        $exceptionString .= " (Code {$exceptionCode})";
         $pageTemplate = self::getPageLayout();
 
         $pageTemplate = str_replace('{{ AntCMSTitle }}', 'An error ocurred', $pageTemplate);
@@ -84,8 +84,7 @@ class AntCMS
         exit;
     }
 
-    /**
-     * @param string $page 
+    /** 
      * @return array<mixed>|false 
      */
     public function getPage(string $page)
@@ -108,8 +107,7 @@ class AntCMS
         }
     }
 
-    /**
-     * @param string $layout 
+    /** 
      * @param string|null $theme 
      * @return string 
      */
@@ -161,8 +159,7 @@ class AntCMS
         return $template;
     }
 
-    /**
-     * @param string $pageContent 
+    /** 
      * @return array<mixed> 
      */
     public static function getPageHeaders(string $pageContent)
@@ -206,8 +203,7 @@ class AntCMS
         return AntConfig::currentConfig('siteInfo');
     }
 
-    /**
-     * @param string $path 
+    /** 
      * @return void 
      */
     public function serveContent(string $path)

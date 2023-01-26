@@ -7,8 +7,7 @@ use Symfony\Component\Yaml\Yaml;
 
 class AntYaml
 {
-    /**
-     * @param string $file 
+    /** 
      * @return array<mixed> 
      */
     public static function parseFile(string $file)
@@ -16,19 +15,16 @@ class AntYaml
         return Yaml::parseFile($file);
     }
 
-    /**
-     * @param string $file 
+    /** 
      * @param array<mixed> $data 
-     * @return bool 
      */
-    public static function saveFile(string $file, array $data)
+    public static function saveFile(string $file, array $data): bool
     {
         $yaml = Yaml::dump($data);
-        return boolval(file_put_contents($file, $yaml));
+        return (bool) file_put_contents($file, $yaml);
     }
 
-    /**
-     * @param string $yaml 
+    /** 
      * @return array<mixed>|null 
      */
     public static function parseYaml(string $yaml)

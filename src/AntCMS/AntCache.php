@@ -21,7 +21,7 @@ class AntCache
         $config = AntConfig::currentConfig();
         if ($config['enableCache']) {
             try {
-                file_put_contents($cachePath, (string)$content);
+                file_put_contents($cachePath, $content);
                 return true;
             } catch (\Exception) {
                 return false;

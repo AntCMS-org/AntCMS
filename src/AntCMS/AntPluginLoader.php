@@ -10,7 +10,6 @@ class AntPluginLoader
     public function loadPlugins()
     {
         $plugins = array();
-        $files = array();
 
         $files = AntTools::getFileList(antPluginPath, null, true);
 

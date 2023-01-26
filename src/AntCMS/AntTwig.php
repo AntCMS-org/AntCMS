@@ -6,8 +6,7 @@ use AntCMS\AntConfig;
 
 class AntTwig
 {
-    /**
-     * @param string $content 
+    /** 
      * @param array<mixed> $params 
      * @param string|null $theme 
      * @return string 

@@ -4,10 +4,7 @@ namespace AntCMS;
 
 class AntTools
 {
-    /**
-     * @param string $dir 
-     * @param (null|string)|null $extension 
-     * @param null|bool $returnPath 
+    /** 
      * @return array<string> 
      */
     public static function getFileList(string $dir, ?string $extension = null, ?bool $returnPath = false)
@@ -24,8 +21,7 @@ class AntTools
         return $files;
     }
 
-    /**
-     * @param string $path 
+    /** 
      * @return string 
      */
     public static function repairFilePath(string $path)

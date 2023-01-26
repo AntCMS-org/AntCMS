@@ -59,7 +59,6 @@ class AntPages
     }
 
     /**
-     * @param string $navTemplate
      * @param string $currentPage optional - What page is the active page. Used for highlighting the active page in the navbar
      * @return string 
      */

@@ -11,7 +11,6 @@ use AntCMS\AntTwig;
 
 class AdminPlugin extends AntPlugin
 {
-    /** @return string  */
     public function getName(): string
     {
         return 'Admin';
@@ -158,6 +157,7 @@ class AdminPlugin extends AntPlugin
                     if (!str_ends_with($pagePath, ".md")) {
                         $pagePath .= '.md';
                     }
+
                     $pagePath = AntTools::repairFilePath($pagePath);
                     $page = "--AntCMS--\nTitle: New Page Title\nAuthor: Author\nDescription: Description of this page.\nKeywords: Keywords\n--AntCMS--\n";
                 }
@@ -200,12 +200,11 @@ class AdminPlugin extends AntPlugin
                     }
                 }
 
-                if (file_exists($pagePath)) {
-                    // If we were able to delete the page, update the pages list with the updated pages array.
-                    if (unlink($pagePath)) {
-                        AntYaml::saveFile(antPagesList, $pages);
-                    }
+                // If we were able to delete the page, update the pages list with the updated pages array.
+                if (file_exists($pagePath) && unlink($pagePath)) {
+                    AntYaml::saveFile(antPagesList, $pages);
                 }
+                
                 header('Location: //' . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/");
                 break;
 
@@ -249,12 +248,11 @@ class AdminPlugin extends AntPlugin
         exit;
     }
 
-    /**
-     * @param bool $value 
+    /** 
      * @return string 
      */
     private function boolToWord(bool $value)
     {
-        return (bool) $value ? 'true' : 'false';
+        return $value ? 'true' : 'false';
     }
 }

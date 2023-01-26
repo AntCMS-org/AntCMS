@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector;
 use Rector\CodingStyle\Rector\FuncCall\ConsistentPregDelimiterRector;
 use Rector\Config\RectorConfig;
+use Rector\DeadCode\Rector\ClassLike\RemoveAnnotationRector;
 use Rector\Php80\Rector\FunctionLike\MixedTypeRector;
 use Rector\Php80\Rector\FunctionLike\UnionTypesRector;
 use Rector\Set\ValueObject\SetList;
@@ -21,6 +22,7 @@ return static function (RectorConfig $rectorConfig): void {
         MixedTypeRector::class,
         EncapsedStringsToSprintfRector::class,
         ConsistentPregDelimiterRector::class,
+        RemoveAnnotationRector::class,
     ]);
 
     $rectorConfig->sets([
@@ -28,5 +30,6 @@ return static function (RectorConfig $rectorConfig): void {
         SetList::CODE_QUALITY,
         SetList::CODING_STYLE,
         SetList::NAMING,
+        SetList::DEAD_CODE,
     ]);
 };
