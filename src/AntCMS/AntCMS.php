@@ -53,12 +53,12 @@ class AntCMS
      * @param string $currentPage optional - What page is the active page.
      * @return string the default page layout
      */
-    public function getPageLayout(string $theme = null, string $currentPage = '')
+    public static function getPageLayout(string $theme = null, string $currentPage = '')
     {
         $siteInfo = AntCMS::getSiteInfo();
 
-        $pageTemplate = $this->getThemeTemplate('default_layout', $theme);
-        $pageTemplate = str_replace('<!--AntCMS-Navigation-->', AntPages::generateNavigation($this->getThemeTemplate('nav_layout', $theme), $currentPage), $pageTemplate);
+        $pageTemplate = self::getThemeTemplate('default_layout', $theme);
+        $pageTemplate = str_replace('<!--AntCMS-Navigation-->', AntPages::generateNavigation(self::getThemeTemplate('nav_layout', $theme), $currentPage), $pageTemplate);
 
         $pageTemplate = str_replace('<!--AntCMS-SiteTitle-->', $siteInfo['siteTitle'], $pageTemplate);
 
@@ -69,15 +69,19 @@ class AntCMS
      * Render an exception page with the provided exception code.
      * 
      * @param string $exceptionCode The exception code to be displayed on the error page
+     * @param int $httpCode The HTTP response code to return, 404 by default.
+     * @param string $exceptionString An optional parameter to define a custom string to be displayed along side the exception. 
      * @return never 
      */
-    public function renderException(string $exceptionCode)
+    public static function renderException(string $exceptionCode, int $httpCode = 404, string $exceptionString = 'That request caused an exception to be thrown.')
     {
-        $pageTemplate = $this->getPageLayout();
+        $exceptionString = $exceptionString . " (Code $exceptionCode)";
+        $pageTemplate = self::getPageLayout();
 
         $pageTemplate = str_replace('<!--AntCMS-Title-->', 'An error ocurred', $pageTemplate);
-        $pageTemplate = str_replace('<!--AntCMS-Body-->', '<h1>An error ocurred</h1><p>That request caused an exception code (' . $exceptionCode . ')</p>', $pageTemplate);
+        $pageTemplate = str_replace('<!--AntCMS-Body-->', '<h1>An error ocurred</h1><p>' . $exceptionString . '</p>', $pageTemplate);
 
+        http_response_code($httpCode);
         echo $pageTemplate;
         exit;
     }
@@ -111,7 +115,7 @@ class AntCMS
      * @param string|null $theme 
      * @return string 
      */
-    public function getThemeTemplate(string $layout = 'default_layout', string $theme = null)
+    public static function getThemeTemplate(string $layout = 'default_layout', string $theme = null)
     {
         $theme = $theme ?? AntConfig::currentConfig('activeTheme');
 

@@ -3,6 +3,7 @@
 namespace AntCMS;
 
 use AntCMS\AntConfig;
+use AntCMS\AntCMS;
 
 class AntAuth
 {
@@ -20,7 +21,7 @@ class AntAuth
         $password = $_SERVER['PHP_AUTH_PW'] ?? null;
 
         if (empty($currentConfig['admin']['password'])) {
-            die("You must set a password in your config.yaml file before you can authenticate within AntCMS.");
+            AntCMS::renderException('401', 401, 'You must set a password in your config.yaml file before you can authenticate within AntCMS.');
         }
 
         // If the stored password is not hashed in the config, hash it
@@ -48,7 +49,7 @@ class AntAuth
     {
         $title = AntConfig::currentConfig('siteInfo.siteTitle');
         header('WWW-Authenticate: Basic realm="' . $title . '"');
-        header('HTTP/1.0 401 Unauthorized');
+        http_response_code(401);
         echo 'You must enter a valid username and password to access this page';
         exit;
     }
