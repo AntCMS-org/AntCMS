@@ -25,13 +25,13 @@ class AntCMS
 
         $pageTemplate = $this->getPageLayout(null, $page);
 
-        $params = array(
+        $params = [
             'AntCMSTitle' => $content['title'],
             'AntCMSDescription' => $content['description'],
             'AntCMSAuthor' => $content['author'],
             'AntCMSKeywords' => $content['keywords'],
             'AntCMSBody' => AntMarkdown::renderMarkdown($content['content']),
-        );
+        ];
         $pageTemplate = AntTwig::renderWithTiwg($pageTemplate, $params);
 
         $end_time = microtime(true);
@@ -76,8 +76,16 @@ class AntCMS
         $exceptionString .= " (Code {$exceptionCode})";
         $pageTemplate = self::getPageLayout();
 
-        $pageTemplate = str_replace('{{ AntCMSTitle }}', 'An error ocurred', $pageTemplate);
-        $pageTemplate = str_replace('{{ AntCMSBody | raw }} ', '<h1>An error ocurred</h1><p>' . $exceptionString . '</p>', $pageTemplate);
+        $params = [
+            'AntCMSTitle' => 'An Error Ocurred',
+            'AntCMSBody' => '<h1>An error ocurred</h1><p>' . $exceptionString . '</p>',
+        ];
+        try {
+            $pageTemplate = AntTwig::renderWithTiwg($pageTemplate, $params);
+        } catch (\Exception) {
+            $pageTemplate = str_replace('{{ AntCMSTitle }}', $params['AntCMSTitle'], $pageTemplate);
+            $pageTemplate = str_replace('{{ AntCMSBody | raw }} ', $params['AntCMSBody'], $pageTemplate);
+        }
 
         http_response_code($httpCode);
         echo $pageTemplate;

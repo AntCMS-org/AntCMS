@@ -8,9 +8,7 @@ use DonatelloZa\RakePlus\RakePlus;
 
 class AntKeywords
 {
-    /**
-     * @param string $content 
-     * @param int $count 
+    /** 
      * @return string 
      */
     public function generateKeywords(string $content = '', int $count = 15)
