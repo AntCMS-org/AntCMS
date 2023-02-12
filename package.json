@@ -1,6 +1,5 @@
 {
   "name": "antcms",
-  "version": "1.0.0",
   "description": "A simple CMS built with PHP and Markdown",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
