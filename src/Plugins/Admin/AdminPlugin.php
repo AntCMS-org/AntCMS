@@ -204,7 +204,7 @@ class AdminPlugin extends AntPlugin
                 if (file_exists($pagePath) && unlink($pagePath)) {
                     AntYaml::saveFile(antPagesList, $pages);
                 }
-                
+
                 header('Location: //' . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/");
                 break;
 
@@ -223,24 +223,15 @@ class AdminPlugin extends AntPlugin
                 break;
 
             default:
-                $HTMLTemplate = "<h1>Page Management</h1>\n";
-                $HTMLTemplate .= "<a href='//" . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/regenerate'>Click here to regenerate the page list</a><br>\n";
-                $HTMLTemplate .= "<a href='//" . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/create'>Click here to create a new page</a><br>\n";
-                $HTMLTemplate .= "<ul>\n";
-                foreach ($pages as $page) {
-                    $HTMLTemplate .= "<li>\n";
-                    $HTMLTemplate .= "<h2>" . $page['pageTitle'] . "</h2>\n";
-                    $HTMLTemplate .= "<a href='//" . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/edit" . $page['functionalPagePath'] . "'>Edit this page</a><br>\n";
-                    $HTMLTemplate .= "<a href='//" . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/delete" . $page['functionalPagePath'] . "'>Delete this page</a><br>\n";
-                    $HTMLTemplate .= "<ul>\n";
-                    $HTMLTemplate .= "<li>Full page path: " . $page['fullPagePath'] . "</li>\n";
-                    $HTMLTemplate .= "<li>Functional page path: " . $page['functionalPagePath'] . "</li>\n";
-                    $HTMLTemplate .= "<li>Show in navbar: <a href='//" . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/togglevisibility" . $page['functionalPagePath'] . "'>" . $this->boolToWord($page['showInNav']) . "</a></li><br>\n";
-                    $HTMLTemplate .= "</ul>\n";
-                    $HTMLTemplate .= "</li>\n";
+                $HTMLTemplate = $antCMS->getThemeTemplate('admin_manage_pages_layout');
+                foreach ($pages as $key => $page) {
+                    $pages[$key]['editurl'] = '//' . AntTools::repairURL(AntConfig::currentConfig('baseURL') . "/plugin/admin/pages/edit/" . $page['functionalPagePath']);
+                    $pages[$key]['deleteurl'] = '//' . AntTools::repairURL(AntConfig::currentConfig('baseURL') . "/plugin/admin/pages/delete/" . $page['functionalPagePath']);
+                    $pages[$key]['togglevisibility'] = '//' . AntTools::repairURL(AntConfig::currentConfig('baseURL') . "/plugin/admin/pages/togglevisibility/" . $page['functionalPagePath']);
+                    $pages[$key]['isvisable'] = $this->boolToWord($page['showInNav']);
                 }
-
-                $HTMLTemplate .= "</ul>\n";
+                $params['pages'] = $pages;
+                $HTMLTemplate = AntTwig::renderWithTiwg($HTMLTemplate, $params);
         }
 
         $params['AntCMSBody'] = $HTMLTemplate;

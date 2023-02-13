@@ -58,9 +58,7 @@ class AntCMS
         $pageTemplate = self::getThemeTemplate('default_layout', $theme);
         $pageTemplate = str_replace('<!--AntCMS-Navigation-->', AntPages::generateNavigation(self::getThemeTemplate('nav_layout', $theme), $currentPage), $pageTemplate);
 
-        $pageTemplate = str_replace('<!--AntCMS-SiteTitle-->', $siteInfo['siteTitle'], $pageTemplate);
-
-        return str_replace('<!--AntCMS-SiteLink-->', '//' . AntConfig::currentConfig('baseURL'), $pageTemplate);
+        return $pageTemplate = str_replace('<!--AntCMS-SiteTitle-->', $siteInfo['siteTitle'], $pageTemplate);
     }
 
     /**

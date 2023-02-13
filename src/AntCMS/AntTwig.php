@@ -3,6 +3,7 @@
 namespace AntCMS;
 
 use AntCMS\AntConfig;
+use AntCMS\AntTwigFilters;
 
 class AntTwig
 {
@@ -29,6 +30,8 @@ class AntTwig
             'cache' => $twigCache,
             'debug' => AntConfig::currentConfig('debug'),
         ]);
+
+        $twigEnvironment->addExtension(new \AntCMS\AntTwigFilters);
 
         return $twigEnvironment->render($content, $params);
     }

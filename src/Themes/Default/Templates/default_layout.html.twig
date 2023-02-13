@@ -8,7 +8,7 @@
   <meta name="author" content="{{ AntCMSAuthor }}">
   <meta name="keywords" content="{{ AntCMSKeywords }}">
 
-  <link href="<!--AntCMS-SiteLink-->Themes/Default/Assets/Dist/tailwind.css" rel="stylesheet">
+  <link href="{{ "Themes/Default/Assets/Dist/tailwind.css"|absUrl }}" rel="stylesheet">
 
   <title>{{ AntCMSTitle }}</title>
 </head>
@@ -17,7 +17,7 @@
   <!-- Navigation -->
   <nav class="p-3 border-gray-200 bg-gray-100 dark:bg-zinc-900 dark:border-gray-700">
     <div class="container flex flex-wrap items-center justify-between mx-auto">
-      <a href="<!--AntCMS-SiteLink-->" class="flex items-center">
+      <a href="{{ ""|absUrl }}" class="flex items-center">
         <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white"><!--AntCMS-SiteTitle--></span>
       </a>
       <button data-collapse-toggle="navbar-solid-bg" type="button"
