@@ -33,6 +33,11 @@ class AntAuth
             $currentConfig = AntConfig::currentConfig();
         }
 
+        // If the credentials are still set valid, but the auth cookie has expired, re-require authentication.
+        if (!isset($_COOKIE['auth'])) {
+            AntAuth::requireAuth();
+        }
+
         if ($currentConfig['admin']['username'] == $username && password_verify($password, $currentConfig['admin']['password'])) {
             return;
         }
@@ -47,6 +52,8 @@ class AntAuth
      */
     private static function requireAuth()
     {
+        setcookie("auth", "true");
+
         $title = AntConfig::currentConfig('siteInfo.siteTitle');
         header('WWW-Authenticate: Basic realm="' . $title . '"');
         http_response_code(401);
