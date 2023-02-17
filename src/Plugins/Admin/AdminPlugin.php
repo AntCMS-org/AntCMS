@@ -11,6 +11,9 @@ use AntCMS\AntTwig;
 
 class AdminPlugin extends AntPlugin
 {
+    protected $auth;
+    protected $antCMS;
+
     public function getName(): string
     {
         return 'Admin';
@@ -22,11 +25,12 @@ class AdminPlugin extends AntPlugin
      */
     public function handlePluginRoute(array $route)
     {
-        AntAuth::checkAuth();
+        $this->auth = new AntAuth;
+        $this->auth->checkAuth();
 
         $currentStep = $route[0] ?? 'none';
-        $antCMS = new AntCMS;
-        $pageTemplate = $antCMS->getPageLayout();
+        $this->antCMS = new AntCMS;
+        $pageTemplate = $this->antCMS->getPageLayout();
         array_shift($route);
 
         switch ($currentStep) {
@@ -60,9 +64,12 @@ class AdminPlugin extends AntPlugin
      */
     private function configureAntCMS(array $route)
     {
-        $antCMS = new AntCMS;
-        $pageTemplate = $antCMS->getPageLayout();
-        $HTMLTemplate = $antCMS->getThemeTemplate('textarea_edit_layout');
+        if ($this->auth->getRole() != 'admin') {
+            AntCMS::renderException("You are not permitted to visit this page.");
+        }
+
+        $pageTemplate = $this->antCMS->getPageLayout();
+        $HTMLTemplate = $this->antCMS->getThemeTemplate('textarea_edit_layout');
         $currentConfig = AntConfig::currentConfig();
         $currentConfigFile = file_get_contents(antConfigFile);
         $params = array(
@@ -125,9 +132,8 @@ class AdminPlugin extends AntPlugin
      */
     private function managePages(array $route)
     {
-        $antCMS = new AntCMS;
-        $pageTemplate = $antCMS->getPageLayout();
-        $HTMLTemplate = $antCMS->getThemeTemplate('markdown_edit_layout');
+        $pageTemplate = $this->antCMS->getPageLayout();
+        $HTMLTemplate = $this->antCMS->getThemeTemplate('markdown_edit_layout');
         $pages = AntPages::getPages();
         $params = array(
             'AntCMSTitle' => 'AntCMS Page Management',
@@ -223,7 +229,7 @@ class AdminPlugin extends AntPlugin
                 break;
 
             default:
-                $HTMLTemplate = $antCMS->getThemeTemplate('admin_manage_pages_layout');
+                $HTMLTemplate = $this->antCMS->getThemeTemplate('admin_manage_pages_layout');
                 foreach ($pages as $key => $page) {
                     $pages[$key]['editurl'] = '//' . AntTools::repairURL(AntConfig::currentConfig('baseURL') . "/plugin/admin/pages/edit/" . $page['functionalPagePath']);
                     $pages[$key]['deleteurl'] = '//' . AntTools::repairURL(AntConfig::currentConfig('baseURL') . "/plugin/admin/pages/delete/" . $page['functionalPagePath']);
