@@ -42,19 +42,18 @@ class AdminPlugin extends AntPlugin
                 $this->managePages($route);
 
             default:
-                $HTMLTemplate = "<h1>AntCMS Admin Plugin</h1>\n";
-                $HTMLTemplate .= "<a href='//" . AntConfig::currentConfig('baseURL') . "plugin/admin/config/'>AntCMS Configuration</a><br>\n";
-                $HTMLTemplate .= "<a href='//" . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/'>Page management</a><br>\n";
+                $HTMLTemplate = $this->antCMS->getThemeTemplate('admin_landing_layout');
+                $params = ['user' => AntUsers::getUserPublicalKeys($this->auth->getUsername())];
 
-                $params = array(
+                $HTMLTemplate = AntTwig::renderWithTiwg($HTMLTemplate, $params);
+                $params = [
                     'AntCMSTitle' => 'AntCMS Admin Dashboard',
                     'AntCMSDescription' => 'The AntCMS admin dashboard',
                     'AntCMSAuthor' => 'AntCMS',
                     'AntCMSKeywords' => '',
                     'AntCMSBody' => $HTMLTemplate,
-                    'CurrentUser' => AntUsers::getUserPublicalKeys($this->auth->getUsername()),
-                );
 
+                ];
                 echo AntTwig::renderWithTiwg($pageTemplate, $params);
                 break;
         }

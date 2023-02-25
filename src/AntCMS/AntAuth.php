@@ -17,7 +17,7 @@ class AntAuth
 
     public function getUsername()
     {
-        return $this->role;
+        return $this->username;
     }
 
     public function getName()
