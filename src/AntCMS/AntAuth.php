@@ -39,7 +39,7 @@ class AntAuth
         }
 
         // If the credentials are still set valid, but the auth cookie has expired, re-require authentication.
-        if (!isset($_COOKIE['auth'])) {
+        if (!isset($_COOKIE['auth']) && $_COOKIE['auth'] = 'valid') {
             $this->requireAuth();
         }
 
@@ -76,12 +76,17 @@ class AntAuth
      */
     private function requireAuth()
     {
-        setcookie("auth", "true");
+        setcookie("auth", "valid");
 
         $title = AntConfig::currentConfig('siteInfo.siteTitle');
         header('WWW-Authenticate: Basic realm="' . $title . '"');
         http_response_code(401);
         echo 'You must enter a valid username and password to access this page';
         exit;
+    }
+
+    public static function invalidateSession()
+    {
+        setcookie("auth", "invalid", time() - 3600);
     }
 }

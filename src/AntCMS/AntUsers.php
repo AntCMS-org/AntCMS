@@ -26,6 +26,12 @@ class AntUsers
 
     public static function updateUser($username, $newData)
     {
+        foreach ($newData as $key => $value) {
+            if (empty($value)) {
+                throw new Exception("Key $key cannot be empty.");
+            }
+        }
+
         $users = self::getUsers();
         if (!isset($users[$username])) {
             throw new Exception("There was an error when updating the selected user.");
@@ -37,6 +43,16 @@ class AntUsers
 
         if (isset($newData['role'])) {
             $users[$username]['role'] = $newData['role'];
+        }
+
+        if (isset($newData['username'])) {
+            if (!isset($users[$newData['username']])) {
+                throw new Exception("Username is already taken.");
+            }
+
+            $user = $users[$username];
+            unset($users[$username]);
+            $users[$newData['username']] = $user;
         }
 
         return AntYaml::saveFile(antUsersList, $users);
