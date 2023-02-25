@@ -8,6 +8,7 @@ use AntCMS\AntYaml;
 use AntCMS\AntAuth;
 use AntCMS\AntTools;
 use AntCMS\AntTwig;
+use AntCMS\AntUsers;
 
 class AdminPlugin extends AntPlugin
 {
@@ -51,6 +52,7 @@ class AdminPlugin extends AntPlugin
                     'AntCMSAuthor' => 'AntCMS',
                     'AntCMSKeywords' => '',
                     'AntCMSBody' => $HTMLTemplate,
+                    'CurrentUser' => AntUsers::getUserPublicalKeys($this->auth->getUsername()),
                 );
 
                 echo AntTwig::renderWithTiwg($pageTemplate, $params);

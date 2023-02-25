@@ -8,6 +8,28 @@ class AntAuth
 {
     protected $role;
     protected $username;
+    protected $authenticated;
+
+    public function getRole()
+    {
+        return $this->role;
+    }
+
+    public function getUsername()
+    {
+        return $this->role;
+    }
+
+    public function getName()
+    {
+        $currentUser = AntUsers::getUser($this->username);
+        return $currentUser['name'];
+    }
+
+    public function isAuthenticated()
+    {
+        return $this->authenticated ?? false;
+    }
 
     /**
      * Check if the user is authenticated using the credentials in the config file.
@@ -29,10 +51,7 @@ class AntAuth
 
         // If the stored password is not hashed in the config, hash it
         if ($password == $currentUser['password']) {
-            $data = [
-                'password' => $password
-            ];
-            AntUsers::updateUser($username, $data);
+            AntUsers::updateUser($username, ['password' => $password]);
 
             // Reload the user info so the next step can pass
             $currentUser = AntUsers::getUser($username);
@@ -53,22 +72,6 @@ class AntAuth
         $this->requireAuth();
     }
 
-    public function getRole()
-    {
-        return $this->role;
-    }
-
-    public function getUsername()
-    {
-        return $this->role;
-    }
-
-    public function getName()
-    {
-        $currentUser = AntUsers::getUser($this->username);
-        return $currentUser['name'];
-    }
-
     /**
      * Send an authentication challenge to the browser, with the realm set to the site title in config.
      *
@@ -85,8 +88,9 @@ class AntAuth
         exit;
     }
 
-    public static function invalidateSession()
+    public function invalidateSession()
     {
-        setcookie("auth", "invalid", time() - 3600);
+        $this->authenticated = false;
+        $this->requireAuth();
     }
 }

@@ -3,6 +3,7 @@
 namespace AntCMS;
 
 use Exception;
+use Symfony\Component\Yaml\Exception\ParseException;
 
 class AntUsers
 {
@@ -10,6 +11,22 @@ class AntUsers
     {
         $users = Self::getUsers();
         return $users[$username] ?? null;
+    }
+
+    /** This function is used to get all the info of a user that is safe to publicize.
+     *  Mostly intended to create an array that can be safely passed to twig and used to display user information on the page, such as their name.
+     * @param mixed $username 
+     * @return array 
+     * @throws ParseException 
+     */
+    public static function getUserPublicalKeys($username)
+    {
+        $user = Self::getUser($username);
+        if (is_null($user)) {
+            return [];
+        }
+        unset($user['password']);
+        return $user;
     }
 
     public static function getUsers()

@@ -1,5 +1,5 @@
 /src/Vendor/
 node_modules
 src/Cache/*
-src/Config/config.yaml
-src/Config/pages.yaml
+src/Config/Config.yaml
+src/Config/Pages.yaml

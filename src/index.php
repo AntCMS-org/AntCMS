@@ -66,6 +66,14 @@ if ($segments[0] == 'robots.txt') {
     $segments[1] = 'robotstxt';
 }
 
+if ($segments[0] == 'admin') {
+    array_unshift($segments, 'plugin');
+}
+
+if ($segments[0] == 'profile') {
+    array_unshift($segments, 'plugin');
+}
+
 if ($segments[0] === 'plugin') {
     $pluginName = $segments[1];
     $pluginLoader = new AntPluginLoader();

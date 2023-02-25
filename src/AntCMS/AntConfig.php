@@ -12,7 +12,6 @@ class AntConfig
         'forceHTTPS',
         'activeTheme',
         'enableCache',
-        'admin',
         'debug',
         'baseURL',
     ];
@@ -30,10 +29,6 @@ class AntConfig
             'forceHTTPS' => true,
             'activeTheme' => 'Default',
             'enableCache' => true,
-            'admin' =>  array(
-                'username' => 'Admin',
-                'password' => '',
-            ),
             'debug' => true,
             'baseURL' => $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']),
         ];
