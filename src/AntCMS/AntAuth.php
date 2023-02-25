@@ -39,7 +39,7 @@ class AntAuth
         }
 
         // If the credentials are still set valid, but the auth cookie has expired, re-require authentication.
-        if (!isset($_COOKIE['auth']) && $_COOKIE['auth'] = 'valid') {
+        if (!isset($_COOKIE['auth']) && $_COOKIE['auth'] == 'valid') {
             $this->requireAuth();
         }
 
