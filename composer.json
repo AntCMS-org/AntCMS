@@ -16,7 +16,8 @@
         "twig/twig": "^3.5",
         "shapecode/twig-string-loader": "^1.1",
         "embed/embed": "^4.4",
-        "nyholm/psr7": "^1.5"
+        "nyholm/psr7": "^1.5",
+        "simonvomeyser/commonmark-ext-lazy-image": "^2.0"
     },
     "authors": [
         {

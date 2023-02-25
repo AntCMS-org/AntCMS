@@ -14,6 +14,7 @@ use League\CommonMark\MarkdownConverter;
 use ElGigi\CommonMarkEmoji\EmojiExtension;
 use League\CommonMark\Extension\Embed\Bridge\OscaroteroEmbedAdapter;
 use League\CommonMark\Extension\Embed\EmbedExtension;
+use SimonVomEyser\CommonMarkExtension\LazyImageExtension;
 
 class AntMarkdown
 {
@@ -50,6 +51,7 @@ class AntMarkdown
         $environment->addExtension(new TaskListExtension());
         $environment->addExtension(new EmojiExtension());
         $environment->addExtension(new EmbedExtension());
+        $environment->addExtension(new LazyImageExtension());
 
         $markdownConverter = new MarkdownConverter($environment);
 
