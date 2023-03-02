@@ -40,11 +40,9 @@ class AdminPlugin extends AntPlugin
         switch ($currentStep) {
             case 'config':
                 $this->configureAntCMS($route);
-                break;
 
             case 'pages':
                 $this->managePages($route);
-                break;
 
             default:
                 $params = [

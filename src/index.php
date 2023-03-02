@@ -20,17 +20,19 @@ if (!file_exists(antPagesList)) {
     AntPages::generatePages();
 }
 
+$antCms = new AntCMS();
+
 if (AntConfig::currentConfig('forceHTTPS') && 'cli' !== PHP_SAPI) {
     $isHTTPS = false;
 
     if (!empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off') {
         $isHTTPS = true;
     }
-    
+
     if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) == 'https') {
         $isHTTPS = true;
     }
-    
+
     if (!empty($_SERVER['HTTP_X_FORWARDED_SSL']) && strtolower($_SERVER['HTTP_X_FORWARDED_SSL']) !== 'off') {
         $isHTTPS = true;
     }
@@ -86,14 +88,13 @@ if ($segments[0] === 'plugin') {
             exit;
         }
     }
-    
+
     // plugin not found
     header("HTTP/1.0 404 Not Found");
     echo ("Error 404");
     exit;
 }
 
-$antCms = new AntCMS();
 $indexes = ['/', '/index.php', '/index.html'];
 if (in_array($segments[0], $indexes)) {
     echo $antCms->renderPage('/');
