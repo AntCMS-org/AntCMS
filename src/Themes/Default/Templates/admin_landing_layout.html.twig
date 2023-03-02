@@ -1,5 +1,5 @@
 <h1>AntCMS Admin Plugin</h1>
 <p>Welcome, {{ user.name }}. Below are all of the available options for you.</p>
-{% if user.role == 'admin' %}<a href="{{ "plugin/admin/config/"|absUrl }}">AntCMS Configuration</a> | {% endif %}
-<a href="{{ "plugin/admin/pages/"|absUrl }}">Page Management</a> |
+{% if user.role == 'admin' %}<a href="{{ "admin/config/"|absUrl }}">AntCMS Configuration</a> | {% endif %}
+<a href="{{ "admin/pages/"|absUrl }}">Page Management</a> |
 <a href="{{ "profile/logout"|absUrl }}">Logout</a>
