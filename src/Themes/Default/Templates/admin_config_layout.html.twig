@@ -1,0 +1,16 @@
+<h1>AntCMS Configuration</h1>
+<a href="{{ "admin/config/edit"|absUrl }}">Click here to edit the config file</a><br>
+<ul>
+{% for key, value in currentConfig %}
+    {% if value is iterable %}
+        <li>{{ key }}:</li>
+        <ul>
+        {% for subkey, subvalue in value %}
+            <li>{{ subkey }}: {{ subvalue }}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <li>{{ key }}: {{ value }}</li>
+    {% endif %}
+{% endfor %}
+</ul>

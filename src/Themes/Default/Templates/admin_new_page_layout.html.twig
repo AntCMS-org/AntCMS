@@ -1,0 +1,9 @@
+<h1>Page Management</h1>
+<p>Create new page</p>
+<form method="post" action="{{ "admin/pages/edit"|absUrl }}">
+    <div style="display:flex; flex-direction: row; justify-content: center; align-items: center">
+        <label for="input">URL for new page: {{ BaseURL }} </label>
+        <input type="text" name="newpage" id="input">
+        <input type="submit" value="Submit">
+    </div>
+</form>

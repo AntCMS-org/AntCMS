@@ -8,6 +8,13 @@ use AntCMS\AntConfig;
 
 class AntCMS
 {
+    protected $antTwig;
+
+    public function __construct()
+    {
+        $this->antTwig = new AntTwig();
+    }
+
     /**
      * Renders a page based on the provided page name.
      *
@@ -32,7 +39,7 @@ class AntCMS
             'AntCMSKeywords' => $content['keywords'],
             'AntCMSBody' => AntMarkdown::renderMarkdown($content['content']),
         ];
-        $pageTemplate = AntTwig::renderWithTiwg($pageTemplate, $params);
+        $pageTemplate = $this->antTwig->renderWithTiwg($pageTemplate, $params);
 
         $end_time = microtime(true);
         $elapsed_time = round($end_time - $start_time, 4);
@@ -69,7 +76,7 @@ class AntCMS
      * @param string $exceptionString An optional parameter to define a custom string to be displayed along side the exception. 
      * @return never 
      */
-    public static function renderException(string $exceptionCode, int $httpCode = 404, string $exceptionString = 'That request caused an exception to be thrown.')
+    public function renderException(string $exceptionCode, int $httpCode = 404, string $exceptionString = 'That request caused an exception to be thrown.')
     {
         $exceptionString .= " (Code {$exceptionCode})";
         $pageTemplate = self::getPageLayout();
@@ -79,7 +86,7 @@ class AntCMS
             'AntCMSBody' => '<h1>An error ocurred</h1><p>' . $exceptionString . '</p>',
         ];
         try {
-            $pageTemplate = AntTwig::renderWithTiwg($pageTemplate, $params);
+            $pageTemplate = $this->antTwig->renderWithTiwg($pageTemplate, $params);
         } catch (\Exception) {
             $pageTemplate = str_replace('{{ AntCMSTitle }}', $params['AntCMSTitle'], $pageTemplate);
             $pageTemplate = str_replace('{{ AntCMSBody | raw }} ', $params['AntCMSBody'], $pageTemplate);

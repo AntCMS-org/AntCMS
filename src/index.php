@@ -12,8 +12,6 @@ use AntCMS\AntConfig;
 use AntCMS\AntPages;
 use AntCMS\AntPluginLoader;
 
-$antCms = new AntCMS();
-
 if (!file_exists(antConfigFile)) {
     AntConfig::generateConfig();
 }
@@ -95,6 +93,7 @@ if ($segments[0] === 'plugin') {
     exit;
 }
 
+$antCms = new AntCMS();
 $indexes = ['/', '/index.php', '/index.html'];
 if (in_array($segments[0], $indexes)) {
     echo $antCms->renderPage('/');

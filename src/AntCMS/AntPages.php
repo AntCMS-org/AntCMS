@@ -66,6 +66,7 @@ class AntPages
     {
         $pages = AntPages::getPages();
         $antCache = new AntCache;
+        $antTwig = new AntTwig();
 
         $theme = AntConfig::currentConfig('activeTheme');
         $cacheKey = $antCache->createCacheKey(json_encode($pages), $theme . $currentPage);
@@ -95,7 +96,7 @@ class AntPages
             }
         }
 
-        $navHTML = AntTwig::renderWithTiwg($navTemplate, array('pages' => $pages));
+        $navHTML = $antTwig->renderWithTiwg($navTemplate, array('pages' => $pages));
 
         $antCache->setCache($cacheKey, $navHTML);
         return $navHTML;
