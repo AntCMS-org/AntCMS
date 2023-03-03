@@ -87,7 +87,7 @@ class AdminPlugin extends AntPlugin
 
             case 'save':
                 if (!$_POST['textarea']) {
-                    header('Location: //' . $currentConfig['baseURL'] . "admin/config/");
+                    AntCMS::redirect('/admin/config');
                 }
 
                 $yaml = AntYaml::parseYaml($_POST['textarea']);
@@ -95,7 +95,7 @@ class AdminPlugin extends AntPlugin
                     AntYaml::saveFile(antConfigFile, $yaml);
                 }
 
-                header('Location: //' . $currentConfig['baseURL'] . "admin/config/");
+                AntCMS::redirect('/admin/config');
                 break;
 
             default:
@@ -137,7 +137,7 @@ class AdminPlugin extends AntPlugin
         switch ($route[0] ?? 'none') {
             case 'regenerate':
                 AntPages::generatePages();
-                header('Location: //' . AntConfig::currentConfig('baseURL') . "admin/pages/");
+                AntCMS::redirect('/admin/pages');
                 exit;
 
             case 'edit':
@@ -171,11 +171,11 @@ class AdminPlugin extends AntPlugin
                 $pagePath = AntTools::repairFilePath(antContentPath . '/' . implode('/', $route));
 
                 if (!isset($_POST['textarea'])) {
-                    header('Location: //' . AntConfig::currentConfig('baseURL') . "admin/pages/");
+                    AntCMS::redirect('/admin/pages');
                 }
 
                 file_put_contents($pagePath, $_POST['textarea']);
-                header('Location: //' . AntConfig::currentConfig('baseURL') . "admin/pages/");
+                AntCMS::redirect('/admin/pages');
                 exit;
 
             case 'create':
@@ -199,7 +199,7 @@ class AdminPlugin extends AntPlugin
                     AntYaml::saveFile(antPagesList, $pages);
                 }
 
-                header('Location: //' . AntConfig::currentConfig('baseURL') . "admin/pages/");
+                AntCMS::redirect('/admin/pages');
                 break;
 
             case 'togglevisibility':
@@ -213,7 +213,7 @@ class AdminPlugin extends AntPlugin
                 }
 
                 AntYaml::saveFile(antPagesList, $pages);
-                header('Location: //' . AntConfig::currentConfig('baseURL') . "admin/pages/");
+                AntCMS::redirect('/admin/pages');
                 break;
 
             default:

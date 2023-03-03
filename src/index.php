@@ -96,7 +96,13 @@ if ($segments[0] === 'plugin') {
 }
 
 $indexes = ['/', '/index.php', '/index.html'];
-if (in_array($segments[0], $indexes)) {
+if (in_array($segments[0], $indexes) or empty($segments[0])) {
+
+    // If the users list hasn't been created, redirect to the first-time setup
+    if (!file_exists(antUsersList)) {
+        AntCMS::redirect('/profile/firsttime');
+    }
+
     echo $antCms->renderPage('/');
     exit;
 } else {

@@ -1,0 +1,15 @@
+<h2>AntCMS First-time User Setup</h2>
+<p>Please fill out the following form to create your new administrator account. This will allow you to access portions of AntCMS that require authentication, such as the <a href="{{ "admin/"|absUrl }}">Admin Panel</a>.</p>
+
+<form method="POST" action="{{ "profile/submitfirst"|absUrl }}">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required>
+
+    <label for="display-name">Display Name:</label>
+    <input type="text" id="display-name" name="display-name" required>
+
+    <input type="submit" value="Create User">
+</form>

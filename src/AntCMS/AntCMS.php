@@ -229,4 +229,11 @@ class AntCMS
             readfile($path);
         }
     }
+
+    public static function redirect(string $url)
+    {
+        $url = '//' . AntTools::repairURL(AntConfig::currentConfig('baseURL') . $url);
+        header("Location: $url");
+        exit;
+    }
 }

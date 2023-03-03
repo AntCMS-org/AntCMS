@@ -34,8 +34,7 @@ class AntUsers
         if (file_exists(antUsersList)) {
             $users = AntYaml::parseFile(antUsersList);
         } else {
-            self::generateEmptyUsers();
-            $users = AntYaml::parseFile(antUsersList);
+            AntCMS::redirect('/profile/firsttime');
         }
 
         return $users;
@@ -75,13 +74,20 @@ class AntUsers
         return AntYaml::saveFile(antUsersList, $users);
     }
 
-    private static function generateEmptyUsers()
+    public static function setupFirstUser($data)
     {
+        if (file_exists(antUsersList)) {
+            AntCMS::redirect('/');
+        }
+
+        $data['username'] = trim($data['username'] );
+        $data['name'] = trim($data['name'] );
+
         $users = [
-            'Admin' => [
-                'password' => '',
+            $data['username'] => [
+                'password' => password_hash($data['password'], PASSWORD_DEFAULT),
                 'role' => 'admin',
-                'name' => 'Administrator'
+                'name' => $data['name'],
             ],
         ];
 
