@@ -44,6 +44,9 @@ class AdminPlugin extends AntPlugin
             case 'pages':
                 $this->managePages($route);
 
+            case 'users':
+                $this->userManagement($route);
+
             default:
                 $params = [
                     'AntCMSTitle' => 'AntCMS Admin Dashboard',
@@ -124,8 +127,6 @@ class AdminPlugin extends AntPlugin
      */
     private function managePages(array $route)
     {
-        $pageTemplate = $this->antCMS->getPageLayout();
-        $HTMLTemplate = $this->antCMS->getThemeTemplate('markdown_edit_layout');
         $pages = AntPages::getPages();
         $params = array(
             'AntCMSTitle' => 'AntCMS Page Management',
@@ -231,6 +232,61 @@ class AdminPlugin extends AntPlugin
                     'pages' => $pages,
                 ];
                 echo $this->AntTwig->renderWithSubLayout('admin_manage_pages_layout', $params);
+                break;
+        }
+        exit;
+    }
+
+    private function userManagement(array $route)
+    {
+        if ($this->auth->getRole() != 'admin') {
+            $this->antCMS->renderException("You are not permitted to visit this page.");
+        }
+
+        $params = array(
+            'AntCMSTitle' => 'AntCMS User Management',
+            'AntCMSDescription' => 'The AntCMS user management screen',
+            'AntCMSAuthor' => 'AntCMS',
+            'AntCMSKeywords' => '',
+        );
+
+        switch ($route[0] ?? 'none') {
+            case 'edit':
+                $user = AntUsers::getUser($route[1]);
+
+                if (!$user) {
+                    AntCMS::redirect('/admin/users');
+                }
+
+                unset($user['password']);
+                $user['username'] = $route[1];
+                $params['user'] = $user;
+
+                echo $this->AntTwig->renderWithSubLayout('admin_user_edit_layout', $params);
+                break;
+            case 'save':
+                $data['username'] = $_POST['username'] ?? null;
+                $data['name'] = $_POST['display-name'] ?? null;
+                $data['role'] = $_POST['role'] ?? null;
+                $data['password'] = $_POST['password'] ?? null;
+
+                foreach ($data as $key => $value) {
+                    if (is_null($value)) {
+                        unset($data[$key]);
+                    }
+                }
+
+                AntUsers::updateUser($_POST['originalusername'], $data);
+                AntCMS::redirect('/admin/users');
+                break;
+            default:
+                $users = AntUsers::getUsers();
+                foreach ($users as $key => $user) {
+                    unset($users[$key]['password']);
+                    $users[$key]['username'] = $key;
+                }
+                $params['users'] = $users;
+                echo $this->AntTwig->renderWithSubLayout('admin_users_layout', $params);
                 break;
         }
         exit;

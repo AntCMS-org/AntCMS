@@ -59,6 +59,10 @@ class AntUsers
             $users[$username]['role'] = $newData['role'];
         }
 
+        if (isset($newData['name'])) {
+            $users[$username]['name'] = $newData['name'];
+        }
+
         if (isset($newData['username'])) {
             if (!isset($users[$newData['username']])) {
                 throw new Exception("Username is already taken.");
