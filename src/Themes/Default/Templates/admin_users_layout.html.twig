@@ -13,7 +13,7 @@
         <td>{{ user.name }}</td>
         <td>{{ user.username }}</td>
         <td>{{ user.role }}</td>
-        <td><a href="{{ ("admin/users/edit/" ~ user.username) |absUrl }}">Edit</a> | <a href="{{ "admin/"|absUrl }}">Reset Password</a></td>
+        <td><a href="{{ ("admin/users/edit/" ~ user.username) |absUrl }}">Edit</a> | <a href="{{ ("admin/users/resetpassword/" ~ user.username) |absUrl }}">Reset Password</a></td>
     </tr>
     {% endfor %}
 </table>

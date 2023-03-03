@@ -251,6 +251,10 @@ class AdminPlugin extends AntPlugin
         );
 
         switch ($route[0] ?? 'none') {
+            case 'add':
+                echo $this->AntTwig->renderWithSubLayout('admin_user_add_layout', $params);
+                break;
+
             case 'edit':
                 $user = AntUsers::getUser($route[1]);
 
@@ -264,6 +268,21 @@ class AdminPlugin extends AntPlugin
 
                 echo $this->AntTwig->renderWithSubLayout('admin_user_edit_layout', $params);
                 break;
+
+            case 'resetpassword':
+                $user = AntUsers::getUser($route[1]);
+
+                if (!$user) {
+                    AntCMS::redirect('/admin/users');
+                }
+
+                unset($user['password']);
+                $user['username'] = $route[1];
+                $params['user'] = $user;
+
+                echo $this->AntTwig->renderWithSubLayout('admin_user_reset_password', $params);
+                break;
+
             case 'save':
                 $data['username'] = $_POST['username'] ?? null;
                 $data['name'] = $_POST['display-name'] ?? null;
@@ -279,6 +298,11 @@ class AdminPlugin extends AntPlugin
                 AntUsers::updateUser($_POST['originalusername'], $data);
                 AntCMS::redirect('/admin/users');
                 break;
+            case 'savenew':
+                AntUsers::addUser($_POST);
+                AntCMS::redirect('/admin/users');
+                break;
+
             default:
                 $users = AntUsers::getUsers();
                 foreach ($users as $key => $user) {

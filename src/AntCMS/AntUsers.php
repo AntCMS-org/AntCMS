@@ -38,6 +38,25 @@ class AntUsers
         }
     }
 
+    public static function addUser($data)
+    {
+        $users = Self::getUsers();
+        if (key_exists($data['username'], $users)) {
+            return false;
+        }
+
+        if (!AntTools::valuesNotNull(['username', 'role', 'display-name', 'password'], $data)) {
+            return false;
+        }
+
+        $users[$data['username']] = [
+            'password' => password_hash($data['password'], PASSWORD_DEFAULT),
+            'role' => $data['role'],
+            'name' => $data['display-name'],
+        ];
+        return AntYaml::saveFile(antUsersList, $users);
+    }
+
     public static function updateUser($username, $newData)
     {
         foreach ($newData as $key => $value) {
@@ -47,7 +66,7 @@ class AntUsers
         }
 
         $users = self::getUsers();
-        if (!isset($users[$username])) {
+        if (!key_exists($username, $users)) {
             throw new Exception("There was an error when updating the selected user.");
         }
 
@@ -64,7 +83,7 @@ class AntUsers
         }
 
         if (isset($newData['username'])) {
-            if (!isset($users[$newData['username']])) {
+            if (key_exists($newData['username'], $users) && $newData['username'] !== $username) {
                 throw new Exception("Username is already taken.");
             }
 
