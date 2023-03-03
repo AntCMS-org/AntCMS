@@ -1,5 +1,6 @@
 <h1>AntCMS Configuration</h1>
-<a href="{{ "admin/config/edit"|absUrl }}">Click here to edit the config file</a><br>
+<a href="{{ "admin/"|absUrl }}">Back</a> |
+<a href="{{ "admin/config/edit"|absUrl }}">Edit Config</a>
 <ul>
 {% for key, value in currentConfig %}
     {% if value is iterable %}

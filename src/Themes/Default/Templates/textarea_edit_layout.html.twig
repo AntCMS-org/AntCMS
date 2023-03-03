@@ -1,5 +1,7 @@
 <form action="{{ AntCMSActionURL }}" method="post">
   <textarea name="textarea" rows="25" cols="75" type="text"
     class="form-textarea p-3 border-gray-200 bg-gray-100 dark:bg-zinc-900 dark:border-gray-700">{{ AntCMSTextAreaContent }}</textarea>
-  <input type="submit" value="Save">
+  <div class="flex justify-end">
+    <button type="submit" class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded-lg">Save</button>
+  </div>
 </form>

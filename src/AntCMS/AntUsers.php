@@ -32,12 +32,10 @@ class AntUsers
     public static function getUsers()
     {
         if (file_exists(antUsersList)) {
-            $users = AntYaml::parseFile(antUsersList);
+            return AntYaml::parseFile(antUsersList);
         } else {
             AntCMS::redirect('/profile/firsttime');
         }
-
-        return $users;
     }
 
     public static function updateUser($username, $newData)
@@ -80,8 +78,8 @@ class AntUsers
             AntCMS::redirect('/');
         }
 
-        $data['username'] = trim($data['username'] );
-        $data['name'] = trim($data['name'] );
+        $data['username'] = trim($data['username']);
+        $data['name'] = trim($data['name']);
 
         $users = [
             $data['username'] => [

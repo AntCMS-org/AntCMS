@@ -1,15 +1,23 @@
-<h2>AntCMS First-time User Setup</h2>
-<p>Please fill out the following form to create your new administrator account. This will allow you to access portions of AntCMS that require authentication, such as the <a href="{{ "admin/"|absUrl }}">Admin Panel</a>.</p>
+<h2 class="text-2xl font-bold mb-4">AntCMS First-Time User Setup</h2>
+<p class="mb-4">Please fill out the following form to create your new administrator account. This will allow you to access portions of AntCMS that require authentication, such as the <a href="{{ "admin/"|absUrl }}" class="text-blue-500 hover:text-blue-400 dark:text-blue-400 dark:hover:text-blue-500">Admin Panel</a>.</p>
 
 <form method="POST" action="{{ "profile/submitfirst"|absUrl }}">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required>
+    <div class="mb-4">
+        <label for="display-name" class="block font-medium mb-2">Display Name:</label>
+        <input type="text" id="display-name" name="display-name" required class="border-gray-400 border-2 rounded-lg w-full py-2 px-3 text-gray-700">
+    </div>
 
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required>
+    <div class="mb-4">
+        <label for="username" class="block font-medium mb-2">Username:</label>
+        <input type="text" id="username" name="username" required class="border-gray-400 border-2 rounded-lg w-full py-2 px-3 text-gray-700">
+    </div>
 
-    <label for="display-name">Display Name:</label>
-    <input type="text" id="display-name" name="display-name" required>
+    <div class="mb-4">
+        <label for="password" class="block font-medium mb-2">Password:</label>
+        <input type="password" id="password" name="password" required class="border-gray-400 border-2 rounded-lg w-full py-2 px-3 text-gray-700">
+    </div>
 
-    <input type="submit" value="Create User">
+    <div class="mb-4 mt-4">
+        <input type="submit" value="Create User" class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded-lg">
+    </div>
 </form>
