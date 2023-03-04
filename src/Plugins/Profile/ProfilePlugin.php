@@ -30,7 +30,7 @@ class ProfilePlugin extends AntPlugin
                 if (file_exists(antUsersList)) {
                     AntCMS::redirect('/admin');
                 }
-                echo $this->antTwig->renderWithSubLayout('profile_firsttime_layout', $params);
+                echo $this->antTwig->renderWithSubLayout('profile_firsttime', $params);
                 break;
 
             case 'submitfirst':

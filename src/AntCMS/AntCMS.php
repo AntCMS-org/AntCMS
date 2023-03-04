@@ -62,8 +62,8 @@ class AntCMS
     {
         $siteInfo = AntCMS::getSiteInfo();
 
-        $pageTemplate = self::getThemeTemplate('default_layout', $theme);
-        $pageTemplate = str_replace('<!--AntCMS-Navigation-->', AntPages::generateNavigation(self::getThemeTemplate('nav_layout', $theme), $currentPage), $pageTemplate);
+        $pageTemplate = self::getThemeTemplate('default', $theme);
+        $pageTemplate = str_replace('<!--AntCMS-Navigation-->', AntPages::generateNavigation(self::getThemeTemplate('nav', $theme), $currentPage), $pageTemplate);
 
         return $pageTemplate = str_replace('<!--AntCMS-SiteTitle-->', $siteInfo['siteTitle'], $pageTemplate);
     }
@@ -124,7 +124,7 @@ class AntCMS
      * @param string|null $theme 
      * @return string 
      */
-    public static function getThemeTemplate(string $layout = 'default_layout', string $theme = null)
+    public static function getThemeTemplate(string $layout = 'default', string $theme = null)
     {
         $theme = $theme ?? AntConfig::currentConfig('activeTheme');
 
@@ -132,12 +132,17 @@ class AntCMS
             $theme = 'Default';
         }
 
-        $templatePath = AntTools::repairFilePath(antThemePath . '/' . $theme . '/' . 'Templates');
-        $defaultTemplates = AntTools::repairFilePath(antThemePath . '/Default/Templates');
-
-        $templates = AntTools::getFileList($templatePath, 'twig');
+        if (strpos($layout, '_') !== false) {
+            $layoutPrefix = explode('_', $layout)[0];
+            $templatePath = AntTools::repairFilePath(antThemePath . '/' . $theme . '/' . 'Templates' . '/' . $layoutPrefix);
+            $defaultTemplates = AntTools::repairFilePath(antThemePath . '/Default/Templates' . '/' . $layoutPrefix);
+        } else {
+            $templatePath = AntTools::repairFilePath(antThemePath . '/' . $theme . '/' . 'Templates');
+            $defaultTemplates = AntTools::repairFilePath(antThemePath . '/Default/Templates');
+        }
 
         try {
+            $templates = AntTools::getFileList($templatePath, 'twig');
             if (in_array($layout . '.html.twig', $templates)) {
                 $template = file_get_contents(AntTools::repairFilePath($templatePath . '/' . $layout . '.html.twig'));
             } else {
@@ -147,7 +152,7 @@ class AntCMS
         }
 
         if (empty($template)) {
-            if ($layout == 'default_layout') {
+            if ($layout == 'default') {
                 $template = '
                 <!DOCTYPE html>
                 <html>
@@ -163,6 +168,7 @@ class AntCMS
                     </body>
                 </html>';
             } else {
+                die("$layout, $templatePath");
                 $template = '
                 <h1>There was an error</h1>
                 <p>AntCMS had an error when fetching the page template, please contact the site administrator.</p>';

@@ -56,7 +56,7 @@ class AdminPlugin extends AntPlugin
                     'user' => AntUsers::getUserPublicalKeys($this->auth->getUsername()),
 
                 ];
-                echo $this->AntTwig->renderWithSubLayout('admin_landing_layout', $params);
+                echo $this->AntTwig->renderWithSubLayout('admin_landing', $params);
                 break;
         }
     }
@@ -85,7 +85,7 @@ class AdminPlugin extends AntPlugin
                 $params['AntCMSActionURL'] = '//' . $currentConfig['baseURL'] . 'admin/config/save';
                 $params['AntCMSTextAreaContent'] = htmlspecialchars($currentConfigFile);
 
-                echo $this->AntTwig->renderWithSubLayout('textarea_edit_layout', $params);
+                echo $this->AntTwig->renderWithSubLayout('textareaEdit', $params);
                 break;
 
             case 'save':
@@ -115,7 +115,7 @@ class AdminPlugin extends AntPlugin
                 }
 
                 $params['currentConfig'] = $currentConfig;
-                echo $this->AntTwig->renderWithSubLayout('admin_config_layout', $params);
+                echo $this->AntTwig->renderWithSubLayout('admin_config', $params);
                 break;
         }
         exit;
@@ -164,7 +164,7 @@ class AdminPlugin extends AntPlugin
                 $params['AntCMSActionURL'] = '//' . AntConfig::currentConfig('baseURL') . "admin/pages/save/{$pagePath}";
                 $params['AntCMSTextAreaContent'] = $page;
 
-                echo $this->AntTwig->renderWithSubLayout('markdown_edit_layout', $params);
+                echo $this->AntTwig->renderWithSubLayout('markdownEdit', $params);
                 break;
 
             case 'save':
@@ -181,7 +181,7 @@ class AdminPlugin extends AntPlugin
 
             case 'create':
                 $params['BaseURL'] = AntConfig::currentConfig('baseURL');
-                echo $this->AntTwig->renderWithSubLayout('admin_new_page_layout', $params);
+                echo $this->AntTwig->renderWithSubLayout('admin_newPage', $params);
                 break;
 
             case 'delete':
@@ -231,7 +231,7 @@ class AdminPlugin extends AntPlugin
                     'AntCMSKeywords' => '',
                     'pages' => $pages,
                 ];
-                echo $this->AntTwig->renderWithSubLayout('admin_manage_pages_layout', $params);
+                echo $this->AntTwig->renderWithSubLayout('admin_managePages', $params);
                 break;
         }
         exit;
@@ -252,7 +252,7 @@ class AdminPlugin extends AntPlugin
 
         switch ($route[0] ?? 'none') {
             case 'add':
-                echo $this->AntTwig->renderWithSubLayout('admin_user_add_layout', $params);
+                echo $this->AntTwig->renderWithSubLayout('admin_userAdd', $params);
                 break;
 
             case 'edit':
@@ -266,7 +266,7 @@ class AdminPlugin extends AntPlugin
                 $user['username'] = $route[1];
                 $params['user'] = $user;
 
-                echo $this->AntTwig->renderWithSubLayout('admin_user_edit_layout', $params);
+                echo $this->AntTwig->renderWithSubLayout('admin_userEdit', $params);
                 break;
 
             case 'resetpassword':
@@ -280,7 +280,7 @@ class AdminPlugin extends AntPlugin
                 $user['username'] = $route[1];
                 $params['user'] = $user;
 
-                echo $this->AntTwig->renderWithSubLayout('admin_user_reset_password', $params);
+                echo $this->AntTwig->renderWithSubLayout('admin_userResetPassword', $params);
                 break;
 
             case 'save':
@@ -310,7 +310,7 @@ class AdminPlugin extends AntPlugin
                     $users[$key]['username'] = $key;
                 }
                 $params['users'] = $users;
-                echo $this->AntTwig->renderWithSubLayout('admin_users_layout', $params);
+                echo $this->AntTwig->renderWithSubLayout('admin_users', $params);
                 break;
         }
         exit;

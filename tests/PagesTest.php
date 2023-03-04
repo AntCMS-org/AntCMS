@@ -20,7 +20,7 @@ class PagesTest extends TestCase
     public function testGetNavigation(){
         $antCMS = new AntCMS;
         $pageTemplate = $antCMS->getThemeTemplate();
-        $navLayout = $antCMS->getThemeTemplate('nav_layout');
+        $navLayout = $antCMS->getThemeTemplate('nav');
 
         $result = AntPages::generateNavigation($navLayout, $pageTemplate);
 

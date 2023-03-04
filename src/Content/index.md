@@ -31,8 +31,8 @@ Here is an example of the default theme folder structure:
 - `/Themes`
   - `/Default`
     - `/Templates`
-      - `default_layout.html.twig`
-      - `nav_layout.html.twig`
+      - `default.html.twig`
+      - `nav.html.twig`
     - `/Assets`
       - `tailwind.css`
 
