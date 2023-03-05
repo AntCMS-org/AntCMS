@@ -14,7 +14,6 @@ class AntUsers
      *  Mostly intended to create an array that can be safely passed to twig and used to display user information on the page, such as their name.
      * @param mixed $username 
      * @return array 
-     * @throws ParseException 
      */
     public static function getUserPublicalKeys($username)
     {
@@ -60,10 +59,6 @@ class AntUsers
 
     public static function updateUser($username, $newData)
     {
-        $newData['username'] = trim($newData['username']);
-        $newData['name'] = trim($newData['name']);
-        Self::validateUsername($newData['username']);
-
         foreach ($newData as $key => $value) {
             if (empty($value)) {
                 throw new \Exception("Key $key cannot be empty.");
@@ -84,10 +79,13 @@ class AntUsers
         }
 
         if (isset($newData['name'])) {
+            $newData['name'] = trim($newData['name']);
             $users[$username]['name'] = $newData['name'];
         }
 
         if (isset($newData['username'])) {
+            $newData['username'] = trim($newData['username']);
+            Self::validateUsername($newData['username']);
             if (key_exists($newData['username'], $users) && $newData['username'] !== $username) {
                 throw new \Exception("Username is already taken.");
             }

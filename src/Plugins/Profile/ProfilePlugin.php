@@ -30,7 +30,7 @@ class ProfilePlugin extends AntPlugin
                 if (file_exists(antUsersList)) {
                     AntCMS::redirect('/admin');
                 }
-                echo $this->antTwig->renderWithSubLayout('profile_firsttime', $params);
+                echo $this->antTwig->renderWithSubLayout('profile_firstTime', $params);
                 break;
 
             case 'submitfirst':
@@ -51,6 +51,52 @@ class ProfilePlugin extends AntPlugin
                 }
                 break;
 
+            case 'edit':
+                $this->antAuth->checkAuth();
+                $user = AntUsers::getUser($this->antAuth->getUsername());
+
+                if (!$user) {
+                    AntCMS::redirect('/profile');
+                }
+
+                unset($user['password']);
+                $user['username'] = $this->antAuth->getUsername();
+                $params['user'] = $user;
+
+                echo $this->antTwig->renderWithSubLayout('profile_edit', $params);
+                break;
+
+            case 'resetpassword':
+                $this->antAuth->checkAuth();
+                $user = AntUsers::getUser($this->antAuth->getUsername());
+
+                if (!$user) {
+                    AntCMS::redirect('/profile');
+                }
+
+                unset($user['password']);
+                $user['username'] = $this->antAuth->getUsername();
+                $params['user'] = $user;
+
+                echo $this->antTwig->renderWithSubLayout('profile_resetPassword', $params);
+                break;
+
+            case 'save':
+                $this->antAuth->checkAuth();
+                $data['username'] = $_POST['username'] ?? null;
+                $data['name'] = $_POST['display-name'] ?? null;
+                $data['password'] = $_POST['password'] ?? null;
+
+                foreach ($data as $key => $value) {
+                    if (is_null($value)) {
+                        unset($data[$key]);
+                    }
+                }
+
+                AntUsers::updateUser($this->antAuth->getUsername(), $data);
+                AntCMS::redirect('/profile');
+                break;
+
             case 'logout':
                 $this->antAuth->invalidateSession();
                 if (!$this->antAuth->isAuthenticated()) {
@@ -61,7 +107,9 @@ class ProfilePlugin extends AntPlugin
                 exit;
 
             default:
-                echo 'Unknown route "' . $currentStep . '"';
+                $this->antAuth->checkAuth();
+                $params['user'] =  AntUsers::getUserPublicalKeys($this->antAuth->getUsername());
+                echo $this->antTwig->renderWithSubLayout('profile_landing', $params);
         }
         exit;
     }
