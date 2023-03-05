@@ -158,7 +158,8 @@ class AdminPlugin extends AntPlugin
                     }
 
                     $pagePath = AntTools::repairFilePath($pagePath);
-                    $page = "--AntCMS--\nTitle: New Page Title\nAuthor: Author\nDescription: Description of this page.\nKeywords: Keywords\n--AntCMS--\n";
+                    $name = $this->auth->getName();
+                    $page = "--AntCMS--\nTitle: New Page Title\nAuthor: $name\nDescription: Description of this page.\nKeywords: Keywords\n--AntCMS--\n";
                 }
 
                 $params['AntCMSActionURL'] = '//' . AntConfig::currentConfig('baseURL') . "admin/pages/save/{$pagePath}";
@@ -256,13 +257,12 @@ class AdminPlugin extends AntPlugin
                 break;
 
             case 'edit':
-                $user = AntUsers::getUser($route[1]);
+                $user = AntUsers::getUserPublicalKeys($route[1]);
 
                 if (!$user) {
                     AntCMS::redirect('/admin/users');
                 }
 
-                unset($user['password']);
                 $user['username'] = $route[1];
                 $params['user'] = $user;
 
@@ -270,13 +270,12 @@ class AdminPlugin extends AntPlugin
                 break;
 
             case 'resetpassword':
-                $user = AntUsers::getUser($route[1]);
+                $user = AntUsers::getUserPublicalKeys($route[1]);
 
                 if (!$user) {
                     AntCMS::redirect('/admin/users');
                 }
 
-                unset($user['password']);
                 $user['username'] = $route[1];
                 $params['user'] = $user;
 

@@ -53,13 +53,12 @@ class ProfilePlugin extends AntPlugin
 
             case 'edit':
                 $this->antAuth->checkAuth();
-                $user = AntUsers::getUser($this->antAuth->getUsername());
+                $user = AntUsers::getUserPublicalKeys($this->antAuth->getUsername());
 
                 if (!$user) {
                     AntCMS::redirect('/profile');
                 }
 
-                unset($user['password']);
                 $user['username'] = $this->antAuth->getUsername();
                 $params['user'] = $user;
 
@@ -68,13 +67,12 @@ class ProfilePlugin extends AntPlugin
 
             case 'resetpassword':
                 $this->antAuth->checkAuth();
-                $user = AntUsers::getUser($this->antAuth->getUsername());
+                $user = AntUsers::getUserPublicalKeys($this->antAuth->getUsername());
 
                 if (!$user) {
                     AntCMS::redirect('/profile');
                 }
 
-                unset($user['password']);
                 $user['username'] = $this->antAuth->getUsername();
                 $params['user'] = $user;
 
