@@ -1,0 +1,28 @@
+<form method="POST" action="{{ " admin/users/savenew"|absUrl }}">
+    <div class="mb-3">
+        <label for="display-name" class="form-label">Display Name:</label>
+        <input type="text" id="display-name" name="display-name" required class="form-control">
+    </div>
+
+    <div class="mb-3">
+        <label for="username" class="form-label">Username:</label>
+        <input type="text" id="username" name="username" required class="form-control">
+    </div>
+
+    <div class="mb-3">
+        <label for="password" class="form-label">Password:</label>
+        <input type="password" id="password" name="password" required class="form-control">
+    </div>
+
+    <div class="mb-3">
+        <label for="role" class="form-label">Role:</label>
+        <select name="role" id="role" multiple class="form-select">
+            <option value="admin">Admin</option>
+            <option value="writer">Writer</option>
+        </select>
+    </div>
+
+    <div class="mb-4 mt-4">
+        <button type="submit" class="btn btn-primary">Create User</button>
+    </div>
+</form>

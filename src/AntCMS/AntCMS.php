@@ -142,10 +142,8 @@ class AntCMS
         }
 
         try {
-            $templates = AntTools::getFileList($templatePath, 'twig');
-            if (in_array($layout . '.html.twig', $templates)) {
-                $template = file_get_contents(AntTools::repairFilePath($templatePath . '/' . $layout . '.html.twig'));
-            } else {
+            $template = @file_get_contents(AntTools::repairFilePath($templatePath . '/' . $layout . '.html.twig'));
+            if (empty($template)) {
                 $template = file_get_contents(AntTools::repairFilePath($defaultTemplates . '/' . $layout . '.html.twig'));
             }
         } catch (\Exception) {
