@@ -38,6 +38,7 @@ class AntCMS
             'AntCMSAuthor' => $content['author'],
             'AntCMSKeywords' => $content['keywords'],
             'AntCMSBody' => AntMarkdown::renderMarkdown($content['content']),
+            'DisplayAuthor' => true,
         ];
         $pageTemplate = $this->antTwig->renderWithTiwg($pageTemplate, $params);
 
