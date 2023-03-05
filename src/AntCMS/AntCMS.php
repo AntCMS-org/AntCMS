@@ -168,7 +168,6 @@ class AntCMS
                     </body>
                 </html>';
             } else {
-                die("$layout, $templatePath");
                 $template = '
                 <h1>There was an error</h1>
                 <p>AntCMS had an error when fetching the page template, please contact the site administrator.</p>';

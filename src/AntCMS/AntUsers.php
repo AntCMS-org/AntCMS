@@ -2,9 +2,6 @@
 
 namespace AntCMS;
 
-use Exception;
-use Symfony\Component\Yaml\Exception\ParseException;
-
 class AntUsers
 {
     public static function getUser($username)
@@ -40,6 +37,10 @@ class AntUsers
 
     public static function addUser($data)
     {
+        $data['username'] = trim($data['username']);
+        $data['name'] = trim($data['name']);
+        Self::validateUsername($data['username']);
+
         $users = Self::getUsers();
         if (key_exists($data['username'], $users)) {
             return false;
@@ -59,15 +60,19 @@ class AntUsers
 
     public static function updateUser($username, $newData)
     {
+        $newData['username'] = trim($newData['username']);
+        $newData['name'] = trim($newData['name']);
+        Self::validateUsername($newData['username']);
+
         foreach ($newData as $key => $value) {
             if (empty($value)) {
-                throw new Exception("Key $key cannot be empty.");
+                throw new \Exception("Key $key cannot be empty.");
             }
         }
 
         $users = self::getUsers();
         if (!key_exists($username, $users)) {
-            throw new Exception("There was an error when updating the selected user.");
+            throw new \Exception("There was an error when updating the selected user.");
         }
 
         if (isset($newData['password'])) {
@@ -84,7 +89,7 @@ class AntUsers
 
         if (isset($newData['username'])) {
             if (key_exists($newData['username'], $users) && $newData['username'] !== $username) {
-                throw new Exception("Username is already taken.");
+                throw new \Exception("Username is already taken.");
             }
 
             $user = $users[$username];
@@ -103,6 +108,7 @@ class AntUsers
 
         $data['username'] = trim($data['username']);
         $data['name'] = trim($data['name']);
+        Self::validateUsername($data['username']);
 
         $users = [
             $data['username'] => [
@@ -113,5 +119,14 @@ class AntUsers
         ];
 
         return AntYaml::saveFile(antUsersList, $users);
+    }
+
+    private static function validateUsername($username)
+    {
+        $pattern = '/^[\p{L}\p{M}*0-9]+$/u';
+        if (!preg_match($pattern, $username)) {
+            throw new \Exception("Invalid username: \"$username\". Usernames can only contain letters, numbers, and combining marks.");
+        }
+        return true;
     }
 }
