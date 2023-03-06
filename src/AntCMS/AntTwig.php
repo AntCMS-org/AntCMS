@@ -18,12 +18,7 @@ class AntTwig
             $this->theme = 'Default';
         }
 
-        //$templatePath = AntTools::repairFilePath(antThemePath . '/' . $this->theme . '/' . 'Templates');
-
-        //$filesystemLoader = new \Twig\Loader\FilesystemLoader($templatePath);
-        $stringLoader = new \Shapecode\Twig\Loader\StringLoader();
-        //$chainLoader = new \Twig\Loader\ChainLoader([$stringLoader, $filesystemLoader]);
-        $this->twigEnvironment = new \Twig\Environment($stringLoader, [
+        $this->twigEnvironment = new \Twig\Environment(new \Shapecode\Twig\Loader\StringLoader(), [
             'cache' => $twigCache,
             'debug' => AntConfig::currentConfig('debug'),
         ]);
@@ -36,7 +31,7 @@ class AntTwig
         $subLayout = AntCMS::getThemeTemplate($layout, $this->theme);
         $mainLayout = AntCMS::getPageLayout($this->theme);
         $params['AntCMSBody'] = $this->twigEnvironment->render($subLayout, $params);
-        
+
         return $this->twigEnvironment->render($mainLayout, $params);
     }
 
