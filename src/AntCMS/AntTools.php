@@ -65,4 +65,15 @@ class AntTools
 
         return AntTools::repairFilePath($pagePath);
     }
+
+    public static function valuesNotNull(array $required, array $actual)
+    {
+        foreach ($required as $key) {
+            if (!key_exists($key, $actual) or is_null($actual[$key])) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

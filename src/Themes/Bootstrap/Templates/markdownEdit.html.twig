@@ -2,9 +2,9 @@
   <div class="row">
     <div class="col-md-6">
       <h3>Page Content</h3>
-      <form action="<!--AntCMS-ActionURL-->" method="post">
+      <form action="{{ AntCMSActionURL }}" method="post">
         <textarea id="markdown-input" name="textarea" rows="100" style="width: 100%; height: 100%;"
-          class="form-control"><!--AntCMS-TextAreaContent--></textarea>
+          class="form-control">{{ AntCMSTextAreaContent }}</textarea>
         <input type="submit" value="Save">
       </form>
     </div>
@@ -18,7 +18,7 @@
         const output = document.getElementById("markdown-output");
 
         function parseMarkdown() {
-          const inputValue = input.value.replace(/\A--AntCMS--.*?--AntCMS--/sm, "");
+          const inputValue = input.value.replace(/^--AntCMS--[\s\S]*?--AntCMS--/gm, "");
           output.innerHTML = marked.parse(inputValue);
         }
 

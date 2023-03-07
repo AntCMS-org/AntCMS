@@ -3,36 +3,40 @@
 namespace AntCMS;
 
 use AntCMS\AntConfig;
-use AntCMS\AntTwigFilters;
 
 class AntTwig
 {
-    /** 
-     * @param array<mixed> $params 
-     * @param string|null $theme 
-     * @return string 
-     */
-    public static function renderWithTiwg(string $content = '', array $params = array(), string $theme = null)
+    protected $twigEnvironment;
+    protected $theme;
+
+    public function __construct(string $theme = null)
     {
         $twigCache = AntConfig::currentConfig('enableCache') ? AntCachePath : false;
-        $theme = $theme ?? AntConfig::currentConfig('activeTheme');
+        $this->theme = $theme ?? AntConfig::currentConfig('activeTheme');
 
-        if (!is_dir(antThemePath . '/' . $theme)) {
-            $theme = 'Default';
+        if (!is_dir(antThemePath . '/' . $this->theme)) {
+            $this->theme = 'Default';
         }
 
-        $templatePath = AntTools::repairFilePath(antThemePath . '/' . $theme . '/' . 'Templates');
-
-        $filesystemLoader = new \Twig\Loader\FilesystemLoader($templatePath);
-        $stringLoader = new \Shapecode\Twig\Loader\StringLoader();
-        $chainLoader = new \Twig\Loader\ChainLoader([$stringLoader, $filesystemLoader]);
-        $twigEnvironment = new \Twig\Environment($chainLoader, [
+        $this->twigEnvironment = new \Twig\Environment(new \Shapecode\Twig\Loader\StringLoader(), [
             'cache' => $twigCache,
             'debug' => AntConfig::currentConfig('debug'),
         ]);
 
-        $twigEnvironment->addExtension(new \AntCMS\AntTwigFilters);
+        $this->twigEnvironment->addExtension(new \AntCMS\AntTwigFilters);
+    }
 
-        return $twigEnvironment->render($content, $params);
+    public function renderWithSubLayout(string $layout, array $params = array())
+    {
+        $subLayout = AntCMS::getThemeTemplate($layout, $this->theme);
+        $mainLayout = AntCMS::getPageLayout($this->theme);
+        $params['AntCMSBody'] = $this->twigEnvironment->render($subLayout, $params);
+
+        return $this->twigEnvironment->render($mainLayout, $params);
+    }
+
+    public function renderWithTiwg(string $content = '', array $params = array())
+    {
+        return $this->twigEnvironment->render($content, $params);
     }
 }

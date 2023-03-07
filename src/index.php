@@ -12,8 +12,6 @@ use AntCMS\AntConfig;
 use AntCMS\AntPages;
 use AntCMS\AntPluginLoader;
 
-$antCms = new AntCMS();
-
 if (!file_exists(antConfigFile)) {
     AntConfig::generateConfig();
 }
@@ -22,17 +20,19 @@ if (!file_exists(antPagesList)) {
     AntPages::generatePages();
 }
 
+$antCms = new AntCMS();
+
 if (AntConfig::currentConfig('forceHTTPS') && 'cli' !== PHP_SAPI) {
     $isHTTPS = false;
 
     if (!empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off') {
         $isHTTPS = true;
     }
-    
+
     if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) == 'https') {
         $isHTTPS = true;
     }
-    
+
     if (!empty($_SERVER['HTTP_X_FORWARDED_SSL']) && strtolower($_SERVER['HTTP_X_FORWARDED_SSL']) !== 'off') {
         $isHTTPS = true;
     }
@@ -44,7 +44,7 @@ if (AntConfig::currentConfig('forceHTTPS') && 'cli' !== PHP_SAPI) {
     }
 }
 
-$requestedPage = strtolower(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+$requestedPage = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $segments = explode('/', $requestedPage);
 
 if ($segments[0] === '') {
@@ -66,6 +66,14 @@ if ($segments[0] == 'robots.txt') {
     $segments[1] = 'robotstxt';
 }
 
+if ($segments[0] == 'admin') {
+    array_unshift($segments, 'plugin');
+}
+
+if ($segments[0] == 'profile') {
+    array_unshift($segments, 'plugin');
+}
+
 if ($segments[0] === 'plugin') {
     $pluginName = $segments[1];
     $pluginLoader = new AntPluginLoader();
@@ -80,7 +88,7 @@ if ($segments[0] === 'plugin') {
             exit;
         }
     }
-    
+
     // plugin not found
     header("HTTP/1.0 404 Not Found");
     echo ("Error 404");
@@ -88,7 +96,13 @@ if ($segments[0] === 'plugin') {
 }
 
 $indexes = ['/', '/index.php', '/index.html'];
-if (in_array($segments[0], $indexes)) {
+if (in_array($segments[0], $indexes) or empty($segments[0])) {
+
+    // If the users list hasn't been created, redirect to the first-time setup
+    if (!file_exists(antUsersList)) {
+        AntCMS::redirect('/profile/firsttime');
+    }
+
     echo $antCms->renderPage('/');
     exit;
 } else {

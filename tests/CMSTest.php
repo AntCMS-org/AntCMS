@@ -31,7 +31,7 @@ class CMSTest extends TestCase
 
     public function testGetPageLayout()
     {
-        //We need to generate the pages.yaml file so that the nav list can be generated.
+        //We need to generate the Pages.yaml file so that the nav list can be generated.
         AntPages::generatePages();
 
         $antCMS = new AntCMS;

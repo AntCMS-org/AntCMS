@@ -8,6 +8,13 @@ use AntCMS\AntConfig;
 
 class AntCMS
 {
+    protected $antTwig;
+
+    public function __construct()
+    {
+        $this->antTwig = new AntTwig();
+    }
+
     /**
      * Renders a page based on the provided page name.
      *
@@ -31,8 +38,9 @@ class AntCMS
             'AntCMSAuthor' => $content['author'],
             'AntCMSKeywords' => $content['keywords'],
             'AntCMSBody' => AntMarkdown::renderMarkdown($content['content']),
+            'DisplayAuthor' => true,
         ];
-        $pageTemplate = AntTwig::renderWithTiwg($pageTemplate, $params);
+        $pageTemplate = $this->antTwig->renderWithTiwg($pageTemplate, $params);
 
         $end_time = microtime(true);
         $elapsed_time = round($end_time - $start_time, 4);
@@ -55,8 +63,8 @@ class AntCMS
     {
         $siteInfo = AntCMS::getSiteInfo();
 
-        $pageTemplate = self::getThemeTemplate('default_layout', $theme);
-        $pageTemplate = str_replace('<!--AntCMS-Navigation-->', AntPages::generateNavigation(self::getThemeTemplate('nav_layout', $theme), $currentPage), $pageTemplate);
+        $pageTemplate = self::getThemeTemplate('default', $theme);
+        $pageTemplate = str_replace('<!--AntCMS-Navigation-->', AntPages::generateNavigation(self::getThemeTemplate('nav', $theme), $currentPage), $pageTemplate);
 
         return $pageTemplate = str_replace('<!--AntCMS-SiteTitle-->', $siteInfo['siteTitle'], $pageTemplate);
     }
@@ -69,7 +77,7 @@ class AntCMS
      * @param string $exceptionString An optional parameter to define a custom string to be displayed along side the exception. 
      * @return never 
      */
-    public static function renderException(string $exceptionCode, int $httpCode = 404, string $exceptionString = 'That request caused an exception to be thrown.')
+    public function renderException(string $exceptionCode, int $httpCode = 404, string $exceptionString = 'That request caused an exception to be thrown.')
     {
         $exceptionString .= " (Code {$exceptionCode})";
         $pageTemplate = self::getPageLayout();
@@ -79,7 +87,7 @@ class AntCMS
             'AntCMSBody' => '<h1>An error ocurred</h1><p>' . $exceptionString . '</p>',
         ];
         try {
-            $pageTemplate = AntTwig::renderWithTiwg($pageTemplate, $params);
+            $pageTemplate = $this->antTwig->renderWithTiwg($pageTemplate, $params);
         } catch (\Exception) {
             $pageTemplate = str_replace('{{ AntCMSTitle }}', $params['AntCMSTitle'], $pageTemplate);
             $pageTemplate = str_replace('{{ AntCMSBody | raw }} ', $params['AntCMSBody'], $pageTemplate);
@@ -117,7 +125,7 @@ class AntCMS
      * @param string|null $theme 
      * @return string 
      */
-    public static function getThemeTemplate(string $layout = 'default_layout', string $theme = null)
+    public static function getThemeTemplate(string $layout = 'default', string $theme = null)
     {
         $theme = $theme ?? AntConfig::currentConfig('activeTheme');
 
@@ -125,22 +133,25 @@ class AntCMS
             $theme = 'Default';
         }
 
-        $templatePath = AntTools::repairFilePath(antThemePath . '/' . $theme . '/' . 'Templates');
-        $defaultTemplates = AntTools::repairFilePath(antThemePath . '/Default/Templates');
-
-        $templates = AntTools::getFileList($templatePath, 'twig');
+        if (strpos($layout, '_') !== false) {
+            $layoutPrefix = explode('_', $layout)[0];
+            $templatePath = AntTools::repairFilePath(antThemePath . '/' . $theme . '/' . 'Templates' . '/' . $layoutPrefix);
+            $defaultTemplates = AntTools::repairFilePath(antThemePath . '/Default/Templates' . '/' . $layoutPrefix);
+        } else {
+            $templatePath = AntTools::repairFilePath(antThemePath . '/' . $theme . '/' . 'Templates');
+            $defaultTemplates = AntTools::repairFilePath(antThemePath . '/Default/Templates');
+        }
 
         try {
-            if (in_array($layout . '.html.twig', $templates)) {
-                $template = file_get_contents(AntTools::repairFilePath($templatePath . '/' . $layout . '.html.twig'));
-            } else {
+            $template = @file_get_contents(AntTools::repairFilePath($templatePath . '/' . $layout . '.html.twig'));
+            if (empty($template)) {
                 $template = file_get_contents(AntTools::repairFilePath($defaultTemplates . '/' . $layout . '.html.twig'));
             }
         } catch (\Exception) {
         }
 
         if (empty($template)) {
-            if ($layout == 'default_layout') {
+            if ($layout == 'default') {
                 $template = '
                 <!DOCTYPE html>
                 <html>
@@ -221,5 +232,12 @@ class AntCMS
             header('Content-Type: ' . $asset_mime_type);
             readfile($path);
         }
+    }
+
+    public static function redirect(string $url)
+    {
+        $url = '//' . AntTools::repairURL(AntConfig::currentConfig('baseURL') . $url);
+        header("Location: $url");
+        exit;
     }
 }

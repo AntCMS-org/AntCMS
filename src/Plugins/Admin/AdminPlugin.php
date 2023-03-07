@@ -8,9 +8,14 @@ use AntCMS\AntYaml;
 use AntCMS\AntAuth;
 use AntCMS\AntTools;
 use AntCMS\AntTwig;
+use AntCMS\AntUsers;
 
 class AdminPlugin extends AntPlugin
 {
+    protected $auth;
+    protected $antCMS;
+    protected $AntTwig;
+
     public function getName(): string
     {
         return 'Admin';
@@ -22,11 +27,14 @@ class AdminPlugin extends AntPlugin
      */
     public function handlePluginRoute(array $route)
     {
-        AntAuth::checkAuth();
-
         $currentStep = $route[0] ?? 'none';
-        $antCMS = new AntCMS;
-        $pageTemplate = $antCMS->getPageLayout();
+
+        $this->auth = new AntAuth;
+        $this->auth->checkAuth();
+
+        $this->antCMS = new AntCMS;
+        $this->AntTwig = new AntTwig();
+
         array_shift($route);
 
         switch ($currentStep) {
@@ -36,20 +44,19 @@ class AdminPlugin extends AntPlugin
             case 'pages':
                 $this->managePages($route);
 
-            default:
-                $HTMLTemplate = "<h1>AntCMS Admin Plugin</h1>\n";
-                $HTMLTemplate .= "<a href='//" . AntConfig::currentConfig('baseURL') . "plugin/admin/config/'>AntCMS Configuration</a><br>\n";
-                $HTMLTemplate .= "<a href='//" . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/'>Page management</a><br>\n";
+            case 'users':
+                $this->userManagement($route);
 
-                $params = array(
+            default:
+                $params = [
                     'AntCMSTitle' => 'AntCMS Admin Dashboard',
                     'AntCMSDescription' => 'The AntCMS admin dashboard',
                     'AntCMSAuthor' => 'AntCMS',
                     'AntCMSKeywords' => '',
-                    'AntCMSBody' => $HTMLTemplate,
-                );
+                    'user' => AntUsers::getUserPublicalKeys($this->auth->getUsername()),
 
-                echo AntTwig::renderWithTiwg($pageTemplate, $params);
+                ];
+                echo $this->AntTwig->renderWithSubLayout('admin_landing', $params);
                 break;
         }
     }
@@ -60,27 +67,30 @@ class AdminPlugin extends AntPlugin
      */
     private function configureAntCMS(array $route)
     {
-        $antCMS = new AntCMS;
-        $pageTemplate = $antCMS->getPageLayout();
-        $HTMLTemplate = $antCMS->getThemeTemplate('textarea_edit_layout');
+        if ($this->auth->getRole() != 'admin') {
+            $this->antCMS->renderException("You are not permitted to visit this page.");
+        }
+
         $currentConfig = AntConfig::currentConfig();
         $currentConfigFile = file_get_contents(antConfigFile);
         $params = array(
             'AntCMSTitle' => 'AntCMS Configuration',
             'AntCMSDescription' => 'The AntCMS configuration screen',
             'AntCMSAuthor' => 'AntCMS',
-            'AntCMSKeywords' => 'N/A',
+            'AntCMSKeywords' => '',
         );
 
         switch ($route[0] ?? 'none') {
             case 'edit':
-                $HTMLTemplate = str_replace('<!--AntCMS-ActionURL-->', '//' . $currentConfig['baseURL'] . 'plugin/admin/config/save', $HTMLTemplate);
-                $HTMLTemplate = str_replace('<!--AntCMS-TextAreaContent-->', htmlspecialchars($currentConfigFile), $HTMLTemplate);
+                $params['AntCMSActionURL'] = '//' . $currentConfig['baseURL'] . 'admin/config/save';
+                $params['AntCMSTextAreaContent'] = htmlspecialchars($currentConfigFile);
+
+                echo $this->AntTwig->renderWithSubLayout('textareaEdit', $params);
                 break;
 
             case 'save':
                 if (!$_POST['textarea']) {
-                    header('Location: //' . $currentConfig['baseURL'] . "plugin/admin/config/");
+                    AntCMS::redirect('/admin/config');
                 }
 
                 $yaml = AntYaml::parseYaml($_POST['textarea']);
@@ -88,34 +98,26 @@ class AdminPlugin extends AntPlugin
                     AntYaml::saveFile(antConfigFile, $yaml);
                 }
 
-                header('Location: //' . $currentConfig['baseURL'] . "plugin/admin/config/");
-                exit;
+                AntCMS::redirect('/admin/config');
+                break;
 
             default:
-                $HTMLTemplate = "<h1>AntCMS Configuration</h1>\n";
-                $HTMLTemplate .= "<a href='//" . $currentConfig['baseURL'] . "plugin/admin/config/edit'>Click here to edit the config file</a><br>\n";
-                $HTMLTemplate .= "<ul>\n";
                 foreach ($currentConfig as $key => $value) {
                     if (is_array($value)) {
-                        $HTMLTemplate .= "<li>{$key}:</li>\n";
-                        $HTMLTemplate .= "<ul>\n";
-                        foreach ($value as $key => $value) {
-                            $value = is_bool($value) ? $this->boolToWord($value) : $value;
-                            $HTMLTemplate .= "<li>{$key}: {$value}</li>\n";
+                        foreach ($value as $subkey => $subvalue) {
+                            if (is_bool($subvalue)) {
+                                $currentConfig[$key][$subkey] = ($subvalue) ? 'true' : 'false';
+                            }
                         }
-
-                        $HTMLTemplate .= "</ul>\n";
-                    } else {
-                        $value = is_bool($value) ? $this->boolToWord($value) : $value;
-                        $HTMLTemplate .= "<li>{$key}: {$value}</li>\n";
+                    } else if (is_bool($value)) {
+                        $currentConfig[$key] = ($value) ? 'true' : 'false';
                     }
                 }
 
-                $HTMLTemplate .= "</ul>\n";
+                $params['currentConfig'] = $currentConfig;
+                echo $this->AntTwig->renderWithSubLayout('admin_config', $params);
+                break;
         }
-
-        $params['AntCMSBody'] = $HTMLTemplate;
-        echo AntTwig::renderWithTiwg($pageTemplate, $params);
         exit;
     }
 
@@ -125,21 +127,18 @@ class AdminPlugin extends AntPlugin
      */
     private function managePages(array $route)
     {
-        $antCMS = new AntCMS;
-        $pageTemplate = $antCMS->getPageLayout();
-        $HTMLTemplate = $antCMS->getThemeTemplate('markdown_edit_layout');
         $pages = AntPages::getPages();
         $params = array(
             'AntCMSTitle' => 'AntCMS Page Management',
             'AntCMSDescription' => 'The AntCMS page management screen',
             'AntCMSAuthor' => 'AntCMS',
-            'AntCMSKeywords' => 'N/A',
+            'AntCMSKeywords' => '',
         );
 
         switch ($route[0] ?? 'none') {
             case 'regenerate':
                 AntPages::generatePages();
-                header('Location: //' . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/");
+                AntCMS::redirect('/admin/pages');
                 exit;
 
             case 'edit':
@@ -159,11 +158,14 @@ class AdminPlugin extends AntPlugin
                     }
 
                     $pagePath = AntTools::repairFilePath($pagePath);
-                    $page = "--AntCMS--\nTitle: New Page Title\nAuthor: Author\nDescription: Description of this page.\nKeywords: Keywords\n--AntCMS--\n";
+                    $name = $this->auth->getName();
+                    $page = "--AntCMS--\nTitle: New Page Title\nAuthor: $name\nDescription: Description of this page.\nKeywords: Keywords\n--AntCMS--\n";
                 }
 
-                $HTMLTemplate = str_replace('<!--AntCMS-ActionURL-->', '//' . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/save/{$pagePath}", $HTMLTemplate);
-                $HTMLTemplate = str_replace('<!--AntCMS-TextAreaContent-->', htmlspecialchars($page), $HTMLTemplate);
+                $params['AntCMSActionURL'] = '//' . AntConfig::currentConfig('baseURL') . "admin/pages/save/{$pagePath}";
+                $params['AntCMSTextAreaContent'] = $page;
+
+                echo $this->AntTwig->renderWithSubLayout('markdownEdit', $params);
                 break;
 
             case 'save':
@@ -171,22 +173,16 @@ class AdminPlugin extends AntPlugin
                 $pagePath = AntTools::repairFilePath(antContentPath . '/' . implode('/', $route));
 
                 if (!isset($_POST['textarea'])) {
-                    header('Location: //' . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/");
+                    AntCMS::redirect('/admin/pages');
                 }
 
                 file_put_contents($pagePath, $_POST['textarea']);
-                header('Location: //' . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/");
+                AntCMS::redirect('/admin/pages');
                 exit;
 
             case 'create':
-                $HTMLTemplate = "<h1>Page Management</h1>\n";
-                $HTMLTemplate .= "<p>Create new page</p>\n";
-                $HTMLTemplate .= '<form method="post" action="' . '//' . AntConfig::currentConfig('baseURL') . 'plugin/admin/pages/edit">';
-                $HTMLTemplate .=
-                    '<div style="display:flex; flex-direction: row; justify-content: center; align-items: center">
-                <label for="input">URL for new page: ' . AntConfig::currentConfig('baseURL') . ' </label> <input type="text" name="newpage" id="input">
-                <input type="submit" value="Submit">
-                </div></form>';
+                $params['BaseURL'] = AntConfig::currentConfig('baseURL');
+                echo $this->AntTwig->renderWithSubLayout('admin_newPage', $params);
                 break;
 
             case 'delete':
@@ -205,7 +201,7 @@ class AdminPlugin extends AntPlugin
                     AntYaml::saveFile(antPagesList, $pages);
                 }
 
-                header('Location: //' . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/");
+                AntCMS::redirect('/admin/pages');
                 break;
 
             case 'togglevisibility':
@@ -219,23 +215,103 @@ class AdminPlugin extends AntPlugin
                 }
 
                 AntYaml::saveFile(antPagesList, $pages);
-                header('Location: //' . AntConfig::currentConfig('baseURL') . "plugin/admin/pages/");
+                AntCMS::redirect('/admin/pages');
                 break;
 
             default:
-                $HTMLTemplate = $antCMS->getThemeTemplate('admin_manage_pages_layout');
                 foreach ($pages as $key => $page) {
-                    $pages[$key]['editurl'] = '//' . AntTools::repairURL(AntConfig::currentConfig('baseURL') . "/plugin/admin/pages/edit/" . $page['functionalPagePath']);
-                    $pages[$key]['deleteurl'] = '//' . AntTools::repairURL(AntConfig::currentConfig('baseURL') . "/plugin/admin/pages/delete/" . $page['functionalPagePath']);
-                    $pages[$key]['togglevisibility'] = '//' . AntTools::repairURL(AntConfig::currentConfig('baseURL') . "/plugin/admin/pages/togglevisibility/" . $page['functionalPagePath']);
+                    $pages[$key]['editurl'] = '//' . AntTools::repairURL(AntConfig::currentConfig('baseURL') . "/admin/pages/edit/" . $page['functionalPagePath']);
+                    $pages[$key]['deleteurl'] = '//' . AntTools::repairURL(AntConfig::currentConfig('baseURL') . "/admin/pages/delete/" . $page['functionalPagePath']);
+                    $pages[$key]['togglevisibility'] = '//' . AntTools::repairURL(AntConfig::currentConfig('baseURL') . "/admin/pages/togglevisibility/" . $page['functionalPagePath']);
                     $pages[$key]['isvisable'] = $this->boolToWord($page['showInNav']);
                 }
-                $params['pages'] = $pages;
-                $HTMLTemplate = AntTwig::renderWithTiwg($HTMLTemplate, $params);
+                $params = [
+                    'AntCMSTitle' => 'AntCMS Admin Dashboard',
+                    'AntCMSDescription' => 'The AntCMS admin dashboard',
+                    'AntCMSAuthor' => 'AntCMS',
+                    'AntCMSKeywords' => '',
+                    'pages' => $pages,
+                ];
+                echo $this->AntTwig->renderWithSubLayout('admin_managePages', $params);
+                break;
+        }
+        exit;
+    }
+
+    private function userManagement(array $route)
+    {
+        if ($this->auth->getRole() != 'admin') {
+            $this->antCMS->renderException("You are not permitted to visit this page.");
         }
 
-        $params['AntCMSBody'] = $HTMLTemplate;
-        echo AntTwig::renderWithTiwg($pageTemplate, $params);
+        $params = array(
+            'AntCMSTitle' => 'AntCMS User Management',
+            'AntCMSDescription' => 'The AntCMS user management screen',
+            'AntCMSAuthor' => 'AntCMS',
+            'AntCMSKeywords' => '',
+        );
+
+        switch ($route[0] ?? 'none') {
+            case 'add':
+                echo $this->AntTwig->renderWithSubLayout('admin_userAdd', $params);
+                break;
+
+            case 'edit':
+                $user = AntUsers::getUserPublicalKeys($route[1]);
+
+                if (!$user) {
+                    AntCMS::redirect('/admin/users');
+                }
+
+                $user['username'] = $route[1];
+                $params['user'] = $user;
+
+                echo $this->AntTwig->renderWithSubLayout('admin_userEdit', $params);
+                break;
+
+            case 'resetpassword':
+                $user = AntUsers::getUserPublicalKeys($route[1]);
+
+                if (!$user) {
+                    AntCMS::redirect('/admin/users');
+                }
+
+                $user['username'] = $route[1];
+                $params['user'] = $user;
+
+                echo $this->AntTwig->renderWithSubLayout('admin_userResetPassword', $params);
+                break;
+
+            case 'save':
+                $data['username'] = $_POST['username'] ?? null;
+                $data['name'] = $_POST['display-name'] ?? null;
+                $data['role'] = $_POST['role'] ?? null;
+                $data['password'] = $_POST['password'] ?? null;
+
+                foreach ($data as $key => $value) {
+                    if (is_null($value)) {
+                        unset($data[$key]);
+                    }
+                }
+
+                AntUsers::updateUser($_POST['originalusername'], $data);
+                AntCMS::redirect('/admin/users');
+                break;
+            case 'savenew':
+                AntUsers::addUser($_POST);
+                AntCMS::redirect('/admin/users');
+                break;
+
+            default:
+                $users = AntUsers::getUsers();
+                foreach ($users as $key => $user) {
+                    unset($users[$key]['password']);
+                    $users[$key]['username'] = $key;
+                }
+                $params['users'] = $users;
+                echo $this->AntTwig->renderWithSubLayout('admin_users', $params);
+                break;
+        }
         exit;
     }
 

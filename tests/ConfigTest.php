@@ -16,7 +16,6 @@ class ConfigTest extends TestCase
             'forceHTTPS',
             'activeTheme',
             'enableCache',
-            'admin',
             'debug',
             'baseURL'
         );
