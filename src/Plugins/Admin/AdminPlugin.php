@@ -114,8 +114,6 @@ class AdminPlugin extends AntPlugin
                         }
                     } else if (is_bool($value)) {
                         $currentConfig[$key] = ($value) ? 'true' : 'false';
-                    } else if (is_array($value)) {
-                        $currentConfig[$key] = implode(', ', $value);
                     }
                 }
 
