@@ -25,6 +25,7 @@ class AntCMS
     {
         $start_time = microtime(true);
         $content = $this->getPage($page);
+        $themeConfig = Self::getThemeConfig();
 
         if (!$content || !is_array($content)) {
             $this->renderException("404");
@@ -38,8 +39,9 @@ class AntCMS
             'AntCMSAuthor' => $content['author'],
             'AntCMSKeywords' => $content['keywords'],
             'AntCMSBody' => AntMarkdown::renderMarkdown($content['content']),
-            'DisplayAuthor' => true,
+            'ThemeConfig' => $themeConfig['config'] ?? [],
         ];
+
         $pageTemplate = $this->antTwig->renderWithTiwg($pageTemplate, $params);
 
         $end_time = microtime(true);
@@ -239,5 +241,21 @@ class AntCMS
         $url = '//' . AntTools::repairURL(AntConfig::currentConfig('baseURL') . $url);
         header("Location: $url");
         exit;
+    }
+
+    public static function getThemeConfig(string|null $theme = null)
+    {
+        $theme = $theme ?? AntConfig::currentConfig('activeTheme');
+
+        if (!is_dir(antThemePath . '/' . $theme)) {
+            $theme = 'Default';
+        }
+
+        $configPath = AntTools::repairFilePath(antThemePath . '/' . $theme . '/' . 'Config.yaml');
+        if (file_exists($configPath)) {
+            $config = AntYaml::parseFile($configPath);
+        }
+
+        return $config ?? [];
     }
 }

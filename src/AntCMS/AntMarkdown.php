@@ -3,6 +3,8 @@
 namespace AntCMS;
 
 use AntCMS\AntCache;
+use AntCMS\AntConfig;
+use AntCMS\AntCMS;
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\Autolink\AutolinkExtension;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
@@ -15,6 +17,7 @@ use ElGigi\CommonMarkEmoji\EmojiExtension;
 use League\CommonMark\Extension\Embed\Bridge\OscaroteroEmbedAdapter;
 use League\CommonMark\Extension\Embed\EmbedExtension;
 use SimonVomEyser\CommonMarkExtension\LazyImageExtension;
+use League\CommonMark\Extension\DefaultAttributes\DefaultAttributesExtension;
 
 class AntMarkdown
 {
@@ -25,6 +28,7 @@ class AntMarkdown
     {
         $antCache = new AntCache();
         $cacheKey = $antCache->createCacheKey($md, 'markdown');
+        $config = AntConfig::currentConfig();
 
         if ($antCache->isCached($cacheKey)) {
             $cachedContent = $antCache->getCache($cacheKey);
@@ -34,13 +38,23 @@ class AntMarkdown
             }
         }
 
+        $defaultAttributes = [];
+        $themeConfig = AntCMS::getThemeConfig();
+        foreach ($themeConfig['defaultAttributes'] as $class => $attributes) {
+            $reflectionClass = new \ReflectionClass($class);
+            $fqcn = $reflectionClass->getName();
+            $defaultAttributes[$fqcn] = $attributes;
+        }
+
         $mdConfig = [
             'embed' => [
                 'adapter' => new OscaroteroEmbedAdapter(),
-                'allowed_domains' => ['youtube.com', 'twitter.com', 'github.com', 'vimeo.com', 'flickr.com', 'instagram.com', 'facebook.com'],
+                'allowed_domains' => $config['embed']['allowed_domains'] ?? [],
                 'fallback' => 'link',
             ],
+            'default_attributes' => $defaultAttributes,
         ];
+
         $environment = new Environment($mdConfig);
 
         $environment->addExtension(new CommonMarkCoreExtension());
@@ -52,6 +66,7 @@ class AntMarkdown
         $environment->addExtension(new EmojiExtension());
         $environment->addExtension(new EmbedExtension());
         $environment->addExtension(new LazyImageExtension());
+        $environment->addExtension(new DefaultAttributesExtension());
 
         $markdownConverter = new MarkdownConverter($environment);
 

@@ -14,6 +14,7 @@ class AntConfig
         'enableCache',
         'debug',
         'baseURL',
+        'embed',
     ];
 
     /**
@@ -31,6 +32,9 @@ class AntConfig
             'enableCache' => true,
             'debug' => true,
             'baseURL' => $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']),
+            'embed' => [
+                'allowed_domains' => ['youtube.com', 'twitter.com', 'github.com', 'vimeo.com', 'flickr.com', 'instagram.com', 'facebook.com'],
+            ]
         ];
 
         Self::saveConfig($defaultOptions);
