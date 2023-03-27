@@ -40,7 +40,7 @@ class AntMarkdown
 
         $defaultAttributes = [];
         $themeConfig = AntCMS::getThemeConfig();
-        foreach ($themeConfig['defaultAttributes'] as $class => $attributes) {
+        foreach (($themeConfig['defaultAttributes'] ?? []) as $class => $attributes) {
             $reflectionClass = new \ReflectionClass($class);
             $fqcn = $reflectionClass->getName();
             $defaultAttributes[$fqcn] = $attributes;
