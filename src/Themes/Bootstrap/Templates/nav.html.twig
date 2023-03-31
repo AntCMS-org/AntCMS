@@ -1,7 +1,7 @@
 {% for page in pages %}
 {% if page.active %}
 <li class="nav-item">
-    <a class="nav-link active" href="{{ page.url }}">{{ page.pageTitle }}</a>
+    <a class="nav-link active" aria-current="page" href="{{ page.url }}">{{ page.pageTitle }}</a>
 </li>
 {% else %}
 <li class="nav-item">

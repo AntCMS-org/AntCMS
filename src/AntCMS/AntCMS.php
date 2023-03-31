@@ -63,12 +63,8 @@ class AntCMS
      */
     public static function getPageLayout(string $theme = null, string $currentPage = '')
     {
-        $siteInfo = AntCMS::getSiteInfo();
-
         $pageTemplate = self::getThemeTemplate('default', $theme);
-        $pageTemplate = str_replace('<!--AntCMS-Navigation-->', AntPages::generateNavigation(self::getThemeTemplate('nav', $theme), $currentPage), $pageTemplate);
-
-        return $pageTemplate = str_replace('<!--AntCMS-SiteTitle-->', $siteInfo['siteTitle'], $pageTemplate);
+        return str_replace('<!--AntCMS-Navigation-->', AntPages::generateNavigation(self::getThemeTemplate('nav', $theme), $currentPage), $pageTemplate);
     }
 
     /**

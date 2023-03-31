@@ -30,6 +30,9 @@ class AntTwig
     {
         $subLayout = AntCMS::getThemeTemplate($layout, $this->theme);
         $mainLayout = AntCMS::getPageLayout($this->theme);
+        $siteInfo = AntCMS::getSiteInfo();
+
+        $params['AntCMSSiteTitle'] = $siteInfo['siteTitle'];
         $params['AntCMSBody'] = $this->twigEnvironment->render($subLayout, $params);
 
         return $this->twigEnvironment->render($mainLayout, $params);
@@ -37,6 +40,9 @@ class AntTwig
 
     public function renderWithTiwg(string $content = '', array $params = array())
     {
+        $siteInfo = AntCMS::getSiteInfo();
+        $params['AntCMSSiteTitle'] = $siteInfo['siteTitle'];
+
         return $this->twigEnvironment->render($content, $params);
     }
 }
