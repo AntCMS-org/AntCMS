@@ -5,7 +5,7 @@ defaultAttributes:
   \League\CommonMark\Extension\Table\Table:
     class: table table-hover
   \League\CommonMark\Extension\CommonMark\Node\Inline\Image:
-    class: img-fluid
+    class: img-fluid TinyZoom
   \League\CommonMark\Extension\CommonMark\Node\Block\BlockQuote:
     class: blockquote
   \League\CommonMark\Extension\CommonMark\Node\Block\ListBlock:

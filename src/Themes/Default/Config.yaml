@@ -1,0 +1,6 @@
+config:
+  showAuthor: false
+
+defaultAttributes:
+  \League\CommonMark\Extension\CommonMark\Node\Inline\Image:
+    class: TinyZoom

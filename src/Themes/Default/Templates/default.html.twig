@@ -10,6 +10,24 @@
 
   <link href="{{ "Themes/Default/Assets/Dist/tailwind.css"|absUrl }}" rel="stylesheet">
 
+  <script src="{{ "Themes/Default/Assets/Dist/TinyZoom.js"|absUrl }}" defer></script>
+
+  <style>
+    .fullscreen-image {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+      backdrop-filter: blur(5px);
+    }
+  </style>
+
   <title>{{ AntCMSTitle }}</title>
 </head>
 
