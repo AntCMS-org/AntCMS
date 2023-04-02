@@ -30,19 +30,19 @@ class AntPages
                 $pageFunctionalPath = '/';
             }
 
-            if(str_ends_with($pageFunctionalPath, 'index')){
+            if (str_ends_with($pageFunctionalPath, 'index')) {
                 $pageFunctionalPath = substr($pageFunctionalPath, 0, -5);
             }
 
             $currentPage = array(
                 'pageTitle' => $pageHeader['title'],
                 'fullPagePath' => $page,
-                'functionalPagePath' => $pageFunctionalPath,
+                'functionalPagePath' => ($pageFunctionalPath == DIRECTORY_SEPARATOR) ? DIRECTORY_SEPARATOR : rtrim($pageFunctionalPath, DIRECTORY_SEPARATOR),
                 'showInNav' => true,
             );
 
-            // Move the index page to the first item in the page list, so it appears as the first item in the navbar.
-            if ($pageFunctionalPath === '/') {
+            // Move the index page to the first item in the page list, so it appears as the first item in the navbar. 
+            if ($pageFunctionalPath == DIRECTORY_SEPARATOR) {
                 array_unshift($pageList, $currentPage);
             } else {
                 $pageList[] = $currentPage;
@@ -79,16 +79,11 @@ class AntPages
             }
         }
 
-        $currentPage = strtolower($currentPage);
-        if (str_ends_with($currentPage, '/')) {
-            $currentPage .= 'index.md';
-        }
-
         $baseURL = AntConfig::currentConfig('baseURL');
         foreach ($pages as $key => $page) {
             $url = "//" . AntTools::repairURL($baseURL . $page['functionalPagePath']);
             $pages[$key]['url'] = $url;
-            $pages[$key]['active'] = $currentPage === strtolower($page['functionalPagePath']);
+            $pages[$key]['active'] = $currentPage == $page['functionalPagePath'];
 
             //Remove pages that are hidden from the nav from the array before sending it to twig. 
             if (!(bool)$page['showInNav']) {

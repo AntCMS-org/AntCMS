@@ -13,6 +13,8 @@ class RobotstxtPlugin extends AntPlugin
 
         $robotstxt = 'User-agent: *' . "\n";
         $robotstxt.= 'Disallow: /plugin/' . "\n";
+        $robotstxt.= 'Disallow: /admin/' . "\n";
+        $robotstxt.= 'Disallow: /profile/' . "\n";
         $robotstxt.= 'Sitemap: ' . $protocol . '://' . AntTools::repairURL($baseURL . '/sitemap.xml' . "\n");
         header("Content-Type: text/plain");
         echo $robotstxt;

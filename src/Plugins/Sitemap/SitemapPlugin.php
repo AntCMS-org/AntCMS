@@ -15,7 +15,7 @@ class SitemapPlugin extends AntPlugin
         $pages = AntPages::getPages();
 
         if (extension_loaded('dom')) {
-            $domDocument = new DOMDocument();
+            $domDocument = new DOMDocument('1.0', 'UTF-8');
             $domDocument->formatOutput = true;
 
             $domElement = $domDocument->createElement('urlset');
@@ -47,7 +47,7 @@ class SitemapPlugin extends AntPlugin
             die("AntCMS is unable to generate a sitemap without having the DOM extension loadded in PHP.");
         }
     }
-    
+
     public function getName(): string
     {
         return 'Sitemap';
