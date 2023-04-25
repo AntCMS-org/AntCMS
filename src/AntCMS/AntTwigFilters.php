@@ -18,6 +18,6 @@ class AntTwigFilters extends AbstractExtension
 
     public function absUrl(string $relative): string
     {
-        return '://' . AntTools::repairURL(AntConfig::currentConfig('baseURL') . '/' . trim($relative));
+        return '//' . AntTools::repairURL(AntConfig::currentConfig('baseURL') . '/' . trim($relative));
     }
 }
