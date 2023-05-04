@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/AntCMS-org/AntLoader.git",
-                "reference": "23efb43f45f72b46fd6635397e40dc32a2a3a421"
+                "reference": "c201dd0dfe8c339ab76e51c2ed0fcbfe4a9eb9b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/AntCMS-org/AntLoader/zipball/23efb43f45f72b46fd6635397e40dc32a2a3a421",
-                "reference": "23efb43f45f72b46fd6635397e40dc32a2a3a421",
+                "url": "https://api.github.com/repos/AntCMS-org/AntLoader/zipball/c201dd0dfe8c339ab76e51c2ed0fcbfe4a9eb9b7",
+                "reference": "c201dd0dfe8c339ab76e51c2ed0fcbfe4a9eb9b7",
                 "shasum": ""
             },
             "require": {
@@ -30,9 +30,9 @@
             "default-branch": true,
             "type": "library",
             "autoload": {
-                "psr-4": {
-                    "Antcms\\Antloader\\": "src/"
-                }
+                "classmap": [
+                    "src/"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -49,7 +49,7 @@
                 "issues": "https://github.com/AntCMS-org/AntLoader/issues",
                 "source": "https://github.com/AntCMS-org/AntLoader/tree/main"
             },
-            "time": "2023-05-04T21:47:14+00:00"
+            "time": "2023-05-04T23:10:25+00:00"
         },
         {
             "name": "composer/ca-bundle",
