@@ -18,7 +18,7 @@ jobs:
       - uses: php-actions/composer@v6
       - run: |
           cp ./tests/Includes/Config.yaml ./src/Config/Config.yaml
-      - uses: php-actions/phpunit@v3
+      - uses: php-actions/phpunit@v9
         with:
           bootstrap: src/Vendor/autoload.php
           php_version: ${{ matrix.php_version }}
