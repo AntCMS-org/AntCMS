@@ -10,7 +10,7 @@
     },
     "require": {
         "php": ">=8.0",
-        "antcms/antloader": "dev-main",
+        "antcms/antloader": "^1.0.0",
         "elgigi/commonmark-emoji": "^2.0",
         "embed/embed": "^4.4",
         "league/commonmark": "^2.3",

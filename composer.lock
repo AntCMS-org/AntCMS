@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "73b53c4909e18e7ac2935d0c63beeb2d",
+    "content-hash": "4bd5e3a9fdba1a9f97f8a6c97d7888c0",
     "packages": [
         {
             "name": "antcms/antloader",
-            "version": "dev-main",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/AntCMS-org/AntLoader.git",
-                "reference": "c201dd0dfe8c339ab76e51c2ed0fcbfe4a9eb9b7"
+                "reference": "1f9e11ffa446429292b85b519528aaa0fddf9b5e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/AntCMS-org/AntLoader/zipball/c201dd0dfe8c339ab76e51c2ed0fcbfe4a9eb9b7",
-                "reference": "c201dd0dfe8c339ab76e51c2ed0fcbfe4a9eb9b7",
+                "url": "https://api.github.com/repos/AntCMS-org/AntLoader/zipball/1f9e11ffa446429292b85b519528aaa0fddf9b5e",
+                "reference": "1f9e11ffa446429292b85b519528aaa0fddf9b5e",
                 "shasum": ""
             },
             "require": {
@@ -25,9 +25,9 @@
                 "php": ">=8.0"
             },
             "require-dev": {
+                "pestphp/pest": "^1.23",
                 "phpstan/phpstan": "^1.10"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "classmap": [
@@ -47,9 +47,9 @@
             "description": "A small and simple autoloader for PHP applications",
             "support": {
                 "issues": "https://github.com/AntCMS-org/AntLoader/issues",
-                "source": "https://github.com/AntCMS-org/AntLoader/tree/main"
+                "source": "https://github.com/AntCMS-org/AntLoader/tree/1.0.0"
             },
-            "time": "2023-05-04T23:10:25+00:00"
+            "time": "2023-05-05T02:16:11+00:00"
         },
         {
             "name": "composer/ca-bundle",
@@ -3768,9 +3768,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "antcms/antloader": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
