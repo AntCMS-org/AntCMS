@@ -90,7 +90,7 @@ class AntConfig
                 throw new Exception("New config is missing the required {$ConfigKey} key from it's array!");
             }
         }
-        
+
         return AntYaml::saveFile(antConfigFile, $config);
     }
 }

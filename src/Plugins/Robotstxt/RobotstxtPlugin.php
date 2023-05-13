@@ -12,15 +12,15 @@ class RobotstxtPlugin extends AntPlugin
         $baseURL = AntConfig::currentConfig('baseURL');
 
         $robotstxt = 'User-agent: *' . "\n";
-        $robotstxt.= 'Disallow: /plugin/' . "\n";
-        $robotstxt.= 'Disallow: /admin/' . "\n";
-        $robotstxt.= 'Disallow: /profile/' . "\n";
-        $robotstxt.= 'Sitemap: ' . $protocol . '://' . AntTools::repairURL($baseURL . '/sitemap.xml' . "\n");
+        $robotstxt .= 'Disallow: /plugin/' . "\n";
+        $robotstxt .= 'Disallow: /admin/' . "\n";
+        $robotstxt .= 'Disallow: /profile/' . "\n";
+        $robotstxt .= 'Sitemap: ' . $protocol . '://' . AntTools::repairURL($baseURL . '/sitemap.xml' . "\n");
         header("Content-Type: text/plain");
         echo $robotstxt;
         exit;
     }
-    
+
     public function getName(): string
     {
         return 'Robotstxt';

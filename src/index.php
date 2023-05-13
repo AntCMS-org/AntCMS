@@ -7,7 +7,7 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'Vendor' . DIRECTORY_SEPARATOR . 'a
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'Constants.php';
 
 $classMapPath = __DIR__  . DIRECTORY_SEPARATOR .  'Cache'  . DIRECTORY_SEPARATOR .  'classMap.php';
-$loader = new AntCMS\AntLoader($classMapPath );
+$loader = new AntCMS\AntLoader($classMapPath);
 $loader->addPrefix('AntCMS\\', __DIR__  . DIRECTORY_SEPARATOR . 'AntCMS');
 $loader->checkClassMap();
 $loader->register();
