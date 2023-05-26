@@ -8,7 +8,7 @@ class AntRouting
     private string $requestUri;
     private array $uriExploded;
 
-    private array $indexes = ['/', '/index.php', '/index.html'];
+    private array $indexes = ['/', '/index.php', '/index.html', '', 'index.php', 'index.html'];
 
     public function __construct(string $baseUrl, string $requestUri)
     {
@@ -21,6 +21,12 @@ class AntRouting
     {
         $this->$requestUri = $requestUri;
         $this->setExplodedUri($requestUri);
+    }
+
+    public function requestUriUnshift(string $append): void
+    {
+        array_unshift($this->uriExploded, $append);
+        $this->requestUri = implode('/', $this->uriExploded);
     }
 
     public function redirectHttps(): void
@@ -40,6 +46,10 @@ class AntRouting
         $matching =  explode('/', $uri);
         if (empty($matching[0])) {
             array_shift($matching);
+        }
+
+        if (count($matching) < count($this->uriExploded) && end($matching) !== '*') {
+            return false;
         }
 
         foreach ($this->uriExploded as $index => $value) {
@@ -75,7 +85,7 @@ class AntRouting
 
     public function isIndex(): bool
     {
-        return (in_array($this->uriExploded[0], $this->indexes) || empty($this->uriExploded[0]));
+        return (in_array($this->requestUri, $this->indexes));
     }
 
     private function setExplodedUri(string $uri): void

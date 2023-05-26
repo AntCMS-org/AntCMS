@@ -49,12 +49,12 @@ if ($antRouting->checkMatch('/robots.txt')) {
     $antRouting->setRequestUri('/plugin/robotstxt');
 }
 
-if ($antRouting->checkMatch('/admin')) {
-    $antRouting->setRequestUri('/plugin/admin');
+if ($antRouting->checkMatch('/admin/*')) {
+    $antRouting->requestUriUnshift('plugin');
 }
 
-if ($antRouting->checkMatch('/profile')) {
-    $antRouting->setRequestUri('/plugin/profile');
+if ($antRouting->checkMatch('/profile/*')) {
+    $antRouting->requestUriUnshift('plugin');
 }
 
 if ($antRouting->checkMatch('/plugin/*')) {
