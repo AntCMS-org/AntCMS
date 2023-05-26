@@ -230,6 +230,7 @@ class AntCMS
             header('Content-Type: ' . $asset_mime_type);
             readfile($path);
         }
+        exit;
     }
 
     public static function redirect(string $url)
