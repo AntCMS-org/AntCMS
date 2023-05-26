@@ -10,6 +10,10 @@ class AntRouting
 
     private array $indexes = ['/', '/index.php', '/index.html', '', 'index.php', 'index.html'];
 
+    /**
+     * @param string $baseUrl The base site URL. Ex: domain.com
+     * @param string $requestUri The current request URI. Ex: /page/example
+     */
     public function __construct(string $baseUrl, string $requestUri)
     {
         $this->baseUrl = $baseUrl;
@@ -17,18 +21,30 @@ class AntRouting
         $this->setExplodedUri($requestUri);
     }
 
+    /**
+     * @param string $requestUri The current request URI. Ex: /page/example
+     */
     public function setRequestUri(string $requestUri): void
     {
         $this->$requestUri = $requestUri;
         $this->setExplodedUri($requestUri);
     }
 
+    /**
+     * Used to add to the start of the request URI. Primarially used for plugin routing.
+     * For example: this is used internally to rewrite /profile/edit to /plugin/profile/edit
+     * 
+     * @param string $append What to append to the start of the request URI.
+     */
     public function requestUriUnshift(string $append): void
     {
         array_unshift($this->uriExploded, $append);
         $this->requestUri = implode('/', $this->uriExploded);
     }
 
+    /**
+     * Used to detect if the current request is over HTTPS. If the request is over HTTP, it'll redirect to HTTPS.
+     */
     public function redirectHttps(): void
     {
         $scheme = $_SERVER['HTTPS'] ?? $_SERVER['REQUEST_SCHEME'] ?? $_SERVER['HTTP_X_FORWARDED_PROTO'] ?? null;
@@ -41,6 +57,12 @@ class AntRouting
         }
     }
 
+    /**
+     * Used to check if the current request URI matches a specified route.
+     * Supports using '*' as a wild-card. Ex: '/admin/*' will match '/admin/somthing' and '/admin'
+     * 
+     * @param string $uri The Route to compare against the current URI.
+     */
     public function checkMatch(string $uri): bool
     {
         $matching =  explode('/', $uri);
@@ -61,6 +83,9 @@ class AntRouting
         return true;
     }
 
+    /** 
+     * Attempts to detect what plugin is associated with the current URI and then routes to the matching one. 
+     */
     public function routeToPlugin(): void
     {
         $pluginName = $this->uriExploded[1];
@@ -83,6 +108,9 @@ class AntRouting
         exit;
     }
 
+    /**
+     * @return bool Returns true if the current request URI is an index request.
+     */
     public function isIndex(): bool
     {
         return (in_array($this->requestUri, $this->indexes));
