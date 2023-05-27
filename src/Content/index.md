@@ -48,7 +48,7 @@ AntCMS stores its configuration in the human-readable "yaml" file format. The ma
   - `siteTitle: AntCMS` - This configuration sets the title of your AntCMS website.
 - `forceHTTPS: true` - Set to 'true' by default, enables HTTPs redirection.
 - `activeTheme: Default` - Sets what theme AntCMS should use. should match the folder name of the theme you want to use.
-- `enableCache: true` - Enables or disables file caching in AntCMS.
+- `cacheMode: auto` - Allows AntCMS to auto-detect if it should use APCu or the file system for it's cache. Also accepts 'none', 'apcu', and 'filesystem'.
 - `debug: true`- Enabled or disables debug mode.
 - `baseURL: antcms.example.com/` - Used to set the baseURL for your AntCMS instance, without the protocol. This will be automatically generated for you, but can be changed if needed.
 

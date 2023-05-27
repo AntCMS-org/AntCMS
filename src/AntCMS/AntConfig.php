@@ -11,7 +11,7 @@ class AntConfig
         'siteInfo',
         'forceHTTPS',
         'activeTheme',
-        'enableCache',
+        'cacheMode',
         'debug',
         'baseURL',
         'embed',
@@ -29,7 +29,7 @@ class AntConfig
             ],
             'forceHTTPS' => true,
             'activeTheme' => 'Default',
-            'enableCache' => true,
+            'cacheMode' => 'auto',
             'debug' => true,
             'baseURL' => $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']),
             'embed' => [

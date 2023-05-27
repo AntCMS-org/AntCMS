@@ -22,7 +22,7 @@ class MarkdownTest extends TestCase
         $currentConfig = AntConfig::currentConfig();
 
         //Ensure cache is enabled
-        $currentConfig['enableCache'] = true;
+        $currentConfig['cacheMode'] = 'auto';
         AntConfig::saveConfig($currentConfig);
 
         for ($i = 0; $i < 10; ++$i) {
@@ -48,7 +48,7 @@ class MarkdownTest extends TestCase
         $currentConfig = AntConfig::currentConfig();
 
         //Disable cache
-        $currentConfig['enableCache'] = false;
+        $currentConfig['cacheMode'] = 'none';
         AntConfig::saveConfig($currentConfig);
 
         $totalTime = 0;
@@ -62,7 +62,7 @@ class MarkdownTest extends TestCase
         $withoutCache = $totalTime / 10;
 
         //Enable cache
-        $currentConfig['enableCache'] = true;
+        $currentConfig['cacheMode'] = 'auto';
         AntConfig::saveConfig($currentConfig);
 
         $totalTime = 0;

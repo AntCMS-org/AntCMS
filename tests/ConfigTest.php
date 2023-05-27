@@ -15,7 +15,7 @@ class ConfigTest extends TestCase
             'siteInfo',
             'forceHTTPS',
             'activeTheme',
-            'enableCache',
+            'cacheMode',
             'debug',
             'baseURL'
         );
@@ -28,7 +28,7 @@ class ConfigTest extends TestCase
     public function testSaveConfigFailed()
     {
         $Badconfig = [
-            'enableCache' => true,
+            'cacheMode' => 'none',
         ];
 
         try {

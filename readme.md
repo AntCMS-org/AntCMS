@@ -12,12 +12,13 @@ AntCMS is a lightweight CMS system designed for simplicity, speed, and small siz
 ### How fast is AntCMS?
 
 AntCMS is designed for speed, with a simple backend and caching capabilities that allow it to quickly render and deliver pages to users in milliseconds. This speed is further enhanced by the use of Tailwind CSS in the default theme, which is only 25KB.
-
 Our unit tests also ensure that rendering markdown content takes less than 0.015 seconds, as demonstrated by the following recent results: `Markdown rendering speed with cache: 0.000289 VS without: 0.003414`.
 
 ### How does it work?
 
 Using AntCMS is simple. First, you need an HTML template with special elements for AntCMS. Then, you can write your content using the popular [markdown](https://www.markdownguide.org/cheat-sheet/) formatting syntax. AntCMS will convert the markdown to HTML, integrate it into the template, and send it to the viewer. This process is already quick, but AntCMS also has caching capabilities that can further improve rendering times.
+
+AntCMS will also automatically leverage the APCu extension for caching, which helps to further improve your website's response time.
 
 ### Theming with AntCMS
 
