@@ -63,7 +63,7 @@ class AntCache
                 return file_put_contents($cachePath, $content);
             case self::apcuCache:
                 $apcuKey = $this->cacheKeyApcu . $key;
-                return apcu_store($apcuKey, $content);
+                return apcu_store($apcuKey, $content, 7 * 24 * 60 * 60); // Save it for one week.
             default:
                 return false;
         }
