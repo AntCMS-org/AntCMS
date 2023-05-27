@@ -11,7 +11,7 @@ class AntTwig
 
     public function __construct(string $theme = null)
     {
-        $twigCache = AntConfig::currentConfig('enableCache') ? AntCachePath : false;
+        $twigCache = (AntConfig::currentConfig('enableCache') !== 'none') ? AntCachePath : false;
         $this->theme = $theme ?? AntConfig::currentConfig('activeTheme');
 
         if (!is_dir(antThemePath . '/' . $this->theme)) {
