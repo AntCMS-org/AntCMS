@@ -23,3 +23,4 @@ jobs:
           bootstrap: src/Vendor/autoload.php
           php_version: ${{ matrix.php_version }}
           args: "tests"
+          php_extensions: apcu
