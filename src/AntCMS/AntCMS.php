@@ -31,7 +31,7 @@ class AntCMS
             $this->renderException("404");
         }
 
-        $pageTemplate = $this->getPageLayout(null, $page);
+        $pageTemplate = $this->getPageLayout(null, $page, $content['template']);
 
         $params = [
             'AntCMSTitle' => $content['title'],
@@ -61,9 +61,10 @@ class AntCMS
      * @param string $currentPage optional - What page is the active page.
      * @return string the default page layout
      */
-    public static function getPageLayout(string $theme = null, string $currentPage = '')
+    public static function getPageLayout(string $theme = null, string $currentPage = '', string | null $template = null)
     {
-        $pageTemplate = self::getThemeTemplate('default', $theme);
+        $layout = empty($template) ? 'default' : $template;
+        $pageTemplate = self::getThemeTemplate($layout, $theme);
         return str_replace('<!--AntCMS-Navigation-->', AntPages::generateNavigation(self::getThemeTemplate('nav', $theme), $currentPage), $pageTemplate);
     }
 
@@ -110,7 +111,7 @@ class AntCMS
                 $pageHeaders = AntCMS::getPageHeaders($pageContent);
                 // Remove the AntCMS section from the content
                 $pageContent = preg_replace('/\A--AntCMS--.*?--AntCMS--/sm', '', $pageContent);
-                return ['content' => $pageContent, 'title' => $pageHeaders['title'], 'author' => $pageHeaders['author'], 'description' => $pageHeaders['description'], 'keywords' => $pageHeaders['keywords']];
+                return ['content' => $pageContent, 'title' => $pageHeaders['title'], 'author' => $pageHeaders['author'], 'description' => $pageHeaders['description'], 'keywords' => $pageHeaders['keywords'], 'template' => $pageHeaders['template']];
             } catch (\Exception) {
                 return false;
             }
@@ -191,8 +192,6 @@ class AntCMS
 
         if (isset($matches[0])) {
             $header = $matches[0];
-            // Then remove it from the page content so it doesn't cause issues if we try to generate the keywords
-            $pageContent = str_replace($header, '', $pageContent);
 
             preg_match('/Title: (.*)/', $header, $matches);
             $pageHeaders['title'] = trim($matches[1] ?? 'AntCMS');
@@ -205,6 +204,9 @@ class AntCMS
 
             preg_match('/Keywords: (.*)/', $header, $matches);
             $pageHeaders['keywords'] = trim($matches[1] ?? '');
+
+            preg_match('/Template: (.*)/', $header, $matches);
+            $pageHeaders['template'] = trim($matches[1] ?? '');
         }
 
         return $pageHeaders;
