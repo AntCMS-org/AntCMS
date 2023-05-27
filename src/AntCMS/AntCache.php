@@ -58,15 +58,14 @@ class AntCache
         switch ($this->cacheType) {
             case self::noCache:
                 return false;
-                break;
             case self::fileCache:
                 $cachePath = AntCachePath . DIRECTORY_SEPARATOR . "{$key}.cache";
                 return file_put_contents($cachePath, $content);
-                break;
             case self::apcuCache:
                 $apcuKey = $this->cacheKeyApcu . $key;
                 return apcu_store($apcuKey, $content);
-                break;
+            default:
+                return false;
         }
     }
 
@@ -82,11 +81,9 @@ class AntCache
         switch ($this->cacheType) {
             case self::noCache:
                 return false;
-                break;
             case self::fileCache:
                 $cachePath = AntCachePath . DIRECTORY_SEPARATOR . "{$key}.cache";
                 return file_get_contents($cachePath);
-                break;
             case self::apcuCache:
                 $apcuKey = $this->cacheKeyApcu . $key;
                 if (apcu_exists($apcuKey)) {
@@ -94,7 +91,8 @@ class AntCache
                 } else {
                     return false;
                 }
-                break;
+            default:
+                return false;
         }
     }
 
@@ -110,15 +108,14 @@ class AntCache
         switch ($this->cacheType) {
             case self::noCache:
                 return false;
-                break;
             case self::fileCache:
                 $cachePath = AntCachePath . DIRECTORY_SEPARATOR . "{$key}.cache";
                 return file_exists($cachePath);
-                break;
             case self::apcuCache:
                 $apcuKey = $this->cacheKeyApcu . $key;
                 return apcu_exists($apcuKey);
-                break;
+            default:
+                return false;
         }
     }
 
