@@ -28,7 +28,7 @@ class AntCache
             case 'auto':
                 if (extension_loaded('apcu') && apcu_enabled()) {
                     $this->cacheType = self::apcuCache;
-                    $this->cacheKeyApcu = 'AntCMS_' . hash('md5', __DIR__);
+                    $this->cacheKeyApcu = 'AntCMS_' . hash('md5', __DIR__) . '_';
                 } else {
                     $this->cacheType = self::fileCache;
                 }
@@ -38,7 +38,7 @@ class AntCache
                 break;
             case 'apcu':
                 $this->cacheType = self::apcuCache;
-                $this->cacheKeyApcu = 'AntCMS_' . hash('md5', __DIR__);
+                $this->cacheKeyApcu = 'AntCMS_' . hash('md5', __DIR__) . '_';
                 break;
             default:
                 throw new \Exception("Invalid cache type. Must be 'auto', 'filesystem', 'apcu', or 'none'.");
@@ -141,7 +141,25 @@ class AntCache
         }
     }
 
-    public function clearCache(): void
+    public static function clearCache(): void
     {
+        $di = new \RecursiveDirectoryIterator(AntCachePath, \FilesystemIterator::SKIP_DOTS);
+        $ri = new \RecursiveIteratorIterator($di, \RecursiveIteratorIterator::CHILD_FIRST);
+        foreach ($ri as $file) {
+            $file->isDir() ?  rmdir($file->getRealPath()) : unlink($file->getRealPath());
+        }
+
+        if (extension_loaded('apcu') && apcu_enabled()) {
+            $prefix = 'AntCMS_' . hash('md5', __DIR__) . '_';
+            $cacheInfo = apcu_cache_info();
+            $keys = $cacheInfo['cache_list'];
+
+            foreach ($keys as $keyInfo) {
+                $key = $keyInfo['info'];
+                if (str_starts_with($key, $prefix)) {
+                    apcu_delete($key);
+                }
+            }
+        }
     }
 }
