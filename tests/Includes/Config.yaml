@@ -2,7 +2,7 @@ siteInfo:
     siteTitle: 'AntCMS'
 forceHTTPS: true
 activeTheme: Default
-enableCache: true
+cacheMode: auto
 debug: true
 baseURL: antcms.org/
 embed:

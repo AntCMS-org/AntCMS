@@ -7,6 +7,44 @@ use Symfony\Component\Yaml\Exception\ParseException;
 
 class AntCache
 {
+    private int $cacheType = 0;
+    private string $cacheKeyApcu = '';
+
+    const noCache   = 0;
+    const fileCache = 1;
+    const apcuCache = 2;
+
+    /**
+     * Creates a new cache object, sets the correct caching type. ('auto', 'filesystem', 'apcu', or 'none')
+     */
+    public function __construct()
+    {
+        $config = AntConfig::currentConfig();
+        $mode = $config['cacheMode'] ?? 'auto';
+        switch ($mode) {
+            case 'none':
+                $this->cacheType = self::noCache;
+                break;
+            case 'auto':
+                if (extension_loaded('apcu') && apcu_enabled()) {
+                    $this->cacheType = self::apcuCache;
+                    $this->cacheKeyApcu = 'AntCMS_' . hash('md5', __DIR__);
+                } else {
+                    $this->cacheType = self::fileCache;
+                }
+                break;
+            case 'filesystem':
+                $this->cacheType = self::fileCache;
+                break;
+            case 'apcu':
+                $this->cacheType = self::apcuCache;
+                $this->cacheKeyApcu = 'AntCMS_' . hash('md5', __DIR__);
+                break;
+            default:
+                throw new \Exception("Invalid cache type. Must be 'auto', 'filesystem', 'apcu', or 'none'.");
+        }
+    }
+
     /**
      * Caches a value for a given cache key.
      * 
@@ -17,17 +55,18 @@ class AntCache
      */
     public function setCache(string $key, string $content)
     {
-        $cachePath = AntCachePath . DIRECTORY_SEPARATOR . "{$key}.cache";
-        $config = AntConfig::currentConfig();
-        if ($config['enableCache']) {
-            try {
-                file_put_contents($cachePath, $content);
-                return true;
-            } catch (\Exception) {
+        switch ($this->cacheType) {
+            case self::noCache:
                 return false;
-            }
-        } else {
-            return true;
+                break;
+            case self::fileCache:
+                $cachePath = AntCachePath . DIRECTORY_SEPARATOR . "{$key}.cache";
+                return file_put_contents($cachePath, $content);
+                break;
+            case self::apcuCache:
+                $apcuKey = $this->cacheKeyApcu . $key;
+                return apcu_store($apcuKey, $content);
+                break;
         }
     }
 
@@ -40,16 +79,22 @@ class AntCache
      */
     public function getCache(string $key)
     {
-        $cachePath = AntCachePath . DIRECTORY_SEPARATOR . "{$key}.cache";
-        $config = AntConfig::currentConfig();
-        if ($config['enableCache']) {
-            try {
-                return file_get_contents($cachePath);
-            } catch (\Exception) {
+        switch ($this->cacheType) {
+            case self::noCache:
                 return false;
-            }
-        } else {
-            return false;
+                break;
+            case self::fileCache:
+                $cachePath = AntCachePath . DIRECTORY_SEPARATOR . "{$key}.cache";
+                return file_get_contents($cachePath);
+                break;
+            case self::apcuCache:
+                $apcuKey = $this->cacheKeyApcu . $key;
+                if (apcu_exists($apcuKey)) {
+                    return apcu_fetch($apcuKey);
+                } else {
+                    return false;
+                }
+                break;
         }
     }
 
@@ -62,12 +107,18 @@ class AntCache
      */
     public function isCached(string $key)
     {
-        $config = AntConfig::currentConfig();
-        if ($config['enableCache']) {
-            $cachePath = AntCachePath . DIRECTORY_SEPARATOR . "{$key}.cache";
-            return file_exists($cachePath);
-        } else {
-            return false;
+        switch ($this->cacheType) {
+            case self::noCache:
+                return false;
+                break;
+            case self::fileCache:
+                $cachePath = AntCachePath . DIRECTORY_SEPARATOR . "{$key}.cache";
+                return file_exists($cachePath);
+                break;
+            case self::apcuCache:
+                $apcuKey = $this->cacheKeyApcu . $key;
+                return apcu_exists($apcuKey);
+                break;
         }
     }
 
@@ -91,5 +142,9 @@ class AntCache
         } else {
             return hash('md4', $content . $salt);
         }
+    }
+
+    public function clearCache(): void
+    {
     }
 }
