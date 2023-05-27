@@ -11,7 +11,7 @@ class AntConfig
         'siteInfo',
         'forceHTTPS',
         'activeTheme',
-        'enableCache',
+        'cacheMode',
         'debug',
         'baseURL',
         'embed',
