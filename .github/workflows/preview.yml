@@ -21,8 +21,7 @@ jobs:
         working-directory: ./src
       - run: |
           npm install -D tailwindcss
-          rm -f ./src/Themes/Default/Assets/Dist/tailwind.css
-          npx tailwindcss -i ./src/Themes/Default/Assets/tailwind.css -o ./src/Themes/Default/Assets/Dist/tailwind.css --minify
+          npm run build
       - uses: ncipollo/release-action@v1
         with:
           artifacts: "./src/AntCMS.zip"

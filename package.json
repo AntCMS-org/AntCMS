@@ -2,20 +2,27 @@
   "name": "antcms",
   "description": "A simple CMS built with PHP and Markdown",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npm-run-all compile-bs-css compile-tw-css",
+    "compile-bs-css": "sass --style compressed --load-path=node_modules --no-source-map src/Themes/Bootstrap/Assets/styles.scss src/Themes/Bootstrap/Assets/Dist/Bootstrap.min.css",
+    "compile-tw-css": "npx tailwindcss -i ./src/Themes/Default/Assets/tailwind.css -o ./src/Themes/Default/Assets/Dist/tailwind.css --minify"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/BelleNottelling/AntCMS.git"
+    "url": "git+https://github.com/AntCMS-org/AntCMS.git"
   },
   "author": "BelleNottelling",
   "bugs": {
-    "url": "https://github.com/BelleNottelling/AntCMS/issues"
+    "url": "https://github.com/AntCMS-org/AntCMS/issues"
   },
-  "homepage": "https://github.com/BelleNottelling/AntCMS#readme",
+  "homepage": "https://github.com/AntCMS-org/AntCMS#readme",
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.3",
     "@tailwindcss/typography": "^0.5.9",
+    "npm-run-all": "^4.1.5",
+    "sass": "^1.63.2",
     "tailwindcss": "^3.3.2"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.0"
   }
 }
