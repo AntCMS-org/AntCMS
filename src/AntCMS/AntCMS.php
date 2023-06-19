@@ -126,25 +126,27 @@ class AntCMS
      */
     public static function getThemeTemplate(string $layout = 'default', string $theme = null)
     {
-        $theme = $theme ?? AntConfig::currentConfig('activeTheme');
+        $theme ??= AntConfig::currentConfig('activeTheme');
 
-        if (!is_dir(antThemePath . '/' . $theme)) {
+        if (!is_dir(antThemePath . DIRECTORY_SEPARATOR . $theme)) {
             $theme = 'Default';
         }
 
+        $basePath = AntTools::repairFilePath(antThemePath . DIRECTORY_SEPARATOR . $theme);
+
         if (strpos($layout, '_') !== false) {
             $layoutPrefix = explode('_', $layout)[0];
-            $templatePath = AntTools::repairFilePath(antThemePath . '/' . $theme . '/' . 'Templates' . '/' . $layoutPrefix);
+            $templatePath = $basePath . DIRECTORY_SEPARATOR . 'Templates' . DIRECTORY_SEPARATOR . $layoutPrefix;
             $defaultTemplates = AntTools::repairFilePath(antThemePath . '/Default/Templates' . '/' . $layoutPrefix);
         } else {
-            $templatePath = AntTools::repairFilePath(antThemePath . '/' . $theme . '/' . 'Templates');
+            $templatePath = $basePath . DIRECTORY_SEPARATOR . 'Templates';
             $defaultTemplates = AntTools::repairFilePath(antThemePath . '/Default/Templates');
         }
 
         try {
-            $template = @file_get_contents(AntTools::repairFilePath($templatePath . '/' . $layout . '.html.twig'));
+            $template = @file_get_contents($templatePath . DIRECTORY_SEPARATOR . $layout . '.html.twig');
             if (empty($template)) {
-                $template = file_get_contents(AntTools::repairFilePath($defaultTemplates . '/' . $layout . '.html.twig'));
+                $template = file_get_contents($defaultTemplates . DIRECTORY_SEPARATOR . $layout . '.html.twig');
             }
         } catch (\Exception) {
         }

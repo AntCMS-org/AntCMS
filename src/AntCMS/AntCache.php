@@ -17,10 +17,10 @@ class AntCache
     /**
      * Creates a new cache object, sets the correct caching type. ('auto', 'filesystem', 'apcu', or 'none')
      */
-    public function __construct()
+    public function __construct(null|string $mode = null)
     {
-        $config = AntConfig::currentConfig();
-        $mode = $config['cacheMode'] ?? 'auto';
+        $mode = $mode ?? AntConfig::currentConfig('cacheMode') ?? 'auto';
+
         switch ($mode) {
             case 'none':
                 $this->cacheType = self::noCache;
@@ -86,11 +86,9 @@ class AntCache
                 return file_get_contents($cachePath);
             case self::apcuCache:
                 $apcuKey = $this->cacheKeyApcu . $key;
-                if (apcu_exists($apcuKey)) {
-                    return apcu_fetch($apcuKey);
-                } else {
-                    return false;
-                }
+                $success = false;
+                $result = apcu_fetch($apcuKey, $success);
+                return $success ? $result : false;
             default:
                 return false;
         }
@@ -129,16 +127,20 @@ class AntCache
      */
     public function createCacheKey(string $content, string $salt = 'cache')
     {
-        /**
-         * If the server is modern enough to have xxh128, use that. It is really fast and still produces long hashes
-         * If not, use MD4 since it's still quite fast.
-         * Source: https://php.watch/articles/php-hash-benchmark
-         */
-        if (defined('HAS_XXH128')) {
-            return hash('xxh128', $content . $salt);
-        } else {
-            return hash('md4', $content . $salt);
-        }
+        return hash(self::getHashAlgo(), $content . $salt);
+    }
+
+    /**
+     * Generates a unique cache key for a file and a salt value.
+     * The salt is used to ensure that each cache key is unique to each component, even if multiple components are using the same source content but caching different results.
+     * 
+     * @param string $filePath The file path to create a cache key for.
+     * @param string $salt An optional salt value to use in the cache key generation. Default is 'cache'.
+     * @return string The generated cache key.
+     */
+    public function createCacheKeyFile(string $filePath, string $salt = 'cache')
+    {
+        return hash_file(self::getHashAlgo(), $filePath) . $salt;
     }
 
     public static function clearCache(): void
@@ -161,5 +163,15 @@ class AntCache
                 }
             }
         }
+    }
+
+    public static function getHashAlgo(): string
+    {
+        /**
+         * If the server is modern enough to have xxh128, use that. It is really fast and still produces long hashes
+         * If not, use MD4 since it's still quite fast.
+         * Source: https://php.watch/articles/php-hash-benchmark
+         */
+        return defined('HAS_XXH128') ? 'xxh128' : 'md4';
     }
 }

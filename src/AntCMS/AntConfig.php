@@ -48,7 +48,8 @@ class AntConfig
      */
     public static function currentConfig(?string $key = null)
     {
-        $config = AntYaml::parseFile(antConfigFile);
+        // FS cache enabled to save ~10% of the time to deliver the file page.
+        $config = AntYaml::parseFile(antConfigFile, true);
         if (is_null($key)) {
             return $config;
         } else {
@@ -56,7 +57,6 @@ class AntConfig
             return self::getArrayValue($config, $keys);
         }
     }
-
 
     /**
      * @param array<mixed> $array 
@@ -67,13 +67,11 @@ class AntConfig
     {
         foreach ($keys as $key) {
             if (isset($array[$key])) {
-                $array = $array[$key];
+                return $array[$key];
             } else {
                 return null;
             }
         }
-
-        return $array;
     }
 
     /**
