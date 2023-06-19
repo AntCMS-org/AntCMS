@@ -52,21 +52,18 @@ class AntPages
         AntYaml::saveFile(antPagesList, $pageList);
     }
 
-    /** @return array<mixed>  */
-    public static function getPages()
+    public static function getPages():array
     {
         return AntYaml::parseFile(antPagesList);
     }
 
     /**
      * @param string $currentPage optional - What page is the active page. Used for highlighting the active page in the navbar
-     * @return string 
      */
-    public static function generateNavigation(string $navTemplate = '', string $currentPage = '')
+    public static function generateNavigation(string $navTemplate = '', string $currentPage = ''): string
     {
         $pages = AntPages::getPages();
         $antCache = new AntCache;
-        $antTwig = new AntTwig();
 
         $theme = AntConfig::currentConfig('activeTheme');
         $cacheKey = $antCache->createCacheKey(json_encode($pages), $theme . $currentPage);
@@ -74,7 +71,7 @@ class AntPages
         if ($antCache->isCached($cacheKey)) {
             $cachedContent = $antCache->getCache($cacheKey);
 
-            if ($cachedContent !== false && !empty($cachedContent)) {
+            if (!empty($cachedContent)) {
                 return $cachedContent;
             }
         }
@@ -91,6 +88,7 @@ class AntPages
             }
         }
 
+        $antTwig = new AntTwig();
         $navHTML = $antTwig->renderWithTiwg($navTemplate, array('pages' => $pages));
 
         $antCache->setCache($cacheKey, $navHTML);

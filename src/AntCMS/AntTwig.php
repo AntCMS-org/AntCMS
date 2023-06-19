@@ -14,7 +14,7 @@ class AntTwig
         $twigCache = (AntConfig::currentConfig('enableCache') !== 'none') ? AntCachePath : false;
         $this->theme = $theme ?? AntConfig::currentConfig('activeTheme');
 
-        if (!is_dir(antThemePath . '/' . $this->theme)) {
+        if (!is_dir(antThemePath . DIRECTORY_SEPARATOR . $this->theme)) {
             $this->theme = 'Default';
         }
 

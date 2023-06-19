@@ -7,12 +7,25 @@ use Symfony\Component\Yaml\Yaml;
 
 class AntYaml
 {
-    /** 
-     * @return array<mixed> 
-     */
-    public static function parseFile(string $file)
+    public static function parseFile(string $file, bool $fileCache = false): array
     {
-        return Yaml::parseFile($file);
+        if ($fileCache) {
+            $antCache = new AntCache('filesystem');
+        } else {
+            $antCache = new AntCache();
+        }
+
+        $cacheKey = $antCache->createCacheKeyFile($file);
+        if ($antCache->isCached($cacheKey)) {
+            $parsed = json_decode($antCache->getCache($cacheKey), true);
+        }
+
+        if (empty($parsed)) {
+            $parsed = Yaml::parseFile($file);
+            $antCache->setCache($cacheKey, json_encode($parsed));
+        }
+
+        return $parsed;
     }
 
     /** 
@@ -27,7 +40,7 @@ class AntYaml
     /** 
      * @return array<mixed>|null 
      */
-    public static function parseYaml(string $yaml)
+    public static function parseYaml(string $yaml): ?array
     {
         try {
             return Yaml::parse($yaml);
