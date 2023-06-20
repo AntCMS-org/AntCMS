@@ -81,8 +81,8 @@ class AntAuth
     {
         setcookie("auth", "valid");
 
-        $title = AntConfig::currentConfig('siteInfo.siteTitle');
-        header('WWW-Authenticate: Basic realm="' . $title . '"');
+        $siteInfo = AntConfig::currentConfig('siteInfo');
+        header('WWW-Authenticate: Basic realm="' . $siteInfo['siteTitle'] . '"');
         http_response_code(401);
         echo 'You must enter a valid username and password to access this page';
         exit;
