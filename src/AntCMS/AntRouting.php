@@ -51,7 +51,7 @@ class AntRouting
         $isHttps = !empty($scheme) && (strcasecmp('on', $scheme) == 0 || strcasecmp('https', $scheme) == 0);
 
         if (!$isHttps) {
-            $url = 'https://' . AntTools::repairURL($this->baseUrl . '/' . $this->requestUri);
+            $url = 'https://' . AntTools::repairURL($this->baseUrl . $this->requestUri);
             header('Location: ' . $url);
             exit;
         }
