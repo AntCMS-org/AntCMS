@@ -2,6 +2,7 @@
 
 use AntCMS\AntCMS;
 use AntCMS\AntConfig;
+use AntCMS\AntPluginLoader;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
@@ -20,9 +21,7 @@ if (!file_exists(antPagesList)) {
     \AntCMS\AntPages::generatePages();
 }
 
-$requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$baseUrl = AntConfig::currentConfig('baseURL');
-$antRouting = new \AntCMS\AntRouting($baseUrl, $requestUri);
+$antCMS = new AntCMS();
 
 $app = AppFactory::create();
 $app->addRoutingMiddleware();
@@ -40,9 +39,9 @@ if (AntConfig::currentConfig('cacheMode') !== 'none') {
     $routeCollector->setCacheFile(AntCachePath . DIRECTORY_SEPARATOR . 'routes.cache');
 }
 
-$routeCollector = $app->getRouteCollector();
-
-$antCMS = new AntCMS($app);
+// Register plugin routes first so they get priority
+$pluginLoader = new AntPluginLoader;
+$pluginLoader->registerPluginRoutes($app);
 
 $app->get('/themes/{theme}/assets', function (Request $request, Response $response) use ($antCMS) {
     $antCMS->setRequest($request);
@@ -55,30 +54,6 @@ $app->get('/.well-known/acme-challenge/{path:.*}', function (Request $request, R
     $antCMS->SetResponse($response);
     return $antCMS->serveContent();
 });
-
-/**
- * TODO: Make these non-static and not hard-coded.
- * This is also still relying on the custom routing implementation I am working to remove
- */
-if ($antRouting->checkMatch('/sitemap.xml')) {
-    $antRouting->setRequestUri('/plugin/sitemap');
-}
-
-if ($antRouting->checkMatch('/robots.txt')) {
-    $antRouting->setRequestUri('/plugin/robotstxt');
-}
-
-if ($antRouting->checkMatch('/admin/*')) {
-    $antRouting->requestUriUnshift('plugin');
-}
-
-if ($antRouting->checkMatch('/profile/*')) {
-    $antRouting->requestUriUnshift('plugin');
-}
-
-if ($antRouting->checkMatch('/plugin/*')) {
-    $antRouting->routeToPlugin();
-}
 
 $app->get('/', function (Request $request, Response $response) use ($antCMS) {
     if (!file_exists(antUsersList)) {

@@ -52,7 +52,7 @@ class AntCMS
         $themeConfig = Self::getThemeConfig();
 
         if (!$content || !is_array($content)) {
-            $this->renderException("404");
+            return $this->renderException("404");
         }
 
         $pageTemplate = $this->getPageLayout(null, $page, $content['template']);
@@ -98,9 +98,8 @@ class AntCMS
      * @param string $exceptionCode The exception code to be displayed on the error page
      * @param int $httpCode The HTTP response code to return, 404 by default.
      * @param string $exceptionString An optional parameter to define a custom string to be displayed along side the exception. 
-     * @return never 
      */
-    public function renderException(string $exceptionCode, int $httpCode = 404, string $exceptionString = 'That request caused an exception to be thrown.')
+    public function renderException(string $exceptionCode, int $httpCode = 404, string $exceptionString = 'That request caused an exception to be thrown.'): Response
     {
         $exceptionString .= " (Code {$exceptionCode})";
         $pageTemplate = self::getPageLayout();
@@ -116,9 +115,9 @@ class AntCMS
             $pageTemplate = str_replace('{{ AntCMSBody | raw }} ', $params['AntCMSBody'], $pageTemplate);
         }
 
-        http_response_code($httpCode);
-        echo $pageTemplate;
-        exit;
+        $response = $this->getResponse()->withStatus($httpCode);
+        $response->getBody()->write($pageTemplate);
+        return $response;
     }
 
     /** 
@@ -248,9 +247,9 @@ class AntCMS
 
     public function serveContent(): Response
     {
-        $path = $this->request->getUri();
+        $path = $this->request->getUri()->getPath();
         if (!file_exists($path)) {
-            $this->renderException('404');
+            return $this->renderException('404');
         } else {
             $response = $this->response->withHeader('Content-Type', mime_content_type($path) . '; charset=UTF-8');
             $response->getBody()->write(file_get_contents($path));

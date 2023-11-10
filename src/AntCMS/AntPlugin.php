@@ -2,15 +2,23 @@
 
 namespace AntCMS;
 
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use \Slim\App;
+
 abstract class AntPlugin
 {
-    /**
-     * @param array<string> $route 
-     * @return mixed 
-     */
-    public function handlePluginRoute(array $route)
+    protected ?Request $request;
+    protected ?Response $response;
+
+    public function setRequest(?Request $request)
     {
-        die("Plugin did not define a handlePluginRoute function");
+        $this->request = $request;
+    }
+
+    public function SetResponse(?Response $response)
+    {
+        $this->response = $response;
     }
 
     /** @return string  */

@@ -1,13 +1,15 @@
 <?php
 
-use AntCMS\AntPlugin;
+namespace Plugins\Sitemap;
+
 use AntCMS\AntPages;
 use AntCMS\AntConfig;
 use AntCMS\AntTools;
+use Psr\Http\Message\ResponseInterface as Response;
 
-class SitemapPlugin extends AntPlugin
+class Sitemap extends \AntCMS\AntPlugin
 {
-    public function handlePluginRoute(array $route)
+    public function returnSitemap(): Response
     {
         $protocol = AntConfig::currentConfig('forceHTTPS') ? 'https' : 'http';
         $baseURL = AntConfig::currentConfig('baseURL');
@@ -15,7 +17,7 @@ class SitemapPlugin extends AntPlugin
         $pages = AntPages::getPages();
 
         if (extension_loaded('dom')) {
-            $domDocument = new DOMDocument('1.0', 'UTF-8');
+            $domDocument = new \DOMDocument('1.0', 'UTF-8');
             $domDocument->formatOutput = true;
 
             $domElement = $domDocument->createElement('urlset');
@@ -40,11 +42,13 @@ class SitemapPlugin extends AntPlugin
                 $domElement->appendChild($element);
             }
 
-            header('Content-Type: application/xml');
-            echo $domDocument->saveXML();
-            exit;
+            $response = $this->response->withHeader('Content-Type', 'Content-Type: application/xml');
+            $response->getBody()->write($domDocument->saveXML());
+            return $response;
         } else {
-            die("AntCMS is unable to generate a sitemap without having the DOM extension loadded in PHP.");
+            $response = $this->response;
+            $response->getBody()->write("AntCMS is unable to generate a sitemap without having the DOM extension loadded in PHP.");
+            return $response;
         }
     }
 
