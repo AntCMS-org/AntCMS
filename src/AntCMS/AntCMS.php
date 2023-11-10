@@ -40,10 +40,7 @@ class AntCMS
     }
 
     /**
-     * Renders a page based on the provided page name.
-     *
-     * @param string $page The name of the page to be rendered
-     * @return string The rendered HTML of the page
+     * Renders the page based on the request URI
      */
     public function renderPage(): Response
     {
@@ -248,9 +245,6 @@ class AntCMS
         return AntConfig::currentConfig('siteInfo');
     }
 
-    /** 
-     * @return void 
-     */
     public function serveContent(): Response
     {
         $path = $this->request->getUri();
