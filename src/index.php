@@ -28,11 +28,21 @@ $app = AppFactory::create();
 $app->addRoutingMiddleware();
 $app->addErrorMiddleware(true, true, true);
 
-$antCMS = new AntCMS($app);
+$trailingSlash = new Middlewares\TrailingSlash();
+$app->addMiddleware($trailingSlash->redirect());
 
 if (AntConfig::currentConfig('forceHTTPS') && !\AntCMS\AntEnviroment::isCli()) {
     $app->addMiddleware(new Middlewares\Https());
 }
+
+if (AntConfig::currentConfig('cacheMode') !== 'none') {
+    $routeCollector = $app->getRouteCollector();
+    $routeCollector->setCacheFile(AntCachePath . DIRECTORY_SEPARATOR . 'routes.cache');
+}
+
+$routeCollector = $app->getRouteCollector();
+
+$antCMS = new AntCMS($app);
 
 $app->get('/themes/{theme}/assets', function (Request $request, Response $response) use ($antCMS) {
     $antCMS->setRequest($request);

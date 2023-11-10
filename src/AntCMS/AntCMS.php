@@ -7,7 +7,6 @@ use AntCMS\AntPages;
 use AntCMS\AntConfig;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Slim\App;
 use Psr\Http\Message\UriInterface;
 
 class AntCMS
@@ -15,12 +14,10 @@ class AntCMS
     protected $antTwig;
     protected ?Response $response = null;
     protected ?Request $request = null;
-    protected ?App     $app = null;
 
-    public function __construct(?App $app)
+    public function __construct()
     {
         $this->antTwig = new AntTwig();
-        $this->app = $app;
     }
 
     public function SetResponse(?Response $response): void
@@ -41,11 +38,6 @@ class AntCMS
     public function getRequest(): ?Request
     {
         return $this->request;
-    }
-
-    public function getApp()
-    {
-        return $this->app;
     }
 
     /**
