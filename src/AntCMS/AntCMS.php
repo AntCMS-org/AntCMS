@@ -5,14 +5,38 @@ namespace AntCMS;
 use AntCMS\AntMarkdown;
 use AntCMS\AntPages;
 use AntCMS\AntConfig;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 
 class AntCMS
 {
     protected $antTwig;
+    protected ?Response $response = null;
+    protected ?Request $request = null;
 
     public function __construct()
     {
         $this->antTwig = new AntTwig();
+    }
+
+    public function SetResponse(?Response $response): void
+    {
+        $this->response = $response;
+    }
+
+    public function setRequest(?Request $request): void
+    {
+        $this->request = $request;
+    }
+
+    public function getResponse(): ?Response
+    {
+        return $this->response;
+    }
+
+    public function getRequest(): ?Request
+    {
+        return $this->request;
     }
 
     /**
@@ -21,8 +45,10 @@ class AntCMS
      * @param string $page The name of the page to be rendered
      * @return string The rendered HTML of the page
      */
-    public function renderPage(string $page)
+    public function renderPage(): Response
     {
+        $page = $this->request->getUri()->getPath();
+
         $start_time = hrtime(true);
         $content = $this->getPage($page);
         $themeConfig = Self::getThemeConfig();
@@ -49,7 +75,9 @@ class AntCMS
             $pageTemplate = str_replace('<!--AntCMS-Debug-->', '<p>Took ' . $elapsed_time . ' milliseconds to render the page. </p>', $pageTemplate);
         }
 
-        return $pageTemplate;
+        $response = $this->getResponse();
+        $response->getBody()->write($pageTemplate);
+        return $response;
     }
 
     /**
@@ -223,16 +251,16 @@ class AntCMS
     /** 
      * @return void 
      */
-    public function serveContent(string $path)
+    public function serveContent(): Response
     {
+        $path = $this->request->getUri();
         if (!file_exists($path)) {
             $this->renderException('404');
         } else {
-            $asset_mime_type = mime_content_type($path);
-            header('Content-Type: ' . $asset_mime_type);
-            readfile($path);
+            $response = $this->response->withHeader('Content-Type', mime_content_type($path) . '; charset=UTF-8');
+            $response->getBody()->write(file_get_contents($path));
+            return $response;
         }
-        exit;
     }
 
     public static function redirect(string $url)
