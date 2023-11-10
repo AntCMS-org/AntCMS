@@ -7,16 +7,20 @@ use AntCMS\AntPages;
 use AntCMS\AntConfig;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\App;
+use Psr\Http\Message\UriInterface;
 
 class AntCMS
 {
     protected $antTwig;
     protected ?Response $response = null;
     protected ?Request $request = null;
+    protected ?App     $app = null;
 
-    public function __construct()
+    public function __construct(?App $app)
     {
         $this->antTwig = new AntTwig();
+        $this->app = $app;
     }
 
     public function SetResponse(?Response $response): void
@@ -37,6 +41,11 @@ class AntCMS
     public function getRequest(): ?Request
     {
         return $this->request;
+    }
+
+    public function getApp()
+    {
+        return $this->app;
     }
 
     /**
@@ -257,7 +266,20 @@ class AntCMS
         }
     }
 
-    public static function redirect(string $url)
+    public function redirect(string|UriInterface $url, int $code = 307): Response
+    {
+        if (!is_string($url)) {
+            $url = $url->__toString();
+        }
+        $response = $this->response->withStatus($code);
+        return $response->withHeader('Location', $url);
+    }
+
+    /**
+     * Old redirect function.
+     * TODO: Remove this once the other functions have been updated to no longer rely on this
+     */
+    public static function redirectWithoutRequest(string $url)
     {
         $url = '//' . AntTools::repairURL(AntConfig::currentConfig('baseURL') . $url);
         header("Location: $url");

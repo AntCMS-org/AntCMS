@@ -28,14 +28,14 @@ class ProfilePlugin extends AntPlugin
         switch ($currentStep) {
             case 'firsttime':
                 if (file_exists(antUsersList)) {
-                    AntCMS::redirect('/admin');
+                    AntCMS::redirectWithoutRequest('/admin');
                 }
                 echo $this->antTwig->renderWithSubLayout('profile_firstTime', $params);
                 break;
 
             case 'submitfirst':
                 if (file_exists(antUsersList)) {
-                    AntCMS::redirect('/admin');
+                    AntCMS::redirectWithoutRequest('/admin');
                 }
 
                 if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['display-name'])) {
@@ -45,9 +45,9 @@ class ProfilePlugin extends AntPlugin
                         'name' => $_POST['display-name'],
                     ];
                     AntUsers::setupFirstUser($data);
-                    AntCMS::redirect('/admin');
+                    AntCMS::redirectWithoutRequest('/admin');
                 } else {
-                    AntCMS::redirect('/profile/firsttime');
+                    AntCMS::redirectWithoutRequest('/profile/firsttime');
                 }
                 break;
 
@@ -56,7 +56,7 @@ class ProfilePlugin extends AntPlugin
                 $user = AntUsers::getUserPublicalKeys($this->antAuth->getUsername());
 
                 if (!$user) {
-                    AntCMS::redirect('/profile');
+                    AntCMS::redirectWithoutRequest('/profile');
                 }
 
                 $user['username'] = $this->antAuth->getUsername();
@@ -70,7 +70,7 @@ class ProfilePlugin extends AntPlugin
                 $user = AntUsers::getUserPublicalKeys($this->antAuth->getUsername());
 
                 if (!$user) {
-                    AntCMS::redirect('/profile');
+                    AntCMS::redirectWithoutRequest('/profile');
                 }
 
                 $user['username'] = $this->antAuth->getUsername();
@@ -92,7 +92,7 @@ class ProfilePlugin extends AntPlugin
                 }
 
                 AntUsers::updateUser($this->antAuth->getUsername(), $data);
-                AntCMS::redirect('/profile');
+                AntCMS::redirectWithoutRequest('/profile');
                 break;
 
             case 'logout':

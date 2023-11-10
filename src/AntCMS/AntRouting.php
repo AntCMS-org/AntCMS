@@ -43,21 +43,6 @@ class AntRouting
     }
 
     /**
-     * Used to detect if the current request is over HTTPS. If the request is over HTTP, it'll redirect to HTTPS.
-     */
-    public function redirectHttps(): void
-    {
-        $scheme = $_SERVER['HTTPS'] ?? $_SERVER['REQUEST_SCHEME'] ?? $_SERVER['HTTP_X_FORWARDED_PROTO'] ?? null;
-        $isHttps = !empty($scheme) && (strcasecmp('on', $scheme) == 0 || strcasecmp('https', $scheme) == 0);
-
-        if (!$isHttps) {
-            $url = 'https://' . AntTools::repairURL($this->baseUrl . $this->requestUri);
-            header('Location: ' . $url);
-            exit;
-        }
-    }
-
-    /**
      * Used to check if the current request URI matches a specified route.
      * Supports using '*' as a wild-card. Ex: '/admin/*' will match '/admin/somthing' and '/admin'
      * 
@@ -106,14 +91,6 @@ class AntRouting
         header("HTTP/1.0 404 Not Found");
         echo ("Error 404");
         exit;
-    }
-
-    /**
-     * @return bool Returns true if the current request URI is an index request.
-     */
-    public function isIndex(): bool
-    {
-        return (in_array($this->requestUri, $this->indexes));
     }
 
     private function setExplodedUri(string $uri): void

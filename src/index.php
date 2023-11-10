@@ -24,14 +24,14 @@ $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $baseUrl = AntConfig::currentConfig('baseURL');
 $antRouting = new \AntCMS\AntRouting($baseUrl, $requestUri);
 
-$antCMS = new AntCMS;
-
 $app = AppFactory::create();
 $app->addRoutingMiddleware();
 $app->addErrorMiddleware(true, true, true);
 
+$antCMS = new AntCMS($app);
+
 if (AntConfig::currentConfig('forceHTTPS') && !\AntCMS\AntEnviroment::isCli()) {
-    $antRouting->redirectHttps();
+    $app->addMiddleware(new Middlewares\Https());
 }
 
 $app->get('/themes/{theme}/assets', function (Request $request, Response $response) use ($antCMS) {
@@ -72,7 +72,7 @@ if ($antRouting->checkMatch('/plugin/*')) {
 
 $app->get('/', function (Request $request, Response $response) use ($antCMS) {
     if (!file_exists(antUsersList)) {
-        AntCMS::redirect('/profile/firsttime');
+        AntCMS::redirectWithoutRequest('/profile/firsttime');
     }
 
     $antCMS->setRequest($request);

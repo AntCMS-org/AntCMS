@@ -30,7 +30,7 @@ class AntUsers
         if (file_exists(antUsersList)) {
             return AntYaml::parseFile(antUsersList);
         } else {
-            AntCMS::redirect('/profile/firsttime');
+            AntCMS::redirectWithoutRequest('/profile/firsttime');
         }
     }
 
@@ -101,7 +101,7 @@ class AntUsers
     public static function setupFirstUser($data)
     {
         if (file_exists(antUsersList)) {
-            AntCMS::redirect('/');
+            AntCMS::redirectWithoutRequest('/');
         }
 
         $data['username'] = trim($data['username']);

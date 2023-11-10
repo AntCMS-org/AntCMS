@@ -14,6 +14,7 @@
         "elgigi/commonmark-emoji": "^2.0",
         "embed/embed": "^4.4",
         "league/commonmark": "^2.3",
+        "middlewares/https": "^2.0",
         "nyholm/psr7": "^1.8",
         "nyholm/psr7-server": "^1.1",
         "psr/http-message": "2.0 as 1.1",
