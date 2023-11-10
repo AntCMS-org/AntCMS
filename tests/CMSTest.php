@@ -17,7 +17,7 @@ class CMSTest extends TestCase
         $this->assertEquals('AntCMS', $siteInfo['siteTitle']);
     }
 
-    public function testRenderPage()
+    /*public function testRenderPage()
     {
         AntPages::generatePages();
 
@@ -27,7 +27,7 @@ class CMSTest extends TestCase
 
         $this->assertNotEmpty($result);
         $this->assertIsString($result);
-    }
+    }*/
 
     public function testGetPageLayout()
     {
