@@ -28,6 +28,10 @@ class Admin extends AntPlugin
     {
         $this->antAuth = new AntAuth;
         $this->antTwig = new AntTwig;
+    }
+
+    public function checkAuth()
+    {
         $this->antAuth->checkAuth();
     }
 

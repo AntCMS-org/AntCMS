@@ -55,17 +55,11 @@ $app->get('/.well-known/acme-challenge/{path:.*}', function (Request $request, R
     return $antCMS->serveContent();
 });
 
-$app->get('/', function (Request $request, Response $response) use ($antCMS) {
+$app->get('/{path:.*}', function (Request $request, Response $response) use ($antCMS) {
     if (!file_exists(antUsersList)) {
         AntCMS::redirectWithoutRequest('/profile/firsttime');
     }
 
-    $antCMS->setRequest($request);
-    $antCMS->SetResponse($response);
-    return $antCMS->renderPage();
-});
-
-$app->get('/{path:.*}', function (Request $request, Response $response) use ($antCMS) {
     $antCMS->setRequest($request);
     $antCMS->SetResponse($response);
     return $antCMS->renderPage();
