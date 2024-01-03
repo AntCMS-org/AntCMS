@@ -3,16 +3,14 @@
 namespace AntCMS;
 
 use AntCMS\AntConfig;
-use Symfony\Component\Yaml\Exception\ParseException;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Component\Cache\Adapter\ApcuAdapter;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 class AntCache
 {
-    private int $cacheType = 0;
-    private string $cacheKeyApcu = '';
-
-    const noCache   = 0;
-    const fileCache = 1;
-    const apcuCache = 2;
+    private ?object $CacheInterface = null;
+    public static $defaultLifespan = 604_800; // 1 week
 
     /**
      * Creates a new cache object, sets the correct caching type. ('auto', 'filesystem', 'apcu', or 'none')
@@ -20,100 +18,35 @@ class AntCache
     public function __construct(null|string $mode = null)
     {
         $mode = $mode ?? AntConfig::currentConfig('cacheMode') ?? 'auto';
+        if ($mode == 'auto') {
+            if (extension_loaded('apcu') && apcu_enabled()) {
+                $mode = 'apcu';
+            } else {
+                $mode = 'filesystem';
+            }
+        }
 
         switch ($mode) {
             case 'none':
-                $this->cacheType = self::noCache;
-                break;
-            case 'auto':
-                if (extension_loaded('apcu') && apcu_enabled()) {
-                    $this->cacheType = self::apcuCache;
-                    $this->cacheKeyApcu = 'AntCMS_' . hash('md5', __DIR__) . '_';
-                } else {
-                    $this->cacheType = self::fileCache;
-                }
+                $this->CacheInterface = new ArrayAdapter(0, true, 0, 150);
                 break;
             case 'filesystem':
-                $this->cacheType = self::fileCache;
+                $this->CacheInterface = new FilesystemAdapter('', self::$defaultLifespan, AntCachePath);
                 break;
             case 'apcu':
-                $this->cacheType = self::apcuCache;
-                $this->cacheKeyApcu = 'AntCMS_' . hash('md5', __DIR__) . '_';
+                $this->CacheInterface = new ApcuAdapter('AntCMS_' . hash('md5', __DIR__), self::$defaultLifespan);
                 break;
             default:
                 throw new \Exception("Invalid cache type. Must be 'auto', 'filesystem', 'apcu', or 'none'.");
         }
     }
 
-    /**
-     * Caches a value for a given cache key.
-     * 
-     * @param string $key The cache key to use for the cached value.
-     * @param string $content The value to cache.
-     * @return bool True if the value was successfully cached, false otherwise.
-     * @throws ParseException If there is an error parsing the AntCMS configuration file.
-     */
-    public function setCache(string $key, string $content)
+    public function __call(string $name, array $arguments): mixed
     {
-        switch ($this->cacheType) {
-            case self::noCache:
-                return false;
-            case self::fileCache:
-                $cachePath = AntCachePath . DIRECTORY_SEPARATOR . "{$key}.cache";
-                return file_put_contents($cachePath, $content);
-            case self::apcuCache:
-                $apcuKey = $this->cacheKeyApcu . $key;
-                return apcu_store($apcuKey, $content, 7 * 24 * 60 * 60); // Save it for one week.
-            default:
-                return false;
-        }
-    }
-
-    /**
-     * Retrieves the cached value for a given cache key.
-     * 
-     * @param string $key The cache key used to retrieve the cached value.
-     * @return string|false The cached value, or false if there was an error loading it or if caching is disabled.
-     * @throws ParseException If there is an error parsing the AntCMS configuration file.
-     */
-    public function getCache(string $key)
-    {
-        switch ($this->cacheType) {
-            case self::noCache:
-                return false;
-            case self::fileCache:
-                $cachePath = AntCachePath . DIRECTORY_SEPARATOR . "{$key}.cache";
-                return file_get_contents($cachePath);
-            case self::apcuCache:
-                $apcuKey = $this->cacheKeyApcu . $key;
-                $success = false;
-                $result = apcu_fetch($apcuKey, $success);
-                return $success ? $result : false;
-            default:
-                return false;
-        }
-    }
-
-    /**
-     * Determines if a cache key has a corresponding cached value.
-     * 
-     * @param string $key The cache key to check.
-     * @return bool True if the cache key has a corresponding cached value, false otherwise. Will also return false if caching is disabled.
-     * @throws ParseException If there is an error parsing the AntCMS configuration file.
-     */
-    public function isCached(string $key)
-    {
-        switch ($this->cacheType) {
-            case self::noCache:
-                return false;
-            case self::fileCache:
-                $cachePath = AntCachePath . DIRECTORY_SEPARATOR . "{$key}.cache";
-                return file_exists($cachePath);
-            case self::apcuCache:
-                $apcuKey = $this->cacheKeyApcu . $key;
-                return apcu_exists($apcuKey);
-            default:
-                return false;
+        if (method_exists($this->CacheInterface, $name)) {
+            return call_user_func_array([$this->CacheInterface, $name], $arguments);
+        } else {
+            return false;
         }
     }
 
@@ -141,28 +74,6 @@ class AntCache
     public function createCacheKeyFile(string $filePath, string $salt = 'cache')
     {
         return hash_file(self::getHashAlgo(), $filePath) . $salt;
-    }
-
-    public static function clearCache(): void
-    {
-        $di = new \RecursiveDirectoryIterator(AntCachePath, \FilesystemIterator::SKIP_DOTS);
-        $ri = new \RecursiveIteratorIterator($di, \RecursiveIteratorIterator::CHILD_FIRST);
-        foreach ($ri as $file) {
-            $file->isDir() ?  rmdir($file->getRealPath()) : unlink($file->getRealPath());
-        }
-
-        if (extension_loaded('apcu') && apcu_enabled()) {
-            $prefix = 'AntCMS_' . hash('md5', __DIR__) . '_';
-            $cacheInfo = apcu_cache_info();
-            $keys = $cacheInfo['cache_list'];
-
-            foreach ($keys as $keyInfo) {
-                $key = $keyInfo['info'];
-                if (str_starts_with($key, $prefix)) {
-                    apcu_delete($key);
-                }
-            }
-        }
     }
 
     public static function getHashAlgo(): string

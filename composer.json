@@ -17,6 +17,7 @@
         "nyholm/psr7": "^1.5",
         "shapecode/twig-string-loader": "^1.1",
         "simonvomeyser/commonmark-ext-lazy-image": "^2.0",
+        "symfony/cache": "^6.4",
         "symfony/yaml": "^6.0",
         "twig/twig": "^3.5"
     },
