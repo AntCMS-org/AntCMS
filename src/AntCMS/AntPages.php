@@ -8,6 +8,7 @@ use AntCMS\AntConfig;
 use AntCMS\AntCache;
 use AntCMS\AntTools;
 use AntCMS\AntTwig;
+use Symfony\Contracts\Cache\ItemInterface;
 
 class AntPages
 {
@@ -52,7 +53,7 @@ class AntPages
         AntYaml::saveFile(antPagesList, $pageList);
     }
 
-    public static function getPages():array
+    public static function getPages(): array
     {
         return AntYaml::parseFile(antPagesList);
     }
@@ -68,30 +69,23 @@ class AntPages
         $theme = AntConfig::currentConfig('activeTheme');
         $cacheKey = $antCache->createCacheKey(json_encode($pages), $theme . $currentPage);
 
-        if ($antCache->isCached($cacheKey)) {
-            $cachedContent = $antCache->getCache($cacheKey);
+        return $antCache->get($cacheKey, function (ItemInterface $item) use ($navTemplate, $currentPage, $pages): string {
+            $item->expiresAfter(AntCache::$defaultLifespan / 7);
+            $baseURL = AntConfig::currentConfig('baseURL');
+            foreach ($pages as $key => $page) {
+                $url = "//" . AntTools::repairURL($baseURL . $page['functionalPagePath']);
+                $pages[$key]['url'] = $url;
+                $pages[$key]['active'] = $currentPage == $page['functionalPagePath'];
 
-            if (!empty($cachedContent)) {
-                return $cachedContent;
+                //Remove pages that are hidden from the nav from the array before sending it to twig. 
+                if (!(bool)$page['showInNav']) {
+                    unset($pages[$key]);
+                }
             }
-        }
 
-        $baseURL = AntConfig::currentConfig('baseURL');
-        foreach ($pages as $key => $page) {
-            $url = "//" . AntTools::repairURL($baseURL . $page['functionalPagePath']);
-            $pages[$key]['url'] = $url;
-            $pages[$key]['active'] = $currentPage == $page['functionalPagePath'];
-
-            //Remove pages that are hidden from the nav from the array before sending it to twig. 
-            if (!(bool)$page['showInNav']) {
-                unset($pages[$key]);
-            }
-        }
-
-        $antTwig = new AntTwig();
-        $navHTML = $antTwig->renderWithTiwg($navTemplate, array('pages' => $pages));
-
-        $antCache->setCache($cacheKey, $navHTML);
-        return $navHTML;
+            $antTwig = new AntTwig();
+            $navHTML = $antTwig->renderWithTiwg($navTemplate, array('pages' => $pages));
+            return $navHTML;
+        });
     }
 }

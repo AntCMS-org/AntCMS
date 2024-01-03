@@ -7,4 +7,6 @@ parameters:
 		- src/Vendor
 		- src/Cache
 		- src/AntCMS/AntKeywords.php
-
+	ignoreErrors:
+		- '#^Call to an undefined method AntCMS\\AntCache\:\:get\(\)\.$#'
+		- '#^Call to an undefined method AntCMS\\AntCache\:\:purge\(\)\.$#'
