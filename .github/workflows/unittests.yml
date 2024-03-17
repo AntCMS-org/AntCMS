@@ -17,10 +17,10 @@ jobs:
       - uses: actions/checkout@v4
       - uses: php-actions/composer@v6
         with:
-          dev: no
+          dev: yes
           php_version: ${{ matrix.php_version }}
           php_extensions: apcu
 
-      - run: |
-          cp ./tests/Includes/Config.yaml ./src/Config/Config.yaml
-          php src/Vendor/bin/phpunit
+      - run: cp ./tests/Includes/Config.yaml ./src/Config/Config.yaml
+
+      - run: php src/Vendor/bin/phpunit
