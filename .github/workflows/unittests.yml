@@ -23,4 +23,4 @@ jobs:
 
       - run: |
           cp ./tests/Includes/Config.yaml ./src/Config/Config.yaml
-          php src\Vendor\bin\phpunit
+          php src/Vendor/bin/phpunit
