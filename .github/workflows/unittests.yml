@@ -16,11 +16,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: php-actions/composer@v6
-      - run: |
-          cp ./tests/Includes/Config.yaml ./src/Config/Config.yaml
-      - uses: php-actions/phpunit@v3
         with:
-          bootstrap: src/Vendor/autoload.php
+          dev: yes
           php_version: ${{ matrix.php_version }}
-          args: "tests"
           php_extensions: apcu
+
+      - run: cp ./tests/Includes/Config.yaml ./src/Config/Config.yaml
+
+      - run: php src/Vendor/bin/phpunit tests 

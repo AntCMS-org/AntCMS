@@ -14,7 +14,7 @@
         "elgigi/commonmark-emoji": "^2.0",
         "embed/embed": "^4.4",
         "league/commonmark": "^2.3",
-        "nyholm/psr7": "^1.5",
+        "nyholm/psr7": "^1.8",
         "shapecode/twig-string-loader": "^1.1",
         "simonvomeyser/commonmark-ext-lazy-image": "^2.0",
         "symfony/cache": "^6.0",
