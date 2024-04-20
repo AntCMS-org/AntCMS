@@ -87,7 +87,8 @@ class AdminPlugin extends AntPlugin
 
             case 'save':
                 if (!$_POST['textarea']) {
-                    AntCMS::redirect('/admin/config');
+                    FLight::redirect('/admin/config');
+                    exit;
                 }
 
                 $yaml = AntYaml::parseYaml($_POST['textarea']);
@@ -95,8 +96,8 @@ class AdminPlugin extends AntPlugin
                     AntYaml::saveFile(antConfigFile, $yaml);
                 }
 
-                AntCMS::redirect('/admin/config');
-                break;
+                Flight::redirect('/admin/config');
+                exit;
 
             default:
                 foreach ($currentConfig as $key => $value) {
@@ -133,7 +134,7 @@ class AdminPlugin extends AntPlugin
         switch ($route[0] ?? 'none') {
             case 'regenerate':
                 AntPages::generatePages();
-                AntCMS::redirect('/admin/pages');
+                Flight::redirect('/admin/pages');
                 exit;
 
             case 'edit':
@@ -168,11 +169,12 @@ class AdminPlugin extends AntPlugin
                 $pagePath = AntTools::repairFilePath(antContentPath . '/' . implode('/', $route));
 
                 if (!isset($_POST['textarea'])) {
-                    AntCMS::redirect('/admin/pages');
+                    Flight::redirect('/admin/pages');
+                    exit;
                 }
 
                 file_put_contents($pagePath, $_POST['textarea']);
-                AntCMS::redirect('/admin/pages');
+                Flight::redirect('/admin/pages');
                 exit;
 
             case 'create':
@@ -196,8 +198,8 @@ class AdminPlugin extends AntPlugin
                     AntYaml::saveFile(antPagesList, $pages);
                 }
 
-                AntCMS::redirect('/admin/pages');
-                break;
+                Flight::redirect('/admin/pages');
+                exit;
 
             case 'togglevisibility':
                 array_shift($route);
@@ -210,8 +212,8 @@ class AdminPlugin extends AntPlugin
                 }
 
                 AntYaml::saveFile(antPagesList, $pages);
-                AntCMS::redirect('/admin/pages');
-                break;
+                Flight::redirect('/admin/pages');
+                exit;
 
             default:
                 foreach ($pages as $key => $page) {
@@ -250,7 +252,8 @@ class AdminPlugin extends AntPlugin
                 $user = AntUsers::getUserPublicalKeys($route[1]);
 
                 if (!$user) {
-                    AntCMS::redirect('/admin/users');
+                    Flight::redirect('/admin/users');
+                    exit;
                 }
 
                 $user['username'] = $route[1];
@@ -263,7 +266,8 @@ class AdminPlugin extends AntPlugin
                 $user = AntUsers::getUserPublicalKeys($route[1]);
 
                 if (!$user) {
-                    AntCMS::redirect('/admin/users');
+                    Flight::redirect('/admin/users');
+                    exit;
                 }
 
                 $user['username'] = $route[1];
@@ -285,12 +289,12 @@ class AdminPlugin extends AntPlugin
                 }
 
                 AntUsers::updateUser($_POST['originalusername'], $data);
-                AntCMS::redirect('/admin/users');
-                break;
+                Flight::redirect('/admin/users');
+                exit;
             case 'savenew':
                 AntUsers::addUser($_POST);
-                AntCMS::redirect('/admin/users');
-                break;
+                Flight::redirect('/admin/users');
+                exit;
 
             default:
                 $users = AntUsers::getUsers();

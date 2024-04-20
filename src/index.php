@@ -1,5 +1,7 @@
 <?php
 
+use HostByBelle\CompressionBuffer;
+
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
@@ -23,18 +25,23 @@ $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $baseUrl = AntConfig::currentConfig('baseURL');
 $antRouting = new \AntCMS\AntRouting($baseUrl, $requestUri);
 
+// Setup CompressionBuffer & enable it in Flight
+CompressionBuffer::setUp();
+Flight::response()->addResponseBodyCallback([CompressionBuffer::class, 'handler']);
+
 if (AntConfig::currentConfig('forceHTTPS') && !\AntCMS\AntEnviroment::isCli()) {
     $antRouting->redirectHttps();
 }
 
-if ($antRouting->checkMatch('/themes/*/assets')) {
+Flight::route('GET /themes/*/assets', function () use ($antCms, $requestUri): void {
     $antCms->serveContent(AntDir . $requestUri);
-}
+});
 
-if ($antRouting->checkMatch('/.well-known/acme-challenge/*')) {
+Flight::route('GET .well-known/acme-challenge/*', function () use ($antCms, $requestUri): void {
     $antCms->serveContent(AntDir . $requestUri);
-}
+});
 
+/*
 if ($antRouting->checkMatch('/sitemap.xml')) {
     $antRouting->setRequestUri('/plugin/sitemap');
 }
@@ -54,16 +61,18 @@ if ($antRouting->checkMatch('/profile/*')) {
 if ($antRouting->checkMatch('/plugin/*')) {
     $antRouting->routeToPlugin();
 }
+*/
 
-if ($antRouting->isIndex()) {
-    // If the users list hasn't been created, redirect to the first-time setup
+Flight::route('GET /', function () use ($antCms): void {
     if (!file_exists(antUsersList)) {
-        AntCMS::redirect('/profile/firsttime');
+        // TODO for once plugin functionality is rebuilt
+        //AntCMS::redirect('/profile/firsttime');
     }
-
     echo $antCms->renderPage('/');
-    exit;
-} else {
+});
+
+Flight::route('GET /*', function () use ($antCms, $requestUri): void {
     echo $antCms->renderPage($requestUri);
-    exit;
-}
+});
+
+Flight::start();

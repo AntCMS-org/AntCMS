@@ -5,6 +5,8 @@ namespace AntCMS;
 use AntCMS\AntMarkdown;
 use AntCMS\AntPages;
 use AntCMS\AntConfig;
+use Flight;
+use HostByBelle\CompressionBuffer;
 
 class AntCMS
 {
@@ -90,9 +92,7 @@ class AntCMS
             $pageTemplate = str_replace('{{ AntCMSBody | raw }} ', $params['AntCMSBody'], $pageTemplate);
         }
 
-        http_response_code($httpCode);
-        echo $pageTemplate;
-        exit;
+        Flight::halt($httpCode, $pageTemplate);
     }
 
     /**
@@ -228,14 +228,8 @@ class AntCMS
             header('Content-Type: ' . $asset_mime_type);
             readfile($path);
         }
-        exit;
-    }
-
-    public static function redirect(string $url): void
-    {
-        $url = '//' . AntTools::repairURL(AntConfig::currentConfig('baseURL') . $url);
-        header("Location: $url");
-        exit;
+        CompressionBuffer::disable();
+        Flight::halt(200);
     }
 
     public static function getThemeConfig(string|null $theme = null)

@@ -5,6 +5,7 @@ use AntCMS\AntAuth;
 use AntCMS\AntCMS;
 use AntCMS\AntTwig;
 use AntCMS\AntUsers;
+use Flight;
 
 class ProfilePlugin extends AntPlugin
 {
@@ -28,14 +29,16 @@ class ProfilePlugin extends AntPlugin
         switch ($currentStep) {
             case 'firsttime':
                 if (file_exists(antUsersList)) {
-                    AntCMS::redirect('/admin');
+                    Flight::redirect('/admin');
+                    exit;
                 }
                 echo $this->antTwig->renderWithSubLayout('profile_firstTime', $params);
                 break;
 
             case 'submitfirst':
                 if (file_exists(antUsersList)) {
-                    AntCMS::redirect('/admin');
+                    Flight::redirect('/admin');
+                    exit;
                 }
 
                 if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['display-name'])) {
@@ -45,18 +48,19 @@ class ProfilePlugin extends AntPlugin
                         'name' => $_POST['display-name'],
                     ];
                     AntUsers::setupFirstUser($data);
-                    AntCMS::redirect('/admin');
+                    Flight::redirect('/admin');
                 } else {
-                    AntCMS::redirect('/profile/firsttime');
+                    Flight::redirect('/profile/firsttime');
                 }
-                break;
+                exit;
 
             case 'edit':
                 $this->antAuth->checkAuth();
                 $user = AntUsers::getUserPublicalKeys($this->antAuth->getUsername());
 
                 if (!$user) {
-                    AntCMS::redirect('/profile');
+                    Flight::redirect('/profile');
+                    exit;
                 }
 
                 $user['username'] = $this->antAuth->getUsername();
@@ -70,7 +74,8 @@ class ProfilePlugin extends AntPlugin
                 $user = AntUsers::getUserPublicalKeys($this->antAuth->getUsername());
 
                 if (!$user) {
-                    AntCMS::redirect('/profile');
+                    Flight::redirect('/profile');
+                    exit;
                 }
 
                 $user['username'] = $this->antAuth->getUsername();
@@ -92,8 +97,8 @@ class ProfilePlugin extends AntPlugin
                 }
 
                 AntUsers::updateUser($this->antAuth->getUsername(), $data);
-                AntCMS::redirect('/profile');
-                break;
+                Flight::redirect('/profile');
+                exit;
 
             case 'logout':
                 $this->antAuth->invalidateSession();

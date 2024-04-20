@@ -2,6 +2,8 @@
 
 namespace AntCMS;
 
+use Flight;
+
 class AntUsers
 {
     public static function getUser($username)
@@ -24,12 +26,13 @@ class AntUsers
         return $user;
     }
 
-    public static function getUsers()
+    public static function getUsers(): array
     {
         if (file_exists(antUsersList)) {
             return AntYaml::parseFile(antUsersList);
         } else {
-            AntCMS::redirect('/profile/firsttime');
+            Flight::redirect('/profile/firsttime');
+            exit;
         }
     }
 
@@ -100,7 +103,8 @@ class AntUsers
     public static function setupFirstUser(array $data): bool
     {
         if (file_exists(antUsersList)) {
-            AntCMS::redirect('/');
+            Flight::redirect('/');
+            exit;
         }
 
         $data['username'] = trim($data['username']);

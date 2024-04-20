@@ -2,6 +2,8 @@
 
 namespace AntCMS;
 
+use Flight;
+
 class AntRouting
 {
     private array $uriExploded;
@@ -48,7 +50,7 @@ class AntRouting
 
         if (!$isHttps) {
             $url = 'https://' . AntTools::repairURL($this->baseUrl . $this->requestUri);
-            header('Location: ' . $url);
+            Flight::redirect($url);
             exit;
         }
     }

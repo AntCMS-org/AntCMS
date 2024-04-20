@@ -14,6 +14,7 @@
         "elgigi/commonmark-emoji": "^2.0",
         "embed/embed": "^4.4",
         "flightphp/core": "^3.8",
+        "hostbybelle/compressionbuffer": "^1.0",
         "league/commonmark": "^2.3",
         "nyholm/psr7": "^1.8",
         "shapecode/twig-string-loader": "^1.1",
@@ -21,6 +22,9 @@
         "symfony/cache": "^6.0",
         "symfony/yaml": "^6.0",
         "twig/twig": "^3.5"
+    },
+    "replace": {
+        "symfony/polyfill-mbstring": "*"
     },
     "authors": [
         {
