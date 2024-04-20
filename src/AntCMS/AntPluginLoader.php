@@ -7,9 +7,9 @@ use AntCMS\AntTools;
 class AntPluginLoader
 {
     /** @return array<mixed>  */
-    public function loadPlugins()
+    public function loadPlugins(): array
     {
-        $plugins = array();
+        $plugins = [];
 
         $files = AntTools::getFileList(antPluginPath, null, true);
 

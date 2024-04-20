@@ -5,8 +5,8 @@ namespace AntCMS;
 abstract class AntPlugin
 {
     /**
-     * @param array<string> $route 
-     * @return mixed 
+     * @param array<string> $route
+     * @return mixed
      */
     public function handlePluginRoute(array $route)
     {
@@ -14,5 +14,5 @@ abstract class AntPlugin
     }
 
     /** @return string  */
-    abstract function getName();
+    abstract public function getName();
 }

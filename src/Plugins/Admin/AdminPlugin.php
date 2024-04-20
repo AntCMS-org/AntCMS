@@ -22,17 +22,17 @@ class AdminPlugin extends AntPlugin
     }
 
     /**
-     * @param array<string> $route 
+     * @param array<string> $route
      * @return void
      */
     public function handlePluginRoute(array $route)
     {
         $currentStep = $route[0] ?? 'none';
 
-        $this->auth = new AntAuth;
+        $this->auth = new AntAuth();
         $this->auth->checkAuth();
 
-        $this->antCMS = new AntCMS;
+        $this->antCMS = new AntCMS();
         $this->AntTwig = new AntTwig();
 
         array_shift($route);
@@ -41,12 +41,15 @@ class AdminPlugin extends AntPlugin
             case 'config':
                 $this->configureAntCMS($route);
 
+                // no break
             case 'pages':
                 $this->managePages($route);
 
+                // no break
             case 'users':
                 $this->userManagement($route);
 
+                // no break
             default:
                 $params = [
                     'AntCMSTitle' => 'AntCMS Admin Dashboard',
@@ -62,8 +65,8 @@ class AdminPlugin extends AntPlugin
     }
 
     /**
-     * @param array<string> $route 
-     * @return never 
+     * @param array<string> $route
+     * @return never
      */
     private function configureAntCMS(array $route)
     {
@@ -73,12 +76,7 @@ class AdminPlugin extends AntPlugin
 
         $currentConfig = AntConfig::currentConfig();
         $currentConfigFile = file_get_contents(antConfigFile);
-        $params = array(
-            'AntCMSTitle' => 'AntCMS Configuration',
-            'AntCMSDescription' => 'The AntCMS configuration screen',
-            'AntCMSAuthor' => 'AntCMS',
-            'AntCMSKeywords' => '',
-        );
+        $params = ['AntCMSTitle' => 'AntCMS Configuration', 'AntCMSDescription' => 'The AntCMS configuration screen', 'AntCMSAuthor' => 'AntCMS', 'AntCMSKeywords' => ''];
 
         switch ($route[0] ?? 'none') {
             case 'edit':
@@ -112,7 +110,7 @@ class AdminPlugin extends AntPlugin
                                 $currentConfig[$key][$subkey] = implode(', ', $subvalue);
                             }
                         }
-                    } else if (is_bool($value)) {
+                    } elseif (is_bool($value)) {
                         $currentConfig[$key] = ($value) ? 'true' : 'false';
                     }
                 }
@@ -125,18 +123,13 @@ class AdminPlugin extends AntPlugin
     }
 
     /**
-     * @param array<string> $route 
-     * @return never 
+     * @param array<string> $route
+     * @return never
      */
     private function managePages(array $route)
     {
         $pages = AntPages::getPages();
-        $params = array(
-            'AntCMSTitle' => 'AntCMS Page Management',
-            'AntCMSDescription' => 'The AntCMS page management screen',
-            'AntCMSAuthor' => 'AntCMS',
-            'AntCMSKeywords' => '',
-        );
+        $params = ['AntCMSTitle' => 'AntCMS Page Management', 'AntCMSDescription' => 'The AntCMS page management screen', 'AntCMSAuthor' => 'AntCMS', 'AntCMSKeywords' => ''];
 
         switch ($route[0] ?? 'none') {
             case 'regenerate':
@@ -247,12 +240,7 @@ class AdminPlugin extends AntPlugin
             $this->antCMS->renderException("You are not permitted to visit this page.");
         }
 
-        $params = array(
-            'AntCMSTitle' => 'AntCMS User Management',
-            'AntCMSDescription' => 'The AntCMS user management screen',
-            'AntCMSAuthor' => 'AntCMS',
-            'AntCMSKeywords' => '',
-        );
+        $params = ['AntCMSTitle' => 'AntCMS User Management', 'AntCMSDescription' => 'The AntCMS user management screen', 'AntCMSAuthor' => 'AntCMS', 'AntCMSKeywords' => ''];
 
         switch ($route[0] ?? 'none') {
             case 'add':
@@ -318,10 +306,7 @@ class AdminPlugin extends AntPlugin
         exit;
     }
 
-    /** 
-     * @return string 
-     */
-    private function boolToWord(bool $value)
+    private function boolToWord(bool $value): string
     {
         return $value ? 'true' : 'false';
     }

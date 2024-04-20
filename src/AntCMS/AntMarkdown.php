@@ -21,8 +21,8 @@ use Symfony\Contracts\Cache\ItemInterface;
 
 class AntMarkdown
 {
-    /** 
-     * @return string 
+    /**
+     * @return string
      */
     public static function renderMarkdown(string $md)
     {
@@ -63,9 +63,7 @@ class AntMarkdown
             $environment->addExtension(new DefaultAttributesExtension());
 
             $markdownConverter = new MarkdownConverter($environment);
-
-            $renderedContent = $markdownConverter->convert($md);
-            return $renderedContent;
+            return $markdownConverter->convert($md);
         });
     }
 }

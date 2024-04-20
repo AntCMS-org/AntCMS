@@ -4,8 +4,6 @@ namespace AntCMS;
 
 class AntRouting
 {
-    private string $baseUrl;
-    private string $requestUri;
     private array $uriExploded;
 
     private array $indexes = ['/', '/index.php', '/index.html', '', 'index.php', 'index.html'];
@@ -14,11 +12,9 @@ class AntRouting
      * @param string $baseUrl The base site URL. Ex: domain.com
      * @param string $requestUri The current request URI. Ex: /page/example
      */
-    public function __construct(string $baseUrl, string $requestUri)
+    public function __construct(private string $baseUrl, private string $requestUri)
     {
-        $this->baseUrl = $baseUrl;
-        $this->requestUri = $requestUri;
-        $this->setExplodedUri($requestUri);
+        $this->setExplodedUri($this->requestUri);
     }
 
     /**
@@ -33,7 +29,7 @@ class AntRouting
     /**
      * Used to add to the start of the request URI. Primarially used for plugin routing.
      * For example: this is used internally to rewrite /profile/edit to /plugin/profile/edit
-     * 
+     *
      * @param string $append What to append to the start of the request URI.
      */
     public function requestUriUnshift(string $append): void
@@ -60,7 +56,7 @@ class AntRouting
     /**
      * Used to check if the current request URI matches a specified route.
      * Supports using '*' as a wild-card. Ex: '/admin/*' will match '/admin/somthing' and '/admin'
-     * 
+     *
      * @param string $uri The Route to compare against the current URI.
      */
     public function checkMatch(string $uri): bool
@@ -83,8 +79,8 @@ class AntRouting
         return true;
     }
 
-    /** 
-     * Attempts to detect what plugin is associated with the current URI and then routes to the matching one. 
+    /**
+     * Attempts to detect what plugin is associated with the current URI and then routes to the matching one.
      */
     public function routeToPlugin(): void
     {
@@ -104,7 +100,7 @@ class AntRouting
 
         // plugin not found
         header("HTTP/1.0 404 Not Found");
-        echo ("Error 404");
+        echo("Error 404");
         exit;
     }
 

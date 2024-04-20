@@ -9,13 +9,13 @@ include_once 'Includes' . DIRECTORY_SEPARATOR . 'Include.php';
 
 class MarkdownTest extends TestCase
 {
-    public function testCanRenderMarkdown()
+    public function testCanRenderMarkdown(): void
     {
         $result = trim(AntMarkdown::renderMarkdown("# Test Content!"));
         $this->assertEquals('<h1>Test Content!</h1>', $result);
     }
 
-    public function testMarkdownIsFast()
+    public function testMarkdownIsFast(): void
     {
         $markdown = file_get_contents(antContentPath . DIRECTORY_SEPARATOR . 'index.md');
         $totalTime = 0;
@@ -34,15 +34,13 @@ class MarkdownTest extends TestCase
 
         $averageTime = $totalTime / 10;
 
-        $callback = new Callback(static function ($averageTime) {
-            return $averageTime < 0.015;
-        });
+        $callback = new Callback(static fn ($averageTime): bool => $averageTime < 0.015);
 
         $this->assertThat($averageTime, $callback, 'AntMarkdown::renderMarkdown took too long on average!');
     }
 
 
-    public function testMarkdownCacheWorks()
+    public function testMarkdownCacheWorks(): void
     {
         $markdown = file_get_contents(antContentPath . DIRECTORY_SEPARATOR . 'index.md');
         $currentConfig = AntConfig::currentConfig();

@@ -8,7 +8,7 @@ include_once 'Includes' . DIRECTORY_SEPARATOR . 'Include.php';
 
 class PagesTest extends TestCase
 {
-    public function testGetGenerateAndGetPages()
+    public function testGetGenerateAndGetPages(): void
     {
         AntPages::generatePages();
         $result = AntPages::getPages();
@@ -17,8 +17,9 @@ class PagesTest extends TestCase
         $this->assertIsArray($result);
     }
 
-    public function testGetNavigation(){
-        $antCMS = new AntCMS;
+    public function testGetNavigation(): void
+    {
+        $antCMS = new AntCMS();
         $pageTemplate = $antCMS->getThemeTemplate();
         $navLayout = $antCMS->getThemeTemplate('nav');
 

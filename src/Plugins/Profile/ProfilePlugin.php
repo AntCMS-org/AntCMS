@@ -14,8 +14,8 @@ class ProfilePlugin extends AntPlugin
 
     public function handlePluginRoute(array $route)
     {
-        $this->antAuth = new AntAuth;
-        $this->antTwig = new AntTwig;
+        $this->antAuth = new AntAuth();
+        $this->antTwig = new AntTwig();
         $currentStep = $route[0] ?? 'none';
 
         $params = [

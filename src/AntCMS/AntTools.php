@@ -4,14 +4,14 @@ namespace AntCMS;
 
 class AntTools
 {
-    /** 
-     * @return array<string> 
+    /**
+     * @return array<string>
      */
-    public static function getFileList(string $dir, ?string $extension = null, ?bool $returnPath = false)
+    public static function getFileList(string $dir, ?string $extension = null, ?bool $returnPath = false): array
     {
         $dir = new \RecursiveDirectoryIterator($dir);
         $iterator = new \RecursiveIteratorIterator($dir);
-        $files = array();
+        $files = [];
         foreach ($iterator as $file) {
             if (pathinfo($file, PATHINFO_EXTENSION) == $extension || $extension == null) {
                 $files[] = ($returnPath) ? $file->getPathname() : $file->getFilename();
@@ -21,8 +21,8 @@ class AntTools
         return $files;
     }
 
-    /** 
-     * @return string 
+    /**
+     * @return string
      */
     public static function repairFilePath(string $path)
     {
@@ -66,7 +66,7 @@ class AntTools
         return AntTools::repairFilePath($pagePath);
     }
 
-    public static function valuesNotNull(array $required, array $actual)
+    public static function valuesNotNull(array $required, array $actual): bool
     {
         foreach ($required as $key) {
             if (!key_exists($key, $actual) or is_null($actual[$key])) {

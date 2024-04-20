@@ -22,7 +22,7 @@ class SitemapPlugin extends AntPlugin
             $domElement->setAttribute('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
             $domDocument->appendChild($domElement);
 
-            $urls = array();
+            $urls = [];
             foreach ($pages as $key => $value) {
                 $urls[$key]['url'] = $value['functionalPagePath'];
                 $urls[$key]['lastchange'] = date('Y-m-d', filemtime($value['fullPagePath']));

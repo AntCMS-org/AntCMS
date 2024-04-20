@@ -16,7 +16,7 @@ class AntPages
     public static function generatePages()
     {
         $pages = AntTools::getFileList(antContentPath, 'md', true);
-        $pageList = array();
+        $pageList = [];
 
         foreach ($pages as $page) {
             $page = AntTools::repairFilePath($page);
@@ -35,14 +35,9 @@ class AntPages
                 $pageFunctionalPath = substr($pageFunctionalPath, 0, -5);
             }
 
-            $currentPage = array(
-                'pageTitle' => $pageHeader['title'],
-                'fullPagePath' => $page,
-                'functionalPagePath' => ($pageFunctionalPath == DIRECTORY_SEPARATOR) ? DIRECTORY_SEPARATOR : rtrim($pageFunctionalPath, DIRECTORY_SEPARATOR),
-                'showInNav' => true,
-            );
+            $currentPage = ['pageTitle' => $pageHeader['title'], 'fullPagePath' => $page, 'functionalPagePath' => ($pageFunctionalPath == DIRECTORY_SEPARATOR) ? DIRECTORY_SEPARATOR : rtrim($pageFunctionalPath, DIRECTORY_SEPARATOR), 'showInNav' => true];
 
-            // Move the index page to the first item in the page list, so it appears as the first item in the navbar. 
+            // Move the index page to the first item in the page list, so it appears as the first item in the navbar.
             if ($pageFunctionalPath == DIRECTORY_SEPARATOR) {
                 array_unshift($pageList, $currentPage);
             } else {
@@ -64,7 +59,7 @@ class AntPages
     public static function generateNavigation(string $navTemplate = '', string $currentPage = ''): string
     {
         $pages = AntPages::getPages();
-        $antCache = new AntCache;
+        $antCache = new AntCache();
 
         $theme = AntConfig::currentConfig('activeTheme');
         $cacheKey = $antCache->createCacheKey(json_encode($pages), $theme . $currentPage);
@@ -77,15 +72,14 @@ class AntPages
                 $pages[$key]['url'] = $url;
                 $pages[$key]['active'] = $currentPage == $page['functionalPagePath'];
 
-                //Remove pages that are hidden from the nav from the array before sending it to twig. 
+                //Remove pages that are hidden from the nav from the array before sending it to twig.
                 if (!(bool)$page['showInNav']) {
                     unset($pages[$key]);
                 }
             }
 
             $antTwig = new AntTwig();
-            $navHTML = $antTwig->renderWithTiwg($navTemplate, array('pages' => $pages));
-            return $navHTML;
+            return $antTwig->renderWithTiwg($navTemplate, ['pages' => $pages]);
         });
     }
 }

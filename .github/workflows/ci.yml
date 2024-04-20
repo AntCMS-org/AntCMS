@@ -1,4 +1,4 @@
-name: Unit Tests
+name: CI
 
 on:
   push:
@@ -7,11 +7,11 @@ on:
     branches: [main]
 
 jobs:
-  build-test:
+  unit-tests:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php_version: [8.0, 8.1, 8.2, 8.3]
+        php_version: [8.0, 8.1, 8.2, 8.3, 8.4]
 
     steps:
       - uses: actions/checkout@v4
@@ -24,3 +24,15 @@ jobs:
       - run: cp ./tests/Includes/Config.yaml ./src/Config/Config.yaml
 
       - run: php src/Vendor/bin/phpunit tests 
+
+  PHPStan:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      - uses: php-actions/composer@v6
+      - uses: php-actions/phpstan@v3
+        with:
+          configuration: phpstan.neon
+          memory_limit: 256M
+          version: latest
