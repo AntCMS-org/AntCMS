@@ -15,11 +15,16 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: php-actions/composer@v6
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
         with:
-          dev: yes
-          php_version: ${{ matrix.php_version }}
-          php_extensions: apcu
+          php-version: ${{ matrix.php_version }}
+          tools: composer:v2
+          extensions: apcu
+          
+      - name: Install Dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
       - run: cp ./tests/Includes/Config.yaml ./src/Config/Config.yaml
 
