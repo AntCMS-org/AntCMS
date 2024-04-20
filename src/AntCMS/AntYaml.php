@@ -4,23 +4,19 @@ namespace AntCMS;
 
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
-use Symfony\Contracts\Cache\ItemInterface;
 
 class AntYaml
 {
-    public static function parseFile(string $file, bool $fileCache = false): array
+    private static array $yamlCache = [];
+
+    public static function parseFile(string $path): array
     {
-        if ($fileCache) {
-            $antCache = new Cache('filesystem');
-        } else {
-            $antCache = new Cache();
+        $cacheKey = hash('crc32', $path);
+        if (!isset(self::$yamlCache[$cacheKey])) {
+            self::$yamlCache[$cacheKey] = Yaml::parseFile($path);
         }
 
-        $cacheKey = $antCache->createCacheKeyFile($file, 'yaml');
-        return $antCache->get($cacheKey, function (ItemInterface $item) use ($file): array {
-            $item->expiresAfter(Cache::$defaultLifespan / 7);
-            return Yaml::parseFile($file);
-        });
+        return self::$yamlCache[$cacheKey];
     }
 
     /**
