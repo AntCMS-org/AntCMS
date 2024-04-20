@@ -8,7 +8,7 @@ use AntCMS\AntConfig;
 
 class AntCMS
 {
-    protected $antTwig;
+    protected \AntCMS\AntTwig $antTwig;
 
     public function __construct()
     {
@@ -21,7 +21,7 @@ class AntCMS
      * @param string $page The name of the page to be rendered
      * @return string The rendered HTML of the page
      */
-    public function renderPage(string $page)
+    public function renderPage(string $page): string
     {
         $start_time = hrtime(true);
         $content = $this->getPage($page);
@@ -59,7 +59,7 @@ class AntCMS
      * @param string $currentPage optional - What page is the active page.
      * @return string the default page layout
      */
-    public static function getPageLayout(string $theme = null, string $currentPage = '', string | null $template = null)
+    public static function getPageLayout(string $theme = null, string $currentPage = '', string | null $template = null): string
     {
         $layout = empty($template) ? 'default' : $template;
         $pageTemplate = self::getThemeTemplate($layout, $theme);
@@ -74,7 +74,7 @@ class AntCMS
      * @param string $exceptionString An optional parameter to define a custom string to be displayed along side the exception.
      * @return never
      */
-    public function renderException(string $exceptionCode, int $httpCode = 404, string $exceptionString = 'That request caused an exception to be thrown.')
+    public function renderException(string $exceptionCode, int $httpCode = 404, string $exceptionString = 'That request caused an exception to be thrown.'): void
     {
         $exceptionString .= " (Code {$exceptionCode})";
         $pageTemplate = self::getPageLayout();
@@ -98,7 +98,7 @@ class AntCMS
     /**
      * @return array<mixed>|false
      */
-    public function getPage(string $page)
+    public function getPage(string $page): array|false
     {
         $page = strtolower($page);
         $pagePath = AntTools::convertFunctionaltoFullpath($page);
@@ -219,10 +219,7 @@ class AntCMS
         return AntConfig::currentConfig('siteInfo');
     }
 
-    /**
-     * @return void
-     */
-    public function serveContent(string $path)
+    public function serveContent(string $path): void
     {
         if (!file_exists($path)) {
             $this->renderException('404');
@@ -234,7 +231,7 @@ class AntCMS
         exit;
     }
 
-    public static function redirect(string $url)
+    public static function redirect(string $url): void
     {
         $url = '//' . AntTools::repairURL(AntConfig::currentConfig('baseURL') . $url);
         header("Location: $url");

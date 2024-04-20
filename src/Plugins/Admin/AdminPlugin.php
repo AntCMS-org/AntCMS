@@ -23,9 +23,8 @@ class AdminPlugin extends AntPlugin
 
     /**
      * @param array<string> $route
-     * @return void
      */
-    public function handlePluginRoute(array $route)
+    public function handlePluginRoute(array $route): void
     {
         $currentStep = $route[0] ?? 'none';
 
@@ -68,7 +67,7 @@ class AdminPlugin extends AntPlugin
      * @param array<string> $route
      * @return never
      */
-    private function configureAntCMS(array $route)
+    private function configureAntCMS(array $route): void
     {
         if ($this->auth->getRole() != 'admin') {
             $this->antCMS->renderException("You are not permitted to visit this page.");
@@ -126,7 +125,7 @@ class AdminPlugin extends AntPlugin
      * @param array<string> $route
      * @return never
      */
-    private function managePages(array $route)
+    private function managePages(array $route): void
     {
         $pages = AntPages::getPages();
         $params = ['AntCMSTitle' => 'AntCMS Page Management', 'AntCMSDescription' => 'The AntCMS page management screen', 'AntCMSAuthor' => 'AntCMS', 'AntCMSKeywords' => ''];
@@ -234,7 +233,7 @@ class AdminPlugin extends AntPlugin
         exit;
     }
 
-    private function userManagement(array $route)
+    private function userManagement(array $route): void
     {
         if ($this->auth->getRole() != 'admin') {
             $this->antCMS->renderException("You are not permitted to visit this page.");

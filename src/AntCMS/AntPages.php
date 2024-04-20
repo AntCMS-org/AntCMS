@@ -12,8 +12,7 @@ use Symfony\Contracts\Cache\ItemInterface;
 
 class AntPages
 {
-    /** @return void  */
-    public static function generatePages()
+    public static function generatePages(): void
     {
         $pages = AntTools::getFileList(antContentPath, 'md', true);
         $pageList = [];

@@ -21,10 +21,7 @@ class AntTools
         return $files;
     }
 
-    /**
-     * @return string
-     */
-    public static function repairFilePath(string $path)
+    public static function repairFilePath(string $path): string
     {
         $newPath = realpath($path);
         if (!$newPath) {
@@ -43,7 +40,7 @@ class AntTools
      * @param string $url The URL to repair. Note: this function will not work correctly if the URL provided has its own protocol (like HTTS://).
      * @return string The repaired URL
      */
-    public static function repairURL(string $url)
+    public static function repairURL(string $url): string
     {
         $newURL = str_replace('\\\\', '/', $url);
         $newURL = str_replace('\\', '/', $newURL);
@@ -51,7 +48,7 @@ class AntTools
         return str_replace('//', '/', $newURL);
     }
 
-    public static function convertFunctionaltoFullpath(string $path)
+    public static function convertFunctionaltoFullpath(string $path): string
     {
         $pagePath = AntTools::repairFilePath(antContentPath . '/' . $path);
 

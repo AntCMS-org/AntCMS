@@ -33,7 +33,7 @@ class AntUsers
         }
     }
 
-    public static function addUser($data): bool
+    public static function addUser(array $data): bool
     {
         $data['username'] = trim($data['username']);
         $data['name'] = trim($data['name']);
@@ -56,7 +56,7 @@ class AntUsers
         return AntYaml::saveFile(antUsersList, $users);
     }
 
-    public static function updateUser($username, $newData): bool
+    public static function updateUser($username, array $newData): bool
     {
         foreach ($newData as $key => $value) {
             if (empty($value)) {
@@ -97,7 +97,7 @@ class AntUsers
         return AntYaml::saveFile(antUsersList, $users);
     }
 
-    public static function setupFirstUser($data): bool
+    public static function setupFirstUser(array $data): bool
     {
         if (file_exists(antUsersList)) {
             AntCMS::redirect('/');

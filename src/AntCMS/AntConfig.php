@@ -7,7 +7,7 @@ use Exception;
 
 class AntConfig
 {
-    private static $ConfigKeys = [
+    private static array $ConfigKeys = [
         'siteInfo',
         'forceHTTPS',
         'activeTheme',
@@ -19,9 +19,8 @@ class AntConfig
 
     /**
      * Generates the default config file and saves it.
-     * @return void
      */
-    public static function generateConfig()
+    public static function generateConfig(): void
     {
         $defaultOptions = [
             'siteInfo' => [

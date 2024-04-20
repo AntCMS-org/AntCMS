@@ -12,7 +12,7 @@ class ProfilePlugin extends AntPlugin
     protected $antTwig;
 
 
-    public function handlePluginRoute(array $route)
+    public function handlePluginRoute(array $route): void
     {
         $this->antAuth = new AntAuth();
         $this->antTwig = new AntTwig();

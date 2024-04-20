@@ -11,5 +11,5 @@ return RectorConfig::configure()
     ])
     ->withSkipPath(__DIR__ . '/src/Vendor')
     ->withDeadCodeLevel(42)
-    ->withTypeCoverageLevel(20)
+    ->withTypeCoverageLevel(37)
     ->withPhpSets();

@@ -35,10 +35,8 @@ class AntAuth
      * Check if the user is authenticated using the credentials in the config file.
      * If the plain text password in the config file is still present, it will be hashed and the config file will be updated.
      * If the user is not authenticated, it will call AntAuth::requireAuth()
-     *
-     * @return void
      */
-    public function checkAuth()
+    public function checkAuth(): void
     {
         $username = $_SERVER['PHP_AUTH_USER'] ?? null;
         $password = $_SERVER['PHP_AUTH_PW'] ?? null;
@@ -74,10 +72,8 @@ class AntAuth
 
     /**
      * Send an authentication challenge to the browser, with the realm set to the site title in config.
-     *
-     * @return void
      */
-    private function requireAuth()
+    private function requireAuth(): void
     {
         setcookie("auth", "valid");
 
@@ -88,7 +84,7 @@ class AntAuth
         exit;
     }
 
-    public function invalidateSession()
+    public function invalidateSession(): void
     {
         $this->authenticated = false;
         $this->requireAuth();

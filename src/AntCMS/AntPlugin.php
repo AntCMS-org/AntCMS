@@ -6,9 +6,8 @@ abstract class AntPlugin
 {
     /**
      * @param array<string> $route
-     * @return mixed
      */
-    public function handlePluginRoute(array $route)
+    public function handlePluginRoute(array $route): void
     {
         die("Plugin did not define a handlePluginRoute function");
     }
