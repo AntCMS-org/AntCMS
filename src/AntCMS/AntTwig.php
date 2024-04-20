@@ -6,7 +6,7 @@ use AntCMS\AntConfig;
 
 class AntTwig
 {
-    protected $twigEnvironment;
+    protected \Twig\Environment $twigEnvironment;
     protected $theme;
 
     public function __construct(string $theme = null)
@@ -23,10 +23,10 @@ class AntTwig
             'debug' => AntConfig::currentConfig('debug'),
         ]);
 
-        $this->twigEnvironment->addExtension(new \AntCMS\AntTwigFilters);
+        $this->twigEnvironment->addExtension(new \AntCMS\AntTwigFilters());
     }
 
-    public function renderWithSubLayout(string $layout, array $params = array())
+    public function renderWithSubLayout(string $layout, array $params = []): string
     {
         $subLayout = AntCMS::getThemeTemplate($layout, $this->theme);
         $mainLayout = AntCMS::getPageLayout($this->theme);
@@ -38,7 +38,7 @@ class AntTwig
         return $this->twigEnvironment->render($mainLayout, $params);
     }
 
-    public function renderWithTiwg(string $content = '', array $params = array())
+    public function renderWithTiwg(string $content = '', array $params = []): string
     {
         $siteInfo = AntCMS::getSiteInfo();
         $params['AntCMSSiteTitle'] = $siteInfo['siteTitle'];

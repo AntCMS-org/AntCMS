@@ -6,7 +6,7 @@ use AntCMS\AntTools;
 
 class RobotstxtPlugin extends AntPlugin
 {
-    public function handlePluginRoute(array $route)
+    public function handlePluginRoute(array $route): void
     {
         $protocol = AntConfig::currentConfig('forceHTTPS') ? 'https' : 'http';
         $baseURL = AntConfig::currentConfig('baseURL');

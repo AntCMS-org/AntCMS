@@ -8,7 +8,7 @@ include_once 'Includes' . DIRECTORY_SEPARATOR . 'Include.php';
 
 class CMSTest extends TestCase
 {
-    public function testgetSiteInfo()
+    public function testgetSiteInfo(): void
     {
         $siteInfo = AntCMS::getSiteInfo();
 
@@ -17,11 +17,11 @@ class CMSTest extends TestCase
         $this->assertEquals('AntCMS', $siteInfo['siteTitle']);
     }
 
-    public function testRenderPage()
+    public function testRenderPage(): void
     {
         AntPages::generatePages();
 
-        $antCMS = new AntCMS;
+        $antCMS = new AntCMS();
         $pagePath = '/index.md';
         $result = $antCMS->renderPage($pagePath);
 
@@ -29,21 +29,21 @@ class CMSTest extends TestCase
         $this->assertIsString($result);
     }
 
-    public function testGetPageLayout()
+    public function testGetPageLayout(): void
     {
         //We need to generate the Pages.yaml file so that the nav list can be generated.
         AntPages::generatePages();
 
-        $antCMS = new AntCMS;
+        $antCMS = new AntCMS();
         $pageLayout = $antCMS->getPageLayout();
 
         $this->assertNotEmpty($pageLayout);
         $this->assertIsString($pageLayout);
     }
 
-    public function testGetPage()
+    public function testGetPage(): void
     {
-        $antCMS = new AntCMS;
+        $antCMS = new AntCMS();
         $result = $antCMS->getPage('/index.md');
 
         $this->assertNotEmpty($result);
@@ -55,27 +55,27 @@ class CMSTest extends TestCase
         $this->assertArrayHasKey('keywords', $result);
     }
 
-    public function testGetPageFailed()
+    public function testGetPageFailed(): void
     {
-        $antCMS = new AntCMS;
+        $antCMS = new AntCMS();
         $result = $antCMS->getPage('/thisdoesnotexist.md');
 
         $this->assertEquals(false, $result);
         $this->assertIsBool($result);
     }
 
-    public function testGetThemeTemplate()
+    public function testGetThemeTemplate(): void
     {
-        $antCMS = new AntCMS;
+        $antCMS = new AntCMS();
         $result = $antCMS->getThemeTemplate();
 
         $this->assertNotEmpty($result);
         $this->assertIsString($result);
     }
 
-    public function testGetThemeTemplateFallback()
+    public function testGetThemeTemplateFallback(): void
     {
-        $antCMS = new AntCMS;
+        $antCMS = new AntCMS();
         $result = $antCMS->getThemeTemplate('atemplatethatjusdoesntexist');
 
         $this->assertNotEmpty($result);

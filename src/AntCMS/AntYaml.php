@@ -23,8 +23,8 @@ class AntYaml
         });
     }
 
-    /** 
-     * @param array<mixed> $data 
+    /**
+     * @param array<mixed> $data
      */
     public static function saveFile(string $file, array $data): bool
     {
@@ -32,8 +32,8 @@ class AntYaml
         return (bool) file_put_contents($file, $yaml);
     }
 
-    /** 
-     * @return array<mixed>|null 
+    /**
+     * @return array<mixed>|null
      */
     public static function parseYaml(string $yaml): ?array
     {

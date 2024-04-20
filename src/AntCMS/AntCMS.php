@@ -8,7 +8,7 @@ use AntCMS\AntConfig;
 
 class AntCMS
 {
-    protected $antTwig;
+    protected \AntCMS\AntTwig $antTwig;
 
     public function __construct()
     {
@@ -21,17 +21,17 @@ class AntCMS
      * @param string $page The name of the page to be rendered
      * @return string The rendered HTML of the page
      */
-    public function renderPage(string $page)
+    public function renderPage(string $page): string
     {
         $start_time = hrtime(true);
         $content = $this->getPage($page);
-        $themeConfig = Self::getThemeConfig();
+        $themeConfig = self::getThemeConfig();
 
         if (!$content || !is_array($content)) {
             $this->renderException("404");
         }
 
-        $pageTemplate = $this->getPageLayout(null, $page, $content['template']);
+        $pageTemplate = static::getPageLayout(null, $page, $content['template']);
 
         $params = [
             'AntCMSTitle' => $content['title'],
@@ -54,12 +54,12 @@ class AntCMS
 
     /**
      * Returns the default layout of the active theme unless otherwise specified.
-     * 
+     *
      * @param string|null $theme optional - the theme to get the page layout for.
      * @param string $currentPage optional - What page is the active page.
      * @return string the default page layout
      */
-    public static function getPageLayout(string $theme = null, string $currentPage = '', string | null $template = null)
+    public static function getPageLayout(string $theme = null, string $currentPage = '', string | null $template = null): string
     {
         $layout = empty($template) ? 'default' : $template;
         $pageTemplate = self::getThemeTemplate($layout, $theme);
@@ -68,13 +68,13 @@ class AntCMS
 
     /**
      * Render an exception page with the provided exception code.
-     * 
+     *
      * @param string $exceptionCode The exception code to be displayed on the error page
      * @param int $httpCode The HTTP response code to return, 404 by default.
-     * @param string $exceptionString An optional parameter to define a custom string to be displayed along side the exception. 
-     * @return never 
+     * @param string $exceptionString An optional parameter to define a custom string to be displayed along side the exception.
+     * @return never
      */
-    public function renderException(string $exceptionCode, int $httpCode = 404, string $exceptionString = 'That request caused an exception to be thrown.')
+    public function renderException(string $exceptionCode, int $httpCode = 404, string $exceptionString = 'That request caused an exception to be thrown.'): void
     {
         $exceptionString .= " (Code {$exceptionCode})";
         $pageTemplate = self::getPageLayout();
@@ -95,10 +95,10 @@ class AntCMS
         exit;
     }
 
-    /** 
-     * @return array<mixed>|false 
+    /**
+     * @return array<mixed>|false
      */
-    public function getPage(string $page)
+    public function getPage(string $page): array|false
     {
         $page = strtolower($page);
         $pagePath = AntTools::convertFunctionaltoFullpath($page);
@@ -118,11 +118,10 @@ class AntCMS
         }
     }
 
-    /** 
-     * @param string|null $theme 
-     * @return string 
+    /**
+     * @param string|null $theme
      */
-    public static function getThemeTemplate(string $layout = 'default', string $theme = null)
+    public static function getThemeTemplate(string $layout = 'default', string $theme = null): string
     {
         $theme ??= AntConfig::currentConfig('activeTheme');
 
@@ -132,7 +131,7 @@ class AntCMS
 
         $basePath = AntTools::repairFilePath(antThemePath . DIRECTORY_SEPARATOR . $theme);
 
-        if (strpos($layout, '_') !== false) {
+        if (str_contains($layout, '_')) {
             $layoutPrefix = explode('_', $layout)[0];
             $templatePath = $basePath . DIRECTORY_SEPARATOR . 'Templates' . DIRECTORY_SEPARATOR . $layoutPrefix;
             $defaultTemplates = AntTools::repairFilePath(antThemePath . '/Default/Templates' . '/' . $layoutPrefix);
@@ -175,10 +174,10 @@ class AntCMS
         return $template;
     }
 
-    /** 
-     * @return array<mixed> 
+    /**
+     * @return array<mixed>
      */
-    public static function getPageHeaders(string $pageContent)
+    public static function getPageHeaders(string $pageContent): array
     {
         $pageHeaders = [
             'title' => 'AntCMS',
@@ -220,10 +219,7 @@ class AntCMS
         return AntConfig::currentConfig('siteInfo');
     }
 
-    /** 
-     * @return void 
-     */
-    public function serveContent(string $path)
+    public function serveContent(string $path): void
     {
         if (!file_exists($path)) {
             $this->renderException('404');
@@ -235,7 +231,7 @@ class AntCMS
         exit;
     }
 
-    public static function redirect(string $url)
+    public static function redirect(string $url): void
     {
         $url = '//' . AntTools::repairURL(AntConfig::currentConfig('baseURL') . $url);
         header("Location: $url");
@@ -244,7 +240,7 @@ class AntCMS
 
     public static function getThemeConfig(string|null $theme = null)
     {
-        $theme = $theme ?? AntConfig::currentConfig('activeTheme');
+        $theme ??= AntConfig::currentConfig('activeTheme');
 
         if (!is_dir(antThemePath . '/' . $theme)) {
             $theme = 'Default';

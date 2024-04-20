@@ -9,7 +9,7 @@ use AntCMS\AntConfig;
 
 class AntTwigFilters extends AbstractExtension
 {
-    public function getFilters()
+    public function getFilters(): array
     {
         return [
             new TwigFilter('absUrl', [$this, 'absUrl']),

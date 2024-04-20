@@ -12,10 +12,10 @@ class ProfilePlugin extends AntPlugin
     protected $antTwig;
 
 
-    public function handlePluginRoute(array $route)
+    public function handlePluginRoute(array $route): void
     {
-        $this->antAuth = new AntAuth;
-        $this->antTwig = new AntTwig;
+        $this->antAuth = new AntAuth();
+        $this->antTwig = new AntTwig();
         $currentStep = $route[0] ?? 'none';
 
         $params = [

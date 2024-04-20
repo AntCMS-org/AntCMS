@@ -17,7 +17,7 @@ class AntCache
      */
     public function __construct(null|string $mode = null)
     {
-        $mode = $mode ?? AntConfig::currentConfig('cacheMode') ?? 'auto';
+        $mode ??= AntConfig::currentConfig('cacheMode') ?? 'auto';
         if ($mode == 'auto') {
             if (extension_loaded('apcu') && apcu_enabled()) {
                 $mode = 'apcu';
@@ -26,19 +26,12 @@ class AntCache
             }
         }
 
-        switch ($mode) {
-            case 'none':
-                $this->CacheInterface = new ArrayAdapter(0, true, 0, 150);
-                break;
-            case 'filesystem':
-                $this->CacheInterface = new FilesystemAdapter('', self::$defaultLifespan, AntCachePath);
-                break;
-            case 'apcu':
-                $this->CacheInterface = new ApcuAdapter('AntCMS_' . hash('md5', __DIR__), self::$defaultLifespan);
-                break;
-            default:
-                throw new \Exception("Invalid cache type. Must be 'auto', 'filesystem', 'apcu', or 'none'.");
-        }
+        $this->CacheInterface = match ($mode) {
+            'none' => new ArrayAdapter(0, true, 0, 150),
+            'filesystem' => new FilesystemAdapter('', self::$defaultLifespan, AntCachePath),
+            'apcu' => new ApcuAdapter('AntCMS_' . hash('md5', __DIR__), self::$defaultLifespan),
+            default => throw new \Exception("Invalid cache type. Must be 'auto', 'filesystem', 'apcu', or 'none'."),
+        };
     }
 
     public function __call(string $name, array $arguments): mixed
@@ -53,12 +46,12 @@ class AntCache
     /**
      * Generates a unique cache key for the associated content and a salt value.
      * The salt is used to ensure that each cache key is unique to each component, even if multiple components are using the same source content but caching different results.
-     * 
+     *
      * @param string $content The content to generate a cache key for.
      * @param string $salt An optional salt value to use in the cache key generation. Default is 'cache'.
      * @return string The generated cache key.
      */
-    public function createCacheKey(string $content, string $salt = 'cache')
+    public function createCacheKey(string $content, string $salt = 'cache'): string
     {
         return hash(self::getHashAlgo(), $content . $salt);
     }
@@ -66,12 +59,12 @@ class AntCache
     /**
      * Generates a unique cache key for a file and a salt value.
      * The salt is used to ensure that each cache key is unique to each component, even if multiple components are using the same source content but caching different results.
-     * 
+     *
      * @param string $filePath The file path to create a cache key for.
      * @param string $salt An optional salt value to use in the cache key generation. Default is 'cache'.
      * @return string The generated cache key.
      */
-    public function createCacheKeyFile(string $filePath, string $salt = 'cache')
+    public function createCacheKeyFile(string $filePath, string $salt = 'cache'): string
     {
         return hash_file(self::getHashAlgo(), $filePath) . $salt;
     }

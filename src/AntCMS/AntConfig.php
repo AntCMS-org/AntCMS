@@ -7,7 +7,7 @@ use Exception;
 
 class AntConfig
 {
-    private static $ConfigKeys = [
+    private static array $ConfigKeys = [
         'siteInfo',
         'forceHTTPS',
         'activeTheme',
@@ -19,9 +19,8 @@ class AntConfig
 
     /**
      * Generates the default config file and saves it.
-     * @return void
      */
-    public static function generateConfig()
+    public static function generateConfig(): void
     {
         $defaultOptions = [
             'siteInfo' => [
@@ -37,12 +36,12 @@ class AntConfig
             ]
         ];
 
-        Self::saveConfig($defaultOptions);
+        self::saveConfig($defaultOptions);
     }
 
     /**
      * Retrieves the current configuration from the AntCMS config file.
-     * 
+     *
      * @param string|null $key The key of the configuration item to retrieve. Use dot notation to specify nested keys.
      * @return mixed The configuration array or a specific value if the key is specified.
      */
@@ -59,9 +58,9 @@ class AntConfig
     }
 
     /**
-     * @param array<mixed> $array 
-     * @param array<mixed> $keys 
-     * @return mixed 
+     * @param array<mixed> $array
+     * @param array<mixed> $keys
+     * @return mixed
      */
     private static function getArrayValue(array $array, array $keys)
     {
@@ -76,12 +75,11 @@ class AntConfig
 
     /**
      * Saves the AntCMS configuration
-     * 
+     *
      * @param array<mixed> $config The config data to be saved.
-     * @return bool
      * @throws exception
      */
-    public static function saveConfig(array $config)
+    public static function saveConfig(array $config): bool
     {
         foreach (self::$ConfigKeys as $ConfigKey) {
             if (!array_key_exists($ConfigKey, $config)) {

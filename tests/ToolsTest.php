@@ -7,21 +7,10 @@ include_once 'Includes' . DIRECTORY_SEPARATOR . 'Include.php';
 
 class ToolsTest extends TestCase
 {
-    public function testPathRepair()
+    public function testPathRepair(): void
     {
-        $badPaths = array(
-            "path/to/file",
-            "path\\to\\file",
-            "/path/to/file",
-            "C:\\path\\to\\file",
-            "~/path/to/file"
-        );
-        $expectedPaths = array(
-            "path" . DIRECTORY_SEPARATOR . "to" . DIRECTORY_SEPARATOR . "file",
-            "path" . DIRECTORY_SEPARATOR . "to" . DIRECTORY_SEPARATOR . "file", DIRECTORY_SEPARATOR . "path" . DIRECTORY_SEPARATOR . "to" . DIRECTORY_SEPARATOR . "file",
-            "C:" . DIRECTORY_SEPARATOR . "path" . DIRECTORY_SEPARATOR . "to" . DIRECTORY_SEPARATOR . "file",
-            "~" . DIRECTORY_SEPARATOR . "path" . DIRECTORY_SEPARATOR . "to" . DIRECTORY_SEPARATOR . "file"
-        );
+        $badPaths = ["path/to/file", "path\\to\\file", "/path/to/file", "C:\\path\\to\\file", "~/path/to/file"];
+        $expectedPaths = ["path" . DIRECTORY_SEPARATOR . "to" . DIRECTORY_SEPARATOR . "file", "path" . DIRECTORY_SEPARATOR . "to" . DIRECTORY_SEPARATOR . "file", DIRECTORY_SEPARATOR . "path" . DIRECTORY_SEPARATOR . "to" . DIRECTORY_SEPARATOR . "file", "C:" . DIRECTORY_SEPARATOR . "path" . DIRECTORY_SEPARATOR . "to" . DIRECTORY_SEPARATOR . "file", "~" . DIRECTORY_SEPARATOR . "path" . DIRECTORY_SEPARATOR . "to" . DIRECTORY_SEPARATOR . "file"];
 
 
         foreach ($badPaths as $index => $badPath) {
@@ -30,24 +19,10 @@ class ToolsTest extends TestCase
         }
     }
 
-    public function testUrlRepair()
+    public function testUrlRepair(): void
     {
-        $badUrls = array(
-            "example.com\path",
-            "example.com/path/",
-            "example.com//path",
-            "example.com/path/to//file",
-            "example.com\path\\to\\file",
-            "example.com\path\\to\\file?download=yes"
-        );
-        $expectedUrls = array(
-            "example.com/path",
-            "example.com/path/",
-            "example.com/path",
-            "example.com/path/to/file",
-            "example.com/path/to/file",
-            "example.com/path/to/file?download=yes"
-        );
+        $badUrls = ["example.com\path", "example.com/path/", "example.com//path", "example.com/path/to//file", "example.com\path\\to\\file", "example.com\path\\to\\file?download=yes"];
+        $expectedUrls = ["example.com/path", "example.com/path/", "example.com/path", "example.com/path/to/file", "example.com/path/to/file", "example.com/path/to/file?download=yes"];
 
 
         foreach ($badUrls as $index => $badurl) {
@@ -56,7 +31,7 @@ class ToolsTest extends TestCase
         }
     }
 
-    public function testGetFileList()
+    public function testGetFileList(): void
     {
         $basedir = dirname(__DIR__, 1);
         $srcdir = $basedir . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Content';
@@ -66,7 +41,7 @@ class ToolsTest extends TestCase
         $this->assertNotEmpty($result);
     }
 
-    public function testGetFileListWithExtension()
+    public function testGetFileListWithExtension(): void
     {
         $basedir = dirname(__DIR__, 1);
         $srcdir = $basedir . DIRECTORY_SEPARATOR . 'src';

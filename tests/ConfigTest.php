@@ -7,25 +7,18 @@ include_once 'Includes' . DIRECTORY_SEPARATOR . 'Include.php';
 
 class ConfigTest extends TestCase
 {
-    public function testGetConfig()
+    public function testGetConfig(): void
     {
         $config = AntConfig::currentConfig();
 
-        $expectedKeys = array(
-            'siteInfo',
-            'forceHTTPS',
-            'activeTheme',
-            'cacheMode',
-            'debug',
-            'baseURL'
-        );
+        $expectedKeys = ['siteInfo', 'forceHTTPS', 'activeTheme', 'cacheMode', 'debug', 'baseURL'];
 
         foreach ($expectedKeys as $expectedKey) {
             $this->assertArrayHasKey($expectedKey, $config, "Expected key '{$expectedKey}' not found in config array");
         }
     }
 
-    public function testSaveConfigFailed()
+    public function testSaveConfigFailed(): void
     {
         $Badconfig = [
             'cacheMode' => 'none',
@@ -40,7 +33,7 @@ class ConfigTest extends TestCase
         $this->assertNotTrue($result);
     }
 
-    public function testSaveConfigPassed()
+    public function testSaveConfigPassed(): void
     {
         $currentConfig = AntConfig::currentConfig();
 

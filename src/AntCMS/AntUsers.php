@@ -6,18 +6,17 @@ class AntUsers
 {
     public static function getUser($username)
     {
-        $users = Self::getUsers();
+        $users = self::getUsers();
         return $users[$username] ?? null;
     }
 
     /** This function is used to get all the info of a user that is safe to publicize.
      *  Mostly intended to create an array that can be safely passed to twig and used to display user information on the page, such as their name.
-     * @param mixed $username 
-     * @return array 
+     * @return array
      */
-    public static function getUserPublicalKeys($username)
+    public static function getUserPublicalKeys(mixed $username)
     {
-        $user = Self::getUser($username);
+        $user = self::getUser($username);
         if (is_null($user)) {
             return [];
         }
@@ -34,13 +33,13 @@ class AntUsers
         }
     }
 
-    public static function addUser($data)
+    public static function addUser(array $data): bool
     {
         $data['username'] = trim($data['username']);
         $data['name'] = trim($data['name']);
-        Self::validateUsername($data['username']);
+        self::validateUsername($data['username']);
 
-        $users = Self::getUsers();
+        $users = self::getUsers();
         if (key_exists($data['username'], $users)) {
             return false;
         }
@@ -57,7 +56,7 @@ class AntUsers
         return AntYaml::saveFile(antUsersList, $users);
     }
 
-    public static function updateUser($username, $newData)
+    public static function updateUser($username, array $newData): bool
     {
         foreach ($newData as $key => $value) {
             if (empty($value)) {
@@ -85,7 +84,7 @@ class AntUsers
 
         if (isset($newData['username'])) {
             $newData['username'] = trim($newData['username']);
-            Self::validateUsername($newData['username']);
+            self::validateUsername($newData['username']);
             if (key_exists($newData['username'], $users) && $newData['username'] !== $username) {
                 throw new \Exception("Username is already taken.");
             }
@@ -98,7 +97,7 @@ class AntUsers
         return AntYaml::saveFile(antUsersList, $users);
     }
 
-    public static function setupFirstUser($data)
+    public static function setupFirstUser(array $data): bool
     {
         if (file_exists(antUsersList)) {
             AntCMS::redirect('/');
@@ -106,7 +105,7 @@ class AntUsers
 
         $data['username'] = trim($data['username']);
         $data['name'] = trim($data['name']);
-        Self::validateUsername($data['username']);
+        self::validateUsername($data['username']);
 
         $users = [
             $data['username'] => [
@@ -119,7 +118,7 @@ class AntUsers
         return AntYaml::saveFile(antUsersList, $users);
     }
 
-    private static function validateUsername($username)
+    private static function validateUsername($username): bool
     {
         $pattern = '/^[\p{L}\p{M}*0-9]+$/u';
         if (!preg_match($pattern, $username)) {
