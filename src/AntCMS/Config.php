@@ -48,7 +48,7 @@ class Config
     public static function currentConfig(?string $key = null)
     {
         // FS cache enabled to save ~10% of the time to deliver the file page.
-        $config = AntYaml::parseFile(antConfigFile, true);
+        $config = AntYaml::parseFile(antConfigFile);
         if (is_null($key)) {
             return $config;
         } else {

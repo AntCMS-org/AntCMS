@@ -27,7 +27,6 @@ class AntCMS
      */
     public function renderPage(string $page): string
     {
-        $start_time = hrtime(true);
         $content = $this->getPage($page);
         $themeConfig = self::getThemeConfig();
 
@@ -46,14 +45,7 @@ class AntCMS
             'ThemeConfig' => $themeConfig['config'] ?? [],
         ];
 
-        $pageTemplate = $this->antTwig->renderWithTiwg($pageTemplate, $params);
-        $elapsed_time = (hrtime(true) - $start_time) / 1e+6;
-
-        if (Config::currentConfig('debug')) {
-            $pageTemplate = str_replace('<!--AntCMS-Debug-->', '<p>Took ' . $elapsed_time . ' milliseconds to render the page. </p>', $pageTemplate);
-        }
-
-        return $pageTemplate;
+        return $this->antTwig->renderWithTiwg($pageTemplate, $params);
     }
 
     /**

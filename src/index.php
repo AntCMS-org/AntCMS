@@ -8,6 +8,7 @@ use AntCMS\Enviroment;
 
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
+define('START', hrtime(true));
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'Vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'Bootstrap.php';
@@ -23,7 +24,21 @@ if (!file_exists(antPagesList)) {
 $antCms = new AntCMS();
 
 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$baseUrl = Config::currentConfig('baseURL');
+
+// Add a response body callback to display mem usage and time spent
+Flight::response()->addResponseBodyCallback(function ($body) {
+    if (Config::currentConfig('debug')) {
+        $elapsed_time = round((hrtime(true) - START) / 1e+6, 2);
+        $mem_usage = round(memory_get_peak_usage() / 1e+6, 2);
+        return str_replace(
+            '<!--AntCMS-Debug-->',
+            "<p>Took $elapsed_time milliseconds to render the page with $mem_usage MB of RAM used.</p>",
+            $body
+        );
+    } else {
+        return $body;
+    }
+});
 
 // Setup CompressionBuffer & enable it in Flight
 CompressionBuffer::setUp();
