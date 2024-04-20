@@ -2,8 +2,8 @@
 
 namespace AntCMS;
 
-use AntCMS\AntCache;
-use AntCMS\AntConfig;
+use AntCMS\Cache;
+use AntCMS\Config;
 use AntCMS\AntCMS;
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\Autolink\AutolinkExtension;
@@ -19,19 +19,19 @@ use SimonVomEyser\CommonMarkExtension\LazyImageExtension;
 use League\CommonMark\Extension\DefaultAttributes\DefaultAttributesExtension;
 use Symfony\Contracts\Cache\ItemInterface;
 
-class AntMarkdown
+class Markdown
 {
     /**
      * @return string
      */
     public static function renderMarkdown(string $md)
     {
-        $antCache = new AntCache();
+        $antCache = new Cache();
         $cacheKey = $antCache->createCacheKey($md, 'markdown');
-        $config = AntConfig::currentConfig();
+        $config = Config::currentConfig();
 
         return $antCache->get($cacheKey, function (ItemInterface $item) use ($config, $md): string {
-            $item->expiresAfter(AntCache::$defaultLifespan / 7);
+            $item->expiresAfter(Cache::$defaultLifespan / 7);
 
             $defaultAttributes = [];
             $themeConfig = AntCMS::getThemeConfig();

@@ -2,9 +2,9 @@
 
 namespace AntCMS;
 
-use AntCMS\AntConfig;
+use AntCMS\Config;
 
-class AntAuth
+class Auth
 {
     protected $role;
     protected $username;
@@ -22,7 +22,7 @@ class AntAuth
 
     public function getName()
     {
-        $currentUser = AntUsers::getUser($this->username);
+        $currentUser = Users::getUser($this->username);
         return $currentUser['name'];
     }
 
@@ -41,7 +41,7 @@ class AntAuth
         $username = $_SERVER['PHP_AUTH_USER'] ?? null;
         $password = $_SERVER['PHP_AUTH_PW'] ?? null;
 
-        $currentUser = AntUsers::getUser($username);
+        $currentUser = Users::getUser($username);
 
         if (is_null($currentUser) || empty($currentUser['password'])) {
             $this->requireAuth();
@@ -49,10 +49,10 @@ class AntAuth
 
         // If the stored password is not hashed in the config, hash it
         if ($password == $currentUser['password']) {
-            AntUsers::updateUser($username, ['password' => $password]);
+            Users::updateUser($username, ['password' => $password]);
 
             // Reload the user info so the next step can pass
-            $currentUser = AntUsers::getUser($username);
+            $currentUser = Users::getUser($username);
         }
 
         // If the credentials are still set valid, but the auth cookie has expired, re-require authentication.
@@ -77,7 +77,7 @@ class AntAuth
     {
         setcookie("auth", "valid");
 
-        $siteInfo = AntConfig::currentConfig('siteInfo');
+        $siteInfo = Config::currentConfig('siteInfo');
         header('WWW-Authenticate: Basic realm="' . $siteInfo['siteTitle'] . '"');
         http_response_code(401);
         echo 'You must enter a valid username and password to access this page';

@@ -11,14 +11,14 @@ class AntYaml
     public static function parseFile(string $file, bool $fileCache = false): array
     {
         if ($fileCache) {
-            $antCache = new AntCache('filesystem');
+            $antCache = new Cache('filesystem');
         } else {
-            $antCache = new AntCache();
+            $antCache = new Cache();
         }
 
         $cacheKey = $antCache->createCacheKeyFile($file);
         return $antCache->get($cacheKey, function (ItemInterface $item) use ($file): array {
-            $item->expiresAfter(AntCache::$defaultLifespan / 7);
+            $item->expiresAfter(Cache::$defaultLifespan / 7);
             return Yaml::parseFile($file);
         });
     }

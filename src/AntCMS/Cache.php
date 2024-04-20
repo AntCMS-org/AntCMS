@@ -2,12 +2,12 @@
 
 namespace AntCMS;
 
-use AntCMS\AntConfig;
+use AntCMS\Config;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Cache\Adapter\ApcuAdapter;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
-class AntCache
+class Cache
 {
     private ?object $CacheInterface = null;
     public static $defaultLifespan = 604_800; // 1 week
@@ -17,7 +17,7 @@ class AntCache
      */
     public function __construct(null|string $mode = null)
     {
-        $mode ??= AntConfig::currentConfig('cacheMode') ?? 'auto';
+        $mode ??= Config::currentConfig('cacheMode') ?? 'auto';
         if ($mode == 'auto') {
             if (extension_loaded('apcu') && apcu_enabled()) {
                 $mode = 'apcu';

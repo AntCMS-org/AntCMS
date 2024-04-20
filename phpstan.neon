@@ -8,5 +8,5 @@ parameters:
 		- src/Cache
 		- src/Plugins
 	ignoreErrors:
-		- '#^Call to an undefined method AntCMS\\AntCache\:\:get\(\)\.$#'
-		- '#^Call to an undefined method AntCMS\\AntCache\:\:purge\(\)\.$#'
+		- '#^Call to an undefined method AntCMS\\Cache\:\:get\(\)\.$#'
+		- '#^Call to an undefined method AntCMS\\Cache\:\:purge\(\)\.$#'

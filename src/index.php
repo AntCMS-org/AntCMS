@@ -1,6 +1,9 @@
 <?php
 
 use HostByBelle\CompressionBuffer;
+use AntCMS\AntCMS;
+use AntCMS\Config;
+use AntCMS\Enviroment;
 
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
@@ -8,27 +11,24 @@ ini_set('display_errors', '1');
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'Vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'Bootstrap.php';
 
-use AntCMS\AntCMS;
-use AntCMS\AntConfig;
-
 if (!file_exists(antConfigFile)) {
-    AntConfig::generateConfig();
+    Config::generateConfig();
 }
 
 if (!file_exists(antPagesList)) {
-    \AntCMS\AntPages::generatePages();
+    \AntCMS\Pages::generatePages();
 }
 
 $antCms = new AntCMS();
 
 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$baseUrl = AntConfig::currentConfig('baseURL');
+$baseUrl = Config::currentConfig('baseURL');
 
 // Setup CompressionBuffer & enable it in Flight
 CompressionBuffer::setUp();
 Flight::response()->addResponseBodyCallback([CompressionBuffer::class, 'handler']);
 
-if (AntConfig::currentConfig('forceHTTPS') && !Flight::request()->secure) {
+if (!Flight::request()->secure && !Enviroment::isCli() && Config::currentConfig('forceHTTPS')) {
     Flight::redirect('https://' . Flight::request()->host . Flight::request()->url);
     exit;
 }

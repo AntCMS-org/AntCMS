@@ -4,21 +4,21 @@ namespace AntCMS;
 
 use AntCMS\AntCMS;
 use AntCMS\AntYaml;
-use AntCMS\AntConfig;
-use AntCMS\AntCache;
-use AntCMS\AntTools;
-use AntCMS\AntTwig;
+use AntCMS\Config;
+use AntCMS\Cache;
+use AntCMS\Tools;
+use AntCMS\Twig;
 use Symfony\Contracts\Cache\ItemInterface;
 
-class AntPages
+class Pages
 {
     public static function generatePages(): void
     {
-        $pages = AntTools::getFileList(antContentPath, 'md', true);
+        $pages = Tools::getFileList(antContentPath, 'md', true);
         $pageList = [];
 
         foreach ($pages as $page) {
-            $page = AntTools::repairFilePath($page);
+            $page = Tools::repairFilePath($page);
             $pageContent = file_get_contents($page);
             $pageHeader = AntCMS::getPageHeaders($pageContent);
 
@@ -57,17 +57,17 @@ class AntPages
      */
     public static function generateNavigation(string $navTemplate = '', string $currentPage = ''): string
     {
-        $pages = AntPages::getPages();
-        $antCache = new AntCache();
+        $pages = Pages::getPages();
+        $antCache = new Cache();
 
-        $theme = AntConfig::currentConfig('activeTheme');
+        $theme = Config::currentConfig('activeTheme');
         $cacheKey = $antCache->createCacheKey(json_encode($pages), $theme . $currentPage);
 
         return $antCache->get($cacheKey, function (ItemInterface $item) use ($navTemplate, $currentPage, $pages): string {
-            $item->expiresAfter(AntCache::$defaultLifespan / 7);
-            $baseURL = AntConfig::currentConfig('baseURL');
+            $item->expiresAfter(Cache::$defaultLifespan / 7);
+            $baseURL = Config::currentConfig('baseURL');
             foreach ($pages as $key => $page) {
-                $url = "//" . AntTools::repairURL($baseURL . $page['functionalPagePath']);
+                $url = "//" . Tools::repairURL($baseURL . $page['functionalPagePath']);
                 $pages[$key]['url'] = $url;
                 $pages[$key]['active'] = $currentPage == $page['functionalPagePath'];
 
@@ -77,7 +77,7 @@ class AntPages
                 }
             }
 
-            $antTwig = new AntTwig();
+            $antTwig = new Twig();
             return $antTwig->renderWithTiwg($navTemplate, ['pages' => $pages]);
         });
     }

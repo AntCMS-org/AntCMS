@@ -1,6 +1,6 @@
 <?php
 
-use AntCMS\AntTools;
+use AntCMS\Tools;
 use PHPUnit\Framework\TestCase;
 
 include_once 'Includes' . DIRECTORY_SEPARATOR . 'Include.php';
@@ -14,7 +14,7 @@ class ToolsTest extends TestCase
 
 
         foreach ($badPaths as $index => $badPath) {
-            $goodPath = AntTools::repairFilePath($badPath);
+            $goodPath = Tools::repairFilePath($badPath);
             $this->assertEquals($expectedPaths[$index], $goodPath, "Expected '$expectedPaths[$index]' but got '{$goodPath}' for input '{$badPath}'");
         }
     }
@@ -26,7 +26,7 @@ class ToolsTest extends TestCase
 
 
         foreach ($badUrls as $index => $badurl) {
-            $goodUrl = AntTools::repairURL($badurl);
+            $goodUrl = Tools::repairURL($badurl);
             $this->assertEquals($expectedUrls[$index], $goodUrl, "Expected '$expectedUrls[$index]' but got '{$goodUrl}' for input '{$badurl}'");
         }
     }
@@ -36,7 +36,7 @@ class ToolsTest extends TestCase
         $basedir = dirname(__DIR__, 1);
         $srcdir = $basedir . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Content';
 
-        $result = AntTools::getFileList($srcdir);
+        $result = Tools::getFileList($srcdir);
 
         $this->assertNotEmpty($result);
     }
@@ -46,7 +46,7 @@ class ToolsTest extends TestCase
         $basedir = dirname(__DIR__, 1);
         $srcdir = $basedir . DIRECTORY_SEPARATOR . 'src';
 
-        $files = AntTools::getFileList($srcdir, 'md');
+        $files = Tools::getFileList($srcdir, 'md');
 
         foreach ($files as $file) {
             $this->assertEquals('md', pathinfo($file, PATHINFO_EXTENSION), "Expected file extension to be 'md', but got '" . pathinfo($file, PATHINFO_EXTENSION) . "' for file '{$file}'");

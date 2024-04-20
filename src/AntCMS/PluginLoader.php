@@ -2,20 +2,20 @@
 
 namespace AntCMS;
 
-use AntCMS\AntTools;
+use AntCMS\Tools;
 
-class AntPluginLoader
+class PluginLoader
 {
     /** @return array<mixed>  */
     public function loadPlugins(): array
     {
         $plugins = [];
 
-        $files = AntTools::getFileList(antPluginPath, null, true);
+        $files = Tools::getFileList(antPluginPath, null, true);
 
         foreach ($files as $file) {
             if (str_ends_with($file, "Plugin.php")) {
-                include_once AntTools::repairFilePath($file);
+                include_once Tools::repairFilePath($file);
                 $className = pathinfo($file, PATHINFO_FILENAME);
                 $plugins[] = new $className();
             }

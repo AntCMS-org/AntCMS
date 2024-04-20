@@ -4,7 +4,7 @@ namespace AntCMS;
 
 use Flight;
 
-class AntUsers
+class Users
 {
     public static function getUser($username)
     {
@@ -47,7 +47,7 @@ class AntUsers
             return false;
         }
 
-        if (!AntTools::valuesNotNull(['username', 'role', 'display-name', 'password'], $data)) {
+        if (!Tools::valuesNotNull(['username', 'role', 'display-name', 'password'], $data)) {
             return false;
         }
 

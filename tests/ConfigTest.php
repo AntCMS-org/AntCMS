@@ -1,6 +1,6 @@
 <?php
 
-use AntCMS\AntConfig;
+use AntCMS\Config;
 use PHPUnit\Framework\TestCase;
 
 include_once 'Includes' . DIRECTORY_SEPARATOR . 'Include.php';
@@ -9,7 +9,7 @@ class ConfigTest extends TestCase
 {
     public function testGetConfig(): void
     {
-        $config = AntConfig::currentConfig();
+        $config = Config::currentConfig();
 
         $expectedKeys = ['siteInfo', 'forceHTTPS', 'activeTheme', 'cacheMode', 'debug', 'baseURL'];
 
@@ -25,7 +25,7 @@ class ConfigTest extends TestCase
         ];
 
         try {
-            $result = AntConfig::saveConfig($Badconfig);
+            $result = Config::saveConfig($Badconfig);
         } catch (Exception $exception) {
             $result = $exception;
         }
@@ -35,10 +35,10 @@ class ConfigTest extends TestCase
 
     public function testSaveConfigPassed(): void
     {
-        $currentConfig = AntConfig::currentConfig();
+        $currentConfig = Config::currentConfig();
 
         try {
-            $result = AntConfig::saveConfig($currentConfig);
+            $result = Config::saveConfig($currentConfig);
         } catch (Exception $exception) {
             $result = $exception;
         }

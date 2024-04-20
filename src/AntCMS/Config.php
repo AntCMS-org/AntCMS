@@ -5,7 +5,7 @@ namespace AntCMS;
 use AntCMS\AntYaml;
 use Exception;
 
-class AntConfig
+class Config
 {
     private static array $ConfigKeys = [
         'siteInfo',

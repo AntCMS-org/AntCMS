@@ -4,10 +4,10 @@ namespace AntCMS;
 
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
-use AntCMS\AntTools;
-use AntCMS\AntConfig;
+use AntCMS\Tools;
+use AntCMS\Config;
 
-class AntTwigFilters extends AbstractExtension
+class TwigFilters extends AbstractExtension
 {
     public function getFilters(): array
     {
@@ -18,6 +18,6 @@ class AntTwigFilters extends AbstractExtension
 
     public function absUrl(string $relative): string
     {
-        return '//' . AntTools::repairURL(AntConfig::currentConfig('baseURL') . '/' . trim($relative));
+        return '//' . Tools::repairURL(Config::currentConfig('baseURL') . '/' . trim($relative));
     }
 }

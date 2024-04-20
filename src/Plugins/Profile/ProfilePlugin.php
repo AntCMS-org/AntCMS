@@ -1,13 +1,13 @@
 <?php
 
-use AntCMS\AntPlugin;
-use AntCMS\AntAuth;
+use AntCMS\Plugin;
+use AntCMS\Auth;
 use AntCMS\AntCMS;
-use AntCMS\AntTwig;
-use AntCMS\AntUsers;
+use AntCMS\Twig;
+use AntCMS\Users;
 use Flight;
 
-class ProfilePlugin extends AntPlugin
+class ProfilePlugin extends Plugin
 {
     protected $antAuth;
     protected $antTwig;
@@ -15,8 +15,8 @@ class ProfilePlugin extends AntPlugin
 
     public function handlePluginRoute(array $route): void
     {
-        $this->antAuth = new AntAuth();
-        $this->antTwig = new AntTwig();
+        $this->antAuth = new Auth();
+        $this->antTwig = new Twig();
         $currentStep = $route[0] ?? 'none';
 
         $params = [
@@ -47,7 +47,7 @@ class ProfilePlugin extends AntPlugin
                         'password' => $_POST['password'],
                         'name' => $_POST['display-name'],
                     ];
-                    AntUsers::setupFirstUser($data);
+                    Users::setupFirstUser($data);
                     Flight::redirect('/admin');
                 } else {
                     Flight::redirect('/profile/firsttime');
@@ -56,7 +56,7 @@ class ProfilePlugin extends AntPlugin
 
             case 'edit':
                 $this->antAuth->checkAuth();
-                $user = AntUsers::getUserPublicalKeys($this->antAuth->getUsername());
+                $user = Users::getUserPublicalKeys($this->antAuth->getUsername());
 
                 if (!$user) {
                     Flight::redirect('/profile');
@@ -71,7 +71,7 @@ class ProfilePlugin extends AntPlugin
 
             case 'resetpassword':
                 $this->antAuth->checkAuth();
-                $user = AntUsers::getUserPublicalKeys($this->antAuth->getUsername());
+                $user = Users::getUserPublicalKeys($this->antAuth->getUsername());
 
                 if (!$user) {
                     Flight::redirect('/profile');
@@ -96,7 +96,7 @@ class ProfilePlugin extends AntPlugin
                     }
                 }
 
-                AntUsers::updateUser($this->antAuth->getUsername(), $data);
+                Users::updateUser($this->antAuth->getUsername(), $data);
                 Flight::redirect('/profile');
                 exit;
 
@@ -111,7 +111,7 @@ class ProfilePlugin extends AntPlugin
 
             default:
                 $this->antAuth->checkAuth();
-                $params['user'] =  AntUsers::getUserPublicalKeys($this->antAuth->getUsername());
+                $params['user'] =  Users::getUserPublicalKeys($this->antAuth->getUsername());
                 echo $this->antTwig->renderWithSubLayout('profile_landing', $params);
         }
         exit;
