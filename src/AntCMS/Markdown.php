@@ -21,13 +21,10 @@ use Symfony\Contracts\Cache\ItemInterface;
 
 class Markdown
 {
-    /**
-     * @return string
-     */
-    public static function renderMarkdown(string $md)
+    public static function renderMarkdown(string $md, ?string $cacheKey = null): string
     {
         $antCache = new Cache();
-        $cacheKey = $antCache->createCacheKey($md, 'markdown');
+        $cacheKey ??= $antCache->createCacheKey($md, 'markdown');
         $config = Config::currentConfig();
 
         return $antCache->get($cacheKey, function (ItemInterface $item) use ($config, $md): string {
@@ -63,7 +60,7 @@ class Markdown
             $environment->addExtension(new DefaultAttributesExtension());
 
             $markdownConverter = new MarkdownConverter($environment);
-            return $markdownConverter->convert($md);
+            return $markdownConverter->convert($md)->__toString();
         });
     }
 }

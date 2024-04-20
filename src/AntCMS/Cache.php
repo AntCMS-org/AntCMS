@@ -66,7 +66,8 @@ class Cache
      */
     public function createCacheKeyFile(string $filePath, string $salt = 'cache'): string
     {
-        return hash_file(self::getHashAlgo(), $filePath) . $salt;
+        $differentiator = filemtime($filePath) ?: hash_file(self::getHashAlgo(), $filePath);
+        return hash(self::getHashAlgo(), $filePath) . ".$differentiator.$salt";
     }
 
     public static function getHashAlgo(): string

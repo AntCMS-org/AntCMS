@@ -4,6 +4,7 @@ $finder = (new PhpCsFixer\Finder())
     ->in(__DIR__)
     ->exclude([
         'src/Vendor',
+        'src/Cache',
     ])
 ;
 

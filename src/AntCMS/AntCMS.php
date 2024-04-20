@@ -10,11 +10,13 @@ use HostByBelle\CompressionBuffer;
 
 class AntCMS
 {
-    protected \AntCMS\Twig $antTwig;
+    protected Twig $antTwig;
+    protected Cache $cache;
 
     public function __construct()
     {
         $this->antTwig = new Twig();
+        $this->cache = new Cache();
     }
 
     /**
@@ -40,7 +42,7 @@ class AntCMS
             'AntCMSDescription' => $content['description'],
             'AntCMSAuthor' => $content['author'],
             'AntCMSKeywords' => $content['keywords'],
-            'AntCMSBody' => Markdown::renderMarkdown($content['content']),
+            'AntCMSBody' => Markdown::renderMarkdown($content['content'], $content['cacheKey']),
             'ThemeConfig' => $themeConfig['config'] ?? [],
         ];
 
@@ -110,7 +112,16 @@ class AntCMS
                 $pageHeaders = AntCMS::getPageHeaders($pageContent);
                 // Remove the AntCMS section from the content
                 $pageContent = preg_replace('/\A--AntCMS--.*?--AntCMS--/sm', '', $pageContent);
-                return ['content' => $pageContent, 'title' => $pageHeaders['title'], 'author' => $pageHeaders['author'], 'description' => $pageHeaders['description'], 'keywords' => $pageHeaders['keywords'], 'template' => $pageHeaders['template']];
+                return [
+                    'content' => $pageContent,
+                    'title' => $pageHeaders['title'],
+                    'author' => $pageHeaders['author'],
+                    'description' => $pageHeaders['description'],
+                    'keywords' => $pageHeaders['keywords'],
+                    'template' => $pageHeaders['template'],
+                    'lastMod' => filemtime($pagePath),
+                    'cacheKey' => $this->cache->createCacheKeyFile($pagePath, 'content'),
+                ];
             } catch (\Exception) {
                 return false;
             }

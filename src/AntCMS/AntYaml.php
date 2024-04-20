@@ -16,7 +16,7 @@ class AntYaml
             $antCache = new Cache();
         }
 
-        $cacheKey = $antCache->createCacheKeyFile($file);
+        $cacheKey = $antCache->createCacheKeyFile($file, 'yaml');
         return $antCache->get($cacheKey, function (ItemInterface $item) use ($file): array {
             $item->expiresAfter(Cache::$defaultLifespan / 7);
             return Yaml::parseFile($file);
