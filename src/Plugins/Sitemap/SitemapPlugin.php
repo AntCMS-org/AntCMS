@@ -1,18 +1,18 @@
 <?php
 
-use AntCMS\AntPlugin;
-use AntCMS\AntPages;
-use AntCMS\AntConfig;
-use AntCMS\AntTools;
+use AntCMS\Plugin;
+use AntCMS\Pages;
+use AntCMS\Config;
+use AntCMS\Tools;
 
-class SitemapPlugin extends AntPlugin
+class SitemapPlugin extends Plugin
 {
     public function handlePluginRoute(array $route): void
     {
-        $protocol = AntConfig::currentConfig('forceHTTPS') ? 'https' : 'http';
-        $baseURL = AntConfig::currentConfig('baseURL');
+        $protocol = Config::currentConfig('forceHTTPS') ? 'https' : 'http';
+        $baseURL = Config::currentConfig('baseURL');
 
-        $pages = AntPages::getPages();
+        $pages = Pages::getPages();
 
         if (extension_loaded('dom')) {
             $domDocument = new DOMDocument('1.0', 'UTF-8');
@@ -31,7 +31,7 @@ class SitemapPlugin extends AntPlugin
             foreach ($urls as $url) {
                 $element = $domDocument->createElement('url');
 
-                $loc = $domDocument->createElement('loc', $protocol . '://' . AntTools::repairURL($baseURL . $url['url']));
+                $loc = $domDocument->createElement('loc', $protocol . '://' . Tools::repairURL($baseURL . $url['url']));
                 $element->appendChild($loc);
 
                 $lastmod = $domDocument->createElement('lastmod', $url['lastchange']);

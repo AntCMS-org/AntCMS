@@ -7,5 +7,5 @@ $loader->addNamespace('AntCMS\\', __DIR__  . DIRECTORY_SEPARATOR . 'AntCMS');
 $loader->checkClassMap();
 $loader->register();
 
-$antCache = new \AntCMS\AntCache();
+$antCache = new \AntCMS\Cache();
 $antCache->purge();

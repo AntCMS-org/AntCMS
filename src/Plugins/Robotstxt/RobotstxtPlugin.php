@@ -1,21 +1,21 @@
 <?php
 
-use AntCMS\AntPlugin;
-use AntCMS\AntConfig;
-use AntCMS\AntTools;
+use AntCMS\Plugin;
+use AntCMS\Config;
+use AntCMS\Tools;
 
-class RobotstxtPlugin extends AntPlugin
+class RobotstxtPlugin extends Plugin
 {
     public function handlePluginRoute(array $route): void
     {
-        $protocol = AntConfig::currentConfig('forceHTTPS') ? 'https' : 'http';
-        $baseURL = AntConfig::currentConfig('baseURL');
+        $protocol = Config::currentConfig('forceHTTPS') ? 'https' : 'http';
+        $baseURL = Config::currentConfig('baseURL');
 
         $robotstxt = 'User-agent: *' . "\n";
         $robotstxt .= 'Disallow: /plugin/' . "\n";
         $robotstxt .= 'Disallow: /admin/' . "\n";
         $robotstxt .= 'Disallow: /profile/' . "\n";
-        $robotstxt .= 'Sitemap: ' . $protocol . '://' . AntTools::repairURL($baseURL . '/sitemap.xml' . "\n");
+        $robotstxt .= 'Sitemap: ' . $protocol . '://' . Tools::repairURL($baseURL . '/sitemap.xml' . "\n");
         header("Content-Type: text/plain");
         echo $robotstxt;
         exit;

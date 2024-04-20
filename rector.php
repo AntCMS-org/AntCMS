@@ -10,6 +10,7 @@ return RectorConfig::configure()
         __DIR__ . '/tests',
     ])
     ->withSkipPath(__DIR__ . '/src/Vendor')
+    ->withSkipPath(__DIR__ . '/src/Cache')
     ->withDeadCodeLevel(42)
     ->withTypeCoverageLevel(37)
     ->withPhpSets();

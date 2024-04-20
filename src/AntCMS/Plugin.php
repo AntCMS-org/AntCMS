@@ -2,7 +2,7 @@
 
 namespace AntCMS;
 
-abstract class AntPlugin
+abstract class Plugin
 {
     /**
      * @param array<string> $route

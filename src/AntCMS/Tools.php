@@ -2,7 +2,7 @@
 
 namespace AntCMS;
 
-class AntTools
+class Tools
 {
     /**
      * @return array<string>
@@ -50,7 +50,7 @@ class AntTools
 
     public static function convertFunctionaltoFullpath(string $path): string
     {
-        $pagePath = AntTools::repairFilePath(antContentPath . '/' . $path);
+        $pagePath = Tools::repairFilePath(antContentPath . '/' . $path);
 
         if (is_dir($pagePath)) {
             $pagePath .= '/index.md';
@@ -60,7 +60,7 @@ class AntTools
             $pagePath .= '.md';
         }
 
-        return AntTools::repairFilePath($pagePath);
+        return Tools::repairFilePath($pagePath);
     }
 
     public static function valuesNotNull(array $required, array $actual): bool

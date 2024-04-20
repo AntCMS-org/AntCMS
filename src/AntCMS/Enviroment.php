@@ -2,7 +2,7 @@
 
 namespace AntCMS;
 
-class AntEnviroment
+class Enviroment
 {
     public static function isCli(): bool
     {

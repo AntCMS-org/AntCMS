@@ -1,16 +1,16 @@
 <?php
 
 use AntCMS\AntCMS;
-use AntCMS\AntPlugin;
-use AntCMS\AntConfig;
-use AntCMS\AntPages;
+use AntCMS\Plugin;
+use AntCMS\Config;
+use AntCMS\Pages;
 use AntCMS\AntYaml;
-use AntCMS\AntAuth;
-use AntCMS\AntTools;
-use AntCMS\AntTwig;
-use AntCMS\AntUsers;
+use AntCMS\Auth;
+use AntCMS\Tools;
+use AntCMS\Twig;
+use AntCMS\Users;
 
-class AdminPlugin extends AntPlugin
+class AdminPlugin extends Plugin
 {
     protected $auth;
     protected $antCMS;
@@ -28,11 +28,11 @@ class AdminPlugin extends AntPlugin
     {
         $currentStep = $route[0] ?? 'none';
 
-        $this->auth = new AntAuth();
+        $this->auth = new Auth();
         $this->auth->checkAuth();
 
         $this->antCMS = new AntCMS();
-        $this->AntTwig = new AntTwig();
+        $this->AntTwig = new Twig();
 
         array_shift($route);
 
@@ -55,7 +55,7 @@ class AdminPlugin extends AntPlugin
                     'AntCMSDescription' => 'The AntCMS admin dashboard',
                     'AntCMSAuthor' => 'AntCMS',
                     'AntCMSKeywords' => '',
-                    'user' => AntUsers::getUserPublicalKeys($this->auth->getUsername()),
+                    'user' => Users::getUserPublicalKeys($this->auth->getUsername()),
 
                 ];
                 echo $this->AntTwig->renderWithSubLayout('admin_landing', $params);
@@ -73,7 +73,7 @@ class AdminPlugin extends AntPlugin
             $this->antCMS->renderException("You are not permitted to visit this page.");
         }
 
-        $currentConfig = AntConfig::currentConfig();
+        $currentConfig = Config::currentConfig();
         $currentConfigFile = file_get_contents(antConfigFile);
         $params = ['AntCMSTitle' => 'AntCMS Configuration', 'AntCMSDescription' => 'The AntCMS configuration screen', 'AntCMSAuthor' => 'AntCMS', 'AntCMSKeywords' => ''];
 
@@ -87,7 +87,8 @@ class AdminPlugin extends AntPlugin
 
             case 'save':
                 if (!$_POST['textarea']) {
-                    AntCMS::redirect('/admin/config');
+                    Flight::redirect('/admin/config');
+                    exit;
                 }
 
                 $yaml = AntYaml::parseYaml($_POST['textarea']);
@@ -95,8 +96,8 @@ class AdminPlugin extends AntPlugin
                     AntYaml::saveFile(antConfigFile, $yaml);
                 }
 
-                AntCMS::redirect('/admin/config');
-                break;
+                Flight::redirect('/admin/config');
+                exit;
 
             default:
                 foreach ($currentConfig as $key => $value) {
@@ -127,19 +128,19 @@ class AdminPlugin extends AntPlugin
      */
     private function managePages(array $route): void
     {
-        $pages = AntPages::getPages();
+        $pages = Pages::getPages();
         $params = ['AntCMSTitle' => 'AntCMS Page Management', 'AntCMSDescription' => 'The AntCMS page management screen', 'AntCMSAuthor' => 'AntCMS', 'AntCMSKeywords' => ''];
 
         switch ($route[0] ?? 'none') {
             case 'regenerate':
-                AntPages::generatePages();
-                AntCMS::redirect('/admin/pages');
+                Pages::generatePages();
+                Flight::redirect('/admin/pages');
                 exit;
 
             case 'edit':
                 if (!isset($_POST['newpage'])) {
                     array_shift($route);
-                    $pagePath = AntTools::convertFunctionaltoFullpath(implode('/', $route));
+                    $pagePath = Tools::convertFunctionaltoFullpath(implode('/', $route));
 
                     $page = file_get_contents($pagePath);
 
@@ -152,12 +153,12 @@ class AdminPlugin extends AntPlugin
                         $pagePath .= '.md';
                     }
 
-                    $pagePath = AntTools::repairFilePath($pagePath);
+                    $pagePath = Tools::repairFilePath($pagePath);
                     $name = $this->auth->getName();
                     $page = "--AntCMS--\nTitle: New Page Title\nAuthor: $name\nDescription: Description of this page.\nKeywords: Keywords\n--AntCMS--\n";
                 }
 
-                $params['AntCMSActionURL'] = '//' . AntConfig::currentConfig('baseURL') . "admin/pages/save/{$pagePath}";
+                $params['AntCMSActionURL'] = '//' . Config::currentConfig('baseURL') . "admin/pages/save/{$pagePath}";
                 $params['AntCMSTextAreaContent'] = $page;
 
                 echo $this->AntTwig->renderWithSubLayout('markdownEdit', $params);
@@ -165,24 +166,25 @@ class AdminPlugin extends AntPlugin
 
             case 'save':
                 array_shift($route);
-                $pagePath = AntTools::repairFilePath(antContentPath . '/' . implode('/', $route));
+                $pagePath = Tools::repairFilePath(antContentPath . '/' . implode('/', $route));
 
                 if (!isset($_POST['textarea'])) {
-                    AntCMS::redirect('/admin/pages');
+                    Flight::redirect('/admin/pages');
+                    exit;
                 }
 
                 file_put_contents($pagePath, $_POST['textarea']);
-                AntCMS::redirect('/admin/pages');
+                Flight::redirect('/admin/pages');
                 exit;
 
             case 'create':
-                $params['BaseURL'] = AntConfig::currentConfig('baseURL');
+                $params['BaseURL'] = Config::currentConfig('baseURL');
                 echo $this->AntTwig->renderWithSubLayout('admin_newPage', $params);
                 break;
 
             case 'delete':
                 array_shift($route);
-                $pagePath = AntTools::convertFunctionaltoFullpath(implode('/', $route));
+                $pagePath = Tools::convertFunctionaltoFullpath(implode('/', $route));
 
                 // Find the key associated with the functional page path, then remove it from our temp pages array
                 foreach ($pages as $key => $page) {
@@ -196,12 +198,12 @@ class AdminPlugin extends AntPlugin
                     AntYaml::saveFile(antPagesList, $pages);
                 }
 
-                AntCMS::redirect('/admin/pages');
-                break;
+                Flight::redirect('/admin/pages');
+                exit;
 
             case 'togglevisibility':
                 array_shift($route);
-                $pagePath = AntTools::convertFunctionaltoFullpath(implode('/', $route));
+                $pagePath = Tools::convertFunctionaltoFullpath(implode('/', $route));
 
                 foreach ($pages as $key => $page) {
                     if ($page['fullPagePath'] == $pagePath) {
@@ -210,14 +212,14 @@ class AdminPlugin extends AntPlugin
                 }
 
                 AntYaml::saveFile(antPagesList, $pages);
-                AntCMS::redirect('/admin/pages');
-                break;
+                Flight::redirect('/admin/pages');
+                exit;
 
             default:
                 foreach ($pages as $key => $page) {
-                    $pages[$key]['editurl'] = '//' . AntTools::repairURL(AntConfig::currentConfig('baseURL') . "/admin/pages/edit/" . $page['functionalPagePath']);
-                    $pages[$key]['deleteurl'] = '//' . AntTools::repairURL(AntConfig::currentConfig('baseURL') . "/admin/pages/delete/" . $page['functionalPagePath']);
-                    $pages[$key]['togglevisibility'] = '//' . AntTools::repairURL(AntConfig::currentConfig('baseURL') . "/admin/pages/togglevisibility/" . $page['functionalPagePath']);
+                    $pages[$key]['editurl'] = '//' . Tools::repairURL(Config::currentConfig('baseURL') . "/admin/pages/edit/" . $page['functionalPagePath']);
+                    $pages[$key]['deleteurl'] = '//' . Tools::repairURL(Config::currentConfig('baseURL') . "/admin/pages/delete/" . $page['functionalPagePath']);
+                    $pages[$key]['togglevisibility'] = '//' . Tools::repairURL(Config::currentConfig('baseURL') . "/admin/pages/togglevisibility/" . $page['functionalPagePath']);
                     $pages[$key]['isvisable'] = $this->boolToWord($page['showInNav']);
                 }
                 $params = [
@@ -247,10 +249,11 @@ class AdminPlugin extends AntPlugin
                 break;
 
             case 'edit':
-                $user = AntUsers::getUserPublicalKeys($route[1]);
+                $user = Users::getUserPublicalKeys($route[1]);
 
                 if (!$user) {
-                    AntCMS::redirect('/admin/users');
+                    Flight::redirect('/admin/users');
+                    exit;
                 }
 
                 $user['username'] = $route[1];
@@ -260,10 +263,11 @@ class AdminPlugin extends AntPlugin
                 break;
 
             case 'resetpassword':
-                $user = AntUsers::getUserPublicalKeys($route[1]);
+                $user = Users::getUserPublicalKeys($route[1]);
 
                 if (!$user) {
-                    AntCMS::redirect('/admin/users');
+                    Flight::redirect('/admin/users');
+                    exit;
                 }
 
                 $user['username'] = $route[1];
@@ -284,16 +288,16 @@ class AdminPlugin extends AntPlugin
                     }
                 }
 
-                AntUsers::updateUser($_POST['originalusername'], $data);
-                AntCMS::redirect('/admin/users');
-                break;
+                Users::updateUser($_POST['originalusername'], $data);
+                Flight::redirect('/admin/users');
+                exit;
             case 'savenew':
-                AntUsers::addUser($_POST);
-                AntCMS::redirect('/admin/users');
-                break;
+                Users::addUser($_POST);
+                Flight::redirect('/admin/users');
+                exit;
 
             default:
-                $users = AntUsers::getUsers();
+                $users = Users::getUsers();
                 foreach ($users as $key => $user) {
                     unset($users[$key]['password']);
                     $users[$key]['username'] = $key;

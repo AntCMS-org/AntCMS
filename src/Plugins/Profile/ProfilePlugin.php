@@ -1,12 +1,13 @@
 <?php
 
-use AntCMS\AntPlugin;
-use AntCMS\AntAuth;
+use AntCMS\Plugin;
+use AntCMS\Auth;
 use AntCMS\AntCMS;
-use AntCMS\AntTwig;
-use AntCMS\AntUsers;
+use AntCMS\Twig;
+use AntCMS\Users;
+use Flight;
 
-class ProfilePlugin extends AntPlugin
+class ProfilePlugin extends Plugin
 {
     protected $antAuth;
     protected $antTwig;
@@ -14,8 +15,8 @@ class ProfilePlugin extends AntPlugin
 
     public function handlePluginRoute(array $route): void
     {
-        $this->antAuth = new AntAuth();
-        $this->antTwig = new AntTwig();
+        $this->antAuth = new Auth();
+        $this->antTwig = new Twig();
         $currentStep = $route[0] ?? 'none';
 
         $params = [
@@ -28,14 +29,16 @@ class ProfilePlugin extends AntPlugin
         switch ($currentStep) {
             case 'firsttime':
                 if (file_exists(antUsersList)) {
-                    AntCMS::redirect('/admin');
+                    Flight::redirect('/admin');
+                    exit;
                 }
                 echo $this->antTwig->renderWithSubLayout('profile_firstTime', $params);
                 break;
 
             case 'submitfirst':
                 if (file_exists(antUsersList)) {
-                    AntCMS::redirect('/admin');
+                    Flight::redirect('/admin');
+                    exit;
                 }
 
                 if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['display-name'])) {
@@ -44,19 +47,20 @@ class ProfilePlugin extends AntPlugin
                         'password' => $_POST['password'],
                         'name' => $_POST['display-name'],
                     ];
-                    AntUsers::setupFirstUser($data);
-                    AntCMS::redirect('/admin');
+                    Users::setupFirstUser($data);
+                    Flight::redirect('/admin');
                 } else {
-                    AntCMS::redirect('/profile/firsttime');
+                    Flight::redirect('/profile/firsttime');
                 }
-                break;
+                exit;
 
             case 'edit':
                 $this->antAuth->checkAuth();
-                $user = AntUsers::getUserPublicalKeys($this->antAuth->getUsername());
+                $user = Users::getUserPublicalKeys($this->antAuth->getUsername());
 
                 if (!$user) {
-                    AntCMS::redirect('/profile');
+                    Flight::redirect('/profile');
+                    exit;
                 }
 
                 $user['username'] = $this->antAuth->getUsername();
@@ -67,10 +71,11 @@ class ProfilePlugin extends AntPlugin
 
             case 'resetpassword':
                 $this->antAuth->checkAuth();
-                $user = AntUsers::getUserPublicalKeys($this->antAuth->getUsername());
+                $user = Users::getUserPublicalKeys($this->antAuth->getUsername());
 
                 if (!$user) {
-                    AntCMS::redirect('/profile');
+                    Flight::redirect('/profile');
+                    exit;
                 }
 
                 $user['username'] = $this->antAuth->getUsername();
@@ -91,9 +96,9 @@ class ProfilePlugin extends AntPlugin
                     }
                 }
 
-                AntUsers::updateUser($this->antAuth->getUsername(), $data);
-                AntCMS::redirect('/profile');
-                break;
+                Users::updateUser($this->antAuth->getUsername(), $data);
+                Flight::redirect('/profile');
+                exit;
 
             case 'logout':
                 $this->antAuth->invalidateSession();
@@ -106,7 +111,7 @@ class ProfilePlugin extends AntPlugin
 
             default:
                 $this->antAuth->checkAuth();
-                $params['user'] =  AntUsers::getUserPublicalKeys($this->antAuth->getUsername());
+                $params['user'] =  Users::getUserPublicalKeys($this->antAuth->getUsername());
                 echo $this->antTwig->renderWithSubLayout('profile_landing', $params);
         }
         exit;

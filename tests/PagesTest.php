@@ -1,6 +1,6 @@
 <?php
 
-use AntCMS\AntPages;
+use AntCMS\Pages;
 use AntCMS\AntCMS;
 use PHPUnit\Framework\TestCase;
 
@@ -10,8 +10,8 @@ class PagesTest extends TestCase
 {
     public function testGetGenerateAndGetPages(): void
     {
-        AntPages::generatePages();
-        $result = AntPages::getPages();
+        Pages::generatePages();
+        $result = Pages::getPages();
 
         $this->assertNotEmpty($result);
         $this->assertIsArray($result);
@@ -23,7 +23,7 @@ class PagesTest extends TestCase
         $pageTemplate = $antCMS->getThemeTemplate();
         $navLayout = $antCMS->getThemeTemplate('nav');
 
-        $result = AntPages::generateNavigation($navLayout, $pageTemplate);
+        $result = Pages::generateNavigation($navLayout, $pageTemplate);
 
         $this->assertNotEmpty($result);
         $this->assertIsString($result);

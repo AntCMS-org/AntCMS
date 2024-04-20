@@ -2,17 +2,17 @@
 
 namespace AntCMS;
 
-use AntCMS\AntConfig;
+use AntCMS\Config;
 
-class AntTwig
+class Twig
 {
     protected \Twig\Environment $twigEnvironment;
     protected $theme;
 
     public function __construct(string $theme = null)
     {
-        $twigCache = (AntConfig::currentConfig('enableCache') !== 'none') ? AntCachePath : false;
-        $this->theme = $theme ?? AntConfig::currentConfig('activeTheme');
+        $twigCache = (Config::currentConfig('enableCache') !== 'none') ? AntCachePath : false;
+        $this->theme = $theme ?? Config::currentConfig('activeTheme');
 
         if (!is_dir(antThemePath . DIRECTORY_SEPARATOR . $this->theme)) {
             $this->theme = 'Default';
@@ -20,10 +20,10 @@ class AntTwig
 
         $this->twigEnvironment = new \Twig\Environment(new \Shapecode\Twig\Loader\StringLoader(), [
             'cache' => $twigCache,
-            'debug' => AntConfig::currentConfig('debug'),
+            'debug' => Config::currentConfig('debug'),
         ]);
 
-        $this->twigEnvironment->addExtension(new \AntCMS\AntTwigFilters());
+        $this->twigEnvironment->addExtension(new \AntCMS\TwigFilters());
     }
 
     public function renderWithSubLayout(string $layout, array $params = []): string
