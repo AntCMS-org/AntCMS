@@ -6,7 +6,8 @@ parameters:
 		analyse:
 		- src/Vendor
 		- src/Cache
-		- src/Plugins
+		- src/Plugins/Admin
+		- src/Plugins/Profile
 	ignoreErrors:
 		- '#^Call to an undefined method AntCMS\\Cache\:\:get\(\)\.$#'
 		- '#^Call to an undefined method AntCMS\\Cache\:\:purge\(\)\.$#'

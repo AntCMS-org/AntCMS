@@ -1,5 +1,6 @@
 <?php
 
+use AntCMS\PluginController;
 use HostByBelle\CompressionBuffer;
 use AntCMS\AntCMS;
 use AntCMS\Config;
@@ -28,40 +29,24 @@ $baseUrl = Config::currentConfig('baseURL');
 CompressionBuffer::setUp();
 Flight::response()->addResponseBodyCallback([CompressionBuffer::class, 'handler']);
 
+// HTTPS redirects
 if (!Flight::request()->secure && !Enviroment::isCli() && Config::currentConfig('forceHTTPS')) {
     Flight::redirect('https://' . Flight::request()->host . Flight::request()->url);
     exit;
 }
 
+// Asset delivery
 Flight::route('GET /themes/*/assets', function () use ($antCms, $requestUri): void {
     $antCms->serveContent(AntDir . $requestUri);
 });
 
+/// ACME challenges for certificate renewals
 Flight::route('GET .well-known/acme-challenge/*', function () use ($antCms, $requestUri): void {
     $antCms->serveContent(AntDir . $requestUri);
 });
 
-/*
-if ($antRouting->checkMatch('/sitemap.xml')) {
-    $antRouting->setRequestUri('/plugin/sitemap');
-}
-
-if ($antRouting->checkMatch('/robots.txt')) {
-    $antRouting->setRequestUri('/plugin/robotstxt');
-}
-
-if ($antRouting->checkMatch('/admin/*')) {
-    $antRouting->requestUriUnshift('plugin');
-}
-
-if ($antRouting->checkMatch('/profile/*')) {
-    $antRouting->requestUriUnshift('plugin');
-}
-
-if ($antRouting->checkMatch('/plugin/*')) {
-    $antRouting->routeToPlugin();
-}
-*/
+// Register routes for plugins
+PluginController::init();
 
 Flight::route('GET /', function () use ($antCms): void {
     if (!file_exists(antUsersList)) {
