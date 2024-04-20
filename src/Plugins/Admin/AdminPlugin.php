@@ -87,7 +87,7 @@ class AdminPlugin extends AntPlugin
 
             case 'save':
                 if (!$_POST['textarea']) {
-                    FLight::redirect('/admin/config');
+                    Flight::redirect('/admin/config');
                     exit;
                 }
 

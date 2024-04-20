@@ -93,6 +93,7 @@ class AntCMS
         }
 
         Flight::halt($httpCode, $pageTemplate);
+        exit;
     }
 
     /**
