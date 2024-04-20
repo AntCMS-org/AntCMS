@@ -12,10 +12,7 @@ class AntYaml
     public static function parseFile(string $path): array
     {
         $cacheKey = hash('crc32', $path);
-        if (!isset(self::$yamlCache[$cacheKey])) {
-            self::$yamlCache[$cacheKey] = Yaml::parseFile($path);
-        }
-
+        self::$yamlCache[$cacheKey] ??= Yaml::parseFile($path);
         return self::$yamlCache[$cacheKey];
     }
 
