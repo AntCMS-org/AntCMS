@@ -23,14 +23,14 @@ $antCms = new AntCMS();
 
 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $baseUrl = AntConfig::currentConfig('baseURL');
-$antRouting = new \AntCMS\AntRouting($baseUrl, $requestUri);
 
 // Setup CompressionBuffer & enable it in Flight
 CompressionBuffer::setUp();
 Flight::response()->addResponseBodyCallback([CompressionBuffer::class, 'handler']);
 
-if (AntConfig::currentConfig('forceHTTPS') && !\AntCMS\AntEnviroment::isCli()) {
-    $antRouting->redirectHttps();
+if (AntConfig::currentConfig('forceHTTPS') && !Flight::request()->secure) {
+    Flight::redirect('https://' . Flight::request()->host . Flight::request()->url);
+    exit;
 }
 
 Flight::route('GET /themes/*/assets', function () use ($antCms, $requestUri): void {
