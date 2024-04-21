@@ -10,12 +10,10 @@ use HostByBelle\CompressionBuffer;
 
 class AntCMS
 {
-    protected Twig $antTwig;
     protected Cache $cache;
 
     public function __construct()
     {
-        $this->antTwig = new Twig();
         $this->cache = new Cache();
     }
 
@@ -34,32 +32,21 @@ class AntCMS
             $this->renderException("404");
         }
 
-        $pageTemplate = static::getPageLayout(null, $page, $content['template']);
-
         $params = [
             'AntCMSTitle' => $content['title'],
             'AntCMSDescription' => $content['description'],
             'AntCMSAuthor' => $content['author'],
             'AntCMSKeywords' => $content['keywords'],
-            'AntCMSBody' => Markdown::renderMarkdown($content['content'], $content['cacheKey']),
+            'markdown' => Markdown::renderMarkdown($content['content'], $content['cacheKey']),
             'ThemeConfig' => $themeConfig['config'] ?? [],
+            'pages' => Pages::getNavList($page),
         ];
 
-        return $this->antTwig->renderWithTiwg($pageTemplate, $params);
-    }
-
-    /**
-     * Returns the default layout of the active theme unless otherwise specified.
-     *
-     * @param string|null $theme optional - the theme to get the page layout for.
-     * @param string $currentPage optional - What page is the active page.
-     * @return string the default page layout
-     */
-    public static function getPageLayout(string $theme = null, string $currentPage = '', string | null $template = null): string
-    {
-        $layout = empty($template) ? 'default' : $template;
-        $pageTemplate = self::getThemeTemplate($layout, $theme);
-        return str_replace('<!--AntCMS-Navigation-->', Pages::generateNavigation(self::getThemeTemplate('nav', $theme), $currentPage), $pageTemplate);
+        if (Twig::templateExists($page)) {
+            return Twig::render($page, $params);
+        } else {
+            return Twig::render('markdown.html.twig', $params);
+        }
     }
 
     /**
@@ -73,20 +60,16 @@ class AntCMS
     public function renderException(string $exceptionCode, int $httpCode = 404, string $exceptionString = 'That request caused an exception to be thrown.'): void
     {
         $exceptionString .= " (Code {$exceptionCode})";
-        $pageTemplate = self::getPageLayout();
 
         $params = [
             'AntCMSTitle' => 'An Error Ocurred',
-            'AntCMSBody' => '<h1>An error ocurred</h1><p>' . $exceptionString . '</p>',
+            'message' => $exceptionString,
+            'pages' => Pages::getNavList(),
         ];
-        try {
-            $pageTemplate = $this->antTwig->renderWithTiwg($pageTemplate, $params);
-        } catch (\Exception) {
-            $pageTemplate = str_replace('{{ AntCMSTitle }}', $params['AntCMSTitle'], $pageTemplate);
-            $pageTemplate = str_replace('{{ AntCMSBody | raw }} ', $params['AntCMSBody'], $pageTemplate);
-        }
 
-        Flight::halt($httpCode, $pageTemplate);
+        $page = Twig::render('error.html.twig', $params);
+
+        Flight::halt($httpCode, $page);
         exit;
     }
 

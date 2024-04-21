@@ -52,33 +52,22 @@ class Pages
         return AntYaml::parseFile(antPagesList);
     }
 
-    /**
-     * @param string $currentPage optional - What page is the active page. Used for highlighting the active page in the navbar
-     */
-    public static function generateNavigation(string $navTemplate = '', string $currentPage = ''): string
+    public static function getNavList(string $currentPage = ''): array
     {
-        $pages = Pages::getPages();
-        $antCache = new Cache();
+        $pages = self::getPages();
 
-        $theme = Config::currentConfig('activeTheme');
-        $cacheKey = $antCache->createCacheKey(json_encode($pages), $theme . $currentPage);
+        $baseURL = Config::currentConfig('baseURL');
+        foreach ($pages as $key => $page) {
+            $url = "//" . Tools::repairURL($baseURL . $page['functionalPagePath']);
+            $pages[$key]['url'] = $url;
+            $pages[$key]['active'] = $currentPage == $page['functionalPagePath'];
 
-        return $antCache->get($cacheKey, function (ItemInterface $item) use ($navTemplate, $currentPage, $pages): string {
-            $item->expiresAfter(Cache::$defaultLifespan / 7);
-            $baseURL = Config::currentConfig('baseURL');
-            foreach ($pages as $key => $page) {
-                $url = "//" . Tools::repairURL($baseURL . $page['functionalPagePath']);
-                $pages[$key]['url'] = $url;
-                $pages[$key]['active'] = $currentPage == $page['functionalPagePath'];
-
-                //Remove pages that are hidden from the nav from the array before sending it to twig.
-                if (!(bool)$page['showInNav']) {
-                    unset($pages[$key]);
-                }
+            //Remove pages that are hidden from the nav from the array before sending it to twig.
+            if (!(bool) $page['showInNav']) {
+                unset($pages[$key]);
             }
+        }
 
-            $antTwig = new Twig();
-            return $antTwig->renderWithTiwg($navTemplate, ['pages' => $pages]);
-        });
+        return $pages;
     }
 }

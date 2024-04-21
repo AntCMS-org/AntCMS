@@ -3,6 +3,7 @@
 namespace AntCMS;
 
 use AntCMS\AntYaml;
+use AntCMS\Enviroment;
 use Exception;
 
 class Config
@@ -26,7 +27,7 @@ class Config
             'siteInfo' => [
                 'siteTitle' => 'AntCMS',
             ],
-            'forceHTTPS' => true,
+            'forceHTTPS' => !Enviroment::isPHPDevServer(),
             'activeTheme' => 'Default',
             'cacheMode' => 'auto',
             'debug' => true,
@@ -47,7 +48,6 @@ class Config
      */
     public static function currentConfig(?string $key = null)
     {
-        // FS cache enabled to save ~10% of the time to deliver the file page.
         $config = AntYaml::parseFile(antConfigFile);
         if (is_null($key)) {
             return $config;
