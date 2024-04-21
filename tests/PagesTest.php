@@ -19,13 +19,8 @@ class PagesTest extends TestCase
 
     public function testGetNavigation(): void
     {
-        $antCMS = new AntCMS();
-        $pageTemplate = $antCMS->getThemeTemplate();
-        $navLayout = $antCMS->getThemeTemplate('nav');
-
-        $result = Pages::generateNavigation($navLayout, $pageTemplate);
-
+        $result = Pages::getNavList();
         $this->assertNotEmpty($result);
-        $this->assertIsString($result);
+        $this->assertIsArray($result);
     }
 }

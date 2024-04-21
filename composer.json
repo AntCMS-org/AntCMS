@@ -18,7 +18,6 @@
         "league/commonmark": "^2.3",
         "liborm85/composer-vendor-cleaner": "^1.7",
         "nyholm/psr7": "^1.8",
-        "shapecode/twig-string-loader": "^1.1",
         "simonvomeyser/commonmark-ext-lazy-image": "^2.0",
         "symfony/cache": "^6.0",
         "symfony/yaml": "^6.0",
