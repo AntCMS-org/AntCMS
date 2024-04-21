@@ -1,5 +1,7 @@
 # AntCMS
 
+![PHPStan Level](https://img.shields.io/badge/PHPStan-level%209-brightgreen)
+
 AntCMS is being largely rebuilt for better, faser, easier functionality.
 
 ## Differences between "new" and "main"
@@ -11,3 +13,4 @@ AntCMS is being largely rebuilt for better, faser, easier functionality.
 - AntCMS will automatically perform brotli, zstd, and gzip output compression as long as related extensions are installed
 - The vendor folder is now cleaned up to help reduce release size.
 - Slightly improved debug info
+- AntCMS now uses an actual twig loader
