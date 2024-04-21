@@ -130,7 +130,7 @@ class AntCMS
         try {
             $template = @file_get_contents($templatePath . DIRECTORY_SEPARATOR . $layout . '.html.twig');
             if (empty($template)) {
-                $template = file_get_contents($defaultTemplates . DIRECTORY_SEPARATOR . $layout . '.html.twig');
+                $template = @file_get_contents($defaultTemplates . DIRECTORY_SEPARATOR . $layout . '.html.twig');
             }
         } catch (\Exception) {
         }
@@ -198,10 +198,7 @@ class AntCMS
         return $pageHeaders;
     }
 
-    /**
-     * @return mixed
-     */
-    public static function getSiteInfo()
+    public static function getSiteInfo(): array
     {
         return Config::currentConfig('siteInfo');
     }
@@ -213,9 +210,8 @@ class AntCMS
         } else {
             $asset_mime_type = mime_content_type($path);
             header('Content-Type: ' . $asset_mime_type);
-            readfile($path);
+            echo Tools::doAssetCompression($path);
         }
-        CompressionBuffer::disable();
         Flight::halt(200);
     }
 

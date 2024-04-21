@@ -28,8 +28,6 @@ class Markdown
         $config = Config::currentConfig();
 
         return $antCache->get($cacheKey, function (ItemInterface $item) use ($config, $md): string {
-            $item->expiresAfter(Cache::$defaultLifespan / 7);
-
             $defaultAttributes = [];
             $themeConfig = AntCMS::getThemeConfig();
             foreach (($themeConfig['defaultAttributes'] ?? []) as $class => $attributes) {

@@ -91,9 +91,12 @@ class AdminPlugin extends Plugin
                     exit;
                 }
 
-                $yaml = AntYaml::parseYaml($_POST['textarea']);
-                if (is_array($yaml)) {
-                    AntYaml::saveFile(antConfigFile, $yaml);
+                try {
+                    $yaml = AntYaml::parseYaml($_POST['textarea']);
+                    if (is_array($yaml)) {
+                        AntYaml::saveFile(antConfigFile, $yaml);
+                    }
+                } catch (Exception) {
                 }
 
                 Flight::redirect('/admin/config');

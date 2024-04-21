@@ -5,10 +5,7 @@ namespace AntCMS;
 use AntCMS\AntCMS;
 use AntCMS\AntYaml;
 use AntCMS\Config;
-use AntCMS\Cache;
 use AntCMS\Tools;
-use AntCMS\Twig;
-use Symfony\Contracts\Cache\ItemInterface;
 
 class Pages
 {
@@ -34,7 +31,12 @@ class Pages
                 $pageFunctionalPath = substr($pageFunctionalPath, 0, -5);
             }
 
-            $currentPage = ['pageTitle' => $pageHeader['title'], 'fullPagePath' => $page, 'functionalPagePath' => ($pageFunctionalPath == DIRECTORY_SEPARATOR) ? DIRECTORY_SEPARATOR : rtrim($pageFunctionalPath, DIRECTORY_SEPARATOR), 'showInNav' => true];
+            $currentPage = [
+                'pageTitle' => $pageHeader['title'],
+                'fullPagePath' => $page,
+                'functionalPagePath' => ($pageFunctionalPath == DIRECTORY_SEPARATOR) ? DIRECTORY_SEPARATOR : rtrim($pageFunctionalPath, DIRECTORY_SEPARATOR),
+                'showInNav' => true
+            ];
 
             // Move the index page to the first item in the page list, so it appears as the first item in the navbar.
             if ($pageFunctionalPath == DIRECTORY_SEPARATOR) {
