@@ -8,4 +8,9 @@ class Enviroment
     {
         return (php_sapi_name() === 'cli' || !http_response_code());
     }
+
+    public static function isPHPDevServer(): bool
+    {
+        return PHP_SAPI === 'cli-server';
+    }
 }

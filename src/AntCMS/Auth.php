@@ -43,7 +43,7 @@ class Auth
 
         $currentUser = Users::getUser($username);
 
-        if (is_null($currentUser) || empty($currentUser['password'])) {
+        if (empty($currentUser['password'])) {
             $this->requireAuth();
         }
 

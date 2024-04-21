@@ -53,7 +53,7 @@ class Cache
      */
     public function createCacheKey(string $content, string $salt = 'cache'): string
     {
-        return hash(self::getHashAlgo(), $content . $salt);
+        return hash(HASH_ALGO, $content . $salt);
     }
 
     /**
@@ -66,17 +66,7 @@ class Cache
      */
     public function createCacheKeyFile(string $filePath, string $salt = 'cache'): string
     {
-        $differentiator = filemtime($filePath) ?: hash_file(self::getHashAlgo(), $filePath);
-        return hash(self::getHashAlgo(), $filePath) . ".$differentiator.$salt";
-    }
-
-    public static function getHashAlgo(): string
-    {
-        /**
-         * If the server is modern enough to have xxh128, use that. It is really fast and still produces long hashes
-         * If not, use MD4 since it's still quite fast.
-         * Source: https://php.watch/articles/php-hash-benchmark
-         */
-        return defined('HAS_XXH128') ? 'xxh128' : 'md4';
+        $differentiator = filemtime($filePath) ?: hash_file(HASH_ALGO, $filePath);
+        return hash(HASH_ALGO, $filePath) . ".$differentiator.$salt";
     }
 }

@@ -25,7 +25,8 @@
         "twig/twig": "^3.5"
     },
     "replace": {
-        "symfony/polyfill-mbstring": "*"
+        "symfony/polyfill-mbstring": "*",
+        "symfony/polyfill-php80": "*"
     },
     "authors": [
         {
