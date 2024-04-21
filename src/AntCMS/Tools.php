@@ -2,6 +2,9 @@
 
 namespace AntCMS;
 
+use HostByBelle\CompressionBuffer;
+use Symfony\Contracts\Cache\ItemInterface;
+
 class Tools
 {
     /**
@@ -37,7 +40,7 @@ class Tools
     /**
      * Repairs a URL by replacing backslashes with forward slashes and removing duplicate slashes.
      *
-     * @param string $url The URL to repair. Note: this function will not work correctly if the URL provided has its own protocol (like HTTS://).
+     * @param string $url The URL to repair. Note: this function will not work correctly if the URL provided has its own protocol (like https://).
      * @return string The repaired URL
      */
     public static function repairURL(string $url): string
@@ -72,5 +75,30 @@ class Tools
         }
 
         return true;
+    }
+
+    /**
+     * Automatically selects an ideal compression method for various types of assets.
+     * Impliments caching to prevent repeat processing of assets.
+     */
+    public static function doAssetCompression(string $path): string
+    {
+        $cache = new Cache();
+        $contents = file_get_contents($path);
+        switch (pathinfo($path, PATHINFO_EXTENSION)) {
+            case 'css':
+            case 'html':
+            case 'js':
+            case 'xml':
+            case 'md':
+            case 'log':
+            case 'json':
+                CompressionBuffer::enable(); // We will use CompressionBuffer to handle text content
+                $method = CompressionBuffer::getFirstMethodChoice();
+                $cacheKey = $cache->createCacheKeyFile($path, "assetCompression-$method");
+                $contents = $cache->get($cacheKey, fn (ItemInterface $item): string => CompressionBuffer::handler($contents));
+        }
+        CompressionBuffer::disable();
+        return $contents;
     }
 }

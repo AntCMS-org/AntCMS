@@ -605,16 +605,16 @@
         },
         {
             "name": "hostbybelle/compressionbuffer",
-            "version": "1.0.0",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/HostByBelle/CompressionBuffer.git",
-                "reference": "a5ed8b63c9657a235f5551db1b2b7de37801f253"
+                "reference": "5ea2d66129a96c309f972f5db1fb32ab04add962"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/HostByBelle/CompressionBuffer/zipball/a5ed8b63c9657a235f5551db1b2b7de37801f253",
-                "reference": "a5ed8b63c9657a235f5551db1b2b7de37801f253",
+                "url": "https://api.github.com/repos/HostByBelle/CompressionBuffer/zipball/5ea2d66129a96c309f972f5db1fb32ab04add962",
+                "reference": "5ea2d66129a96c309f972f5db1fb32ab04add962",
                 "shasum": ""
             },
             "require": {
@@ -649,9 +649,9 @@
             "description": "CompressionBuffer provides easy access to zstd, brotli, and gzip output buffering with PHP on any webserver.",
             "support": {
                 "issues": "https://github.com/HostByBelle/CompressionBuffer/issues",
-                "source": "https://github.com/HostByBelle/CompressionBuffer/tree/1.0.0"
+                "source": "https://github.com/HostByBelle/CompressionBuffer/tree/1.1.0"
             },
-            "time": "2024-04-08T22:57:40+00:00"
+            "time": "2024-04-21T17:15:21+00:00"
         },
         {
             "name": "league/commonmark",

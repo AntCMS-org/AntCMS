@@ -21,7 +21,7 @@ if (!file_exists(antPagesList)) {
     \AntCMS\Pages::generatePages();
 }
 
-$antCms = new AntCMS();
+$AntCMS = new AntCMS();
 
 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
@@ -30,11 +30,16 @@ Flight::response()->addResponseBodyCallback(function ($body) {
     if (Config::currentConfig('debug')) {
         $elapsed_time = round((hrtime(true) - START) / 1e+6, 2);
         $mem_usage = round(memory_get_peak_usage() / 1e+6, 2);
-        return str_replace(
-            '<!--AntCMS-Debug-->',
-            "<p>Took $elapsed_time milliseconds to render the page with $mem_usage MB of RAM used.</p>",
-            $body
-        );
+        $message = "<p>Took $elapsed_time milliseconds to render the page with $mem_usage MB of RAM used.</p>";
+        if (CompressionBuffer::isEnabled()) {
+            $method = CompressionBuffer::getFirstMethodChoice();
+            if ($method === 'br') {
+                $method = 'brotli';
+            }
+            $message .= PHP_EOL . "<p>$method was used for output compression.</p>";
+        }
+
+        return str_replace('<!--AntCMS-Debug-->', $message, $body);
     } else {
         return $body;
     }
@@ -51,28 +56,28 @@ if (!Flight::request()->secure && !Enviroment::isCli() && Config::currentConfig(
 }
 
 // Asset delivery
-Flight::route('GET /themes/*/assets', function () use ($antCms, $requestUri): void {
-    $antCms->serveContent(AntDir . $requestUri);
+Flight::route('GET /themes/*/assets', function () use ($AntCMS, $requestUri): void {
+    $AntCMS->serveContent(AntDir . $requestUri);
 });
 
 /// ACME challenges for certificate renewals
-Flight::route('GET .well-known/acme-challenge/*', function () use ($antCms, $requestUri): void {
-    $antCms->serveContent(AntDir . $requestUri);
+Flight::route('GET .well-known/acme-challenge/*', function () use ($AntCMS, $requestUri): void {
+    $AntCMS->serveContent(AntDir . $requestUri);
 });
 
 // Register routes for plugins
 PluginController::init();
 
-Flight::route('GET /', function () use ($antCms): void {
+Flight::route('GET /', function () use ($AntCMS): void {
     if (!file_exists(antUsersList)) {
         // TODO for once plugin functionality is rebuilt
         //AntCMS::redirect('/profile/firsttime');
     }
-    echo $antCms->renderPage('/');
+    echo $AntCMS->renderPage('/');
 });
 
-Flight::route('GET /*', function () use ($antCms, $requestUri): void {
-    echo $antCms->renderPage($requestUri);
+Flight::route('GET /*', function () use ($AntCMS, $requestUri): void {
+    echo $AntCMS->renderPage($requestUri);
 });
 
 Flight::start();
