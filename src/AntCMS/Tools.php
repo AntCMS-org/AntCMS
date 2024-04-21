@@ -81,10 +81,11 @@ class Tools
      * Automatically selects an ideal compression method for various types of assets.
      * Impliments caching to prevent repeat processing of assets.
      */
-    public static function doAssetCompression(string $path): string
+    public static function doAssetCompression(string $path): array
     {
         $cache = new Cache();
         $contents = file_get_contents($path);
+        $encoding = 'identity';
         switch (pathinfo($path, PATHINFO_EXTENSION)) {
             case 'css':
             case 'html':
@@ -94,11 +95,40 @@ class Tools
             case 'log':
             case 'json':
                 CompressionBuffer::enable(); // We will use CompressionBuffer to handle text content
-                $method = CompressionBuffer::getFirstMethodChoice();
-                $cacheKey = $cache->createCacheKeyFile($path, "assetCompression-$method");
+                $encoding = CompressionBuffer::getFirstMethodChoice();
+                $cacheKey = $cache->createCacheKeyFile($path, "assetCompression-$encoding");
                 $contents = $cache->get($cacheKey, fn (ItemInterface $item): string => CompressionBuffer::handler($contents));
         }
         CompressionBuffer::disable();
-        return $contents;
+        return [$contents, $encoding];
+    }
+
+    public static function getContentType(string $path): string
+    {
+        $ext = pathinfo($path, PATHINFO_EXTENSION);
+        $type = match ($ext) {
+            'html' => 'text/html',
+            'htm' => 'text/html',
+            'txt' => 'text/plain',
+            'css' => 'text/css',
+            'js' => 'application/javascript',
+            'json' => 'application/json',
+            'xml' => 'application/xml',
+            'jpg' => 'image/jpeg',
+            'jpeg' => 'image/jpeg',
+            'png' => 'image/png',
+            'gif' => 'image/gif',
+            'svg' => 'image/svg+xml',
+            'pdf' => 'application/pdf',
+            'mp3' => 'audio/mpeg',
+            'wav' => 'audio/wav',
+            'mp4' => 'video/mp4',
+            'avi' => 'video/x-msvideo',
+            default => mime_content_type($path),
+        };
+        if ($type === false) {
+            $type = 'application/octet-stream';
+        }
+        return $type;
     }
 }

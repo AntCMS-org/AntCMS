@@ -208,11 +208,12 @@ class AntCMS
         if (!file_exists($path)) {
             $this->renderException('404');
         } else {
-            $asset_mime_type = mime_content_type($path);
-            header('Content-Type: ' . $asset_mime_type);
-            echo Tools::doAssetCompression($path);
+            $asset_mime_type = Tools::getContentType($path);
+            [$result, $encoding] = Tools::doAssetCompression($path);
+            Flight::response()->header('Content-Type', $asset_mime_type);
+            Flight::response()->header('Content-Encoding', $encoding);
+            echo $result;
         }
-        Flight::halt(200);
     }
 
     public static function getThemeConfig(string|null $theme = null)
