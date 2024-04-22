@@ -16,7 +16,7 @@ AntCMS is a lightweight CMS system designed for simplicity, speed, and small siz
 
 AntCMS is designed for speed, with a simple backend and caching capabilities that allow it to quickly render and deliver pages to users in milliseconds. This speed is further enhanced by the use of Tailwind CSS in the default theme, which is only 25KB.
 
-Our unit tests also ensure that rendering markdown content takes less than 0.015 seconds, as demonstrated by the following recent results: `Markdown rendering speed with cache: 0.000289 VS without: 0.003414`.
+Additionally, AntCMS impliments automatic compression page content as well as assets such as JS and CSS files.
 
 ### How does it work?
 
@@ -62,11 +62,3 @@ Here's what the `Pages.yaml` file looks like:
 - `fullPagePath: /antcms.example.com/public_html/Content/index.md` - This defines the full path to your page, as PHP would use to access it.
 - `functionalPagePath: /index.md` - This is the actual path you would use to access the page from online. Ex: `antcms.example.com/index.php`
 - `showInNav: true` - If you'd like to hide a page from the navbar, set this to false and it will be hidden.
-
-#### The Admin Plugin
-
-AntCMS has a very simple admin plugin that you can access it by visiting `antcms.example.com/admin`.
-It will then require you to authenticate using your AntCMS credentials and from there will give you a few simple actions such as editing your config, a page, or regenerating the page list.
-The admin plugin also features a live preview of the content you are creating, but it's important to note that the preview doesn't support all of the markdown syntax that AntCMS does, such as emojis.
-
-Note: when editing the config, if you 'save' it and it didn't update, this means you made an error in the config file and AntCMS prevented the file from being saved.

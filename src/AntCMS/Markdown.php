@@ -2,8 +2,8 @@
 
 namespace AntCMS;
 
-use AntCMS\AntCache;
-use AntCMS\AntConfig;
+use AntCMS\Cache;
+use AntCMS\Config;
 use AntCMS\AntCMS;
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\Autolink\AutolinkExtension;
@@ -19,20 +19,15 @@ use SimonVomEyser\CommonMarkExtension\LazyImageExtension;
 use League\CommonMark\Extension\DefaultAttributes\DefaultAttributesExtension;
 use Symfony\Contracts\Cache\ItemInterface;
 
-class AntMarkdown
+class Markdown
 {
-    /** 
-     * @return string 
-     */
-    public static function renderMarkdown(string $md)
+    public static function parse(string $md, ?string $cacheKey = null): string
     {
-        $antCache = new AntCache();
-        $cacheKey = $antCache->createCacheKey($md, 'markdown');
-        $config = AntConfig::currentConfig();
+        $antCache = new Cache();
+        $cacheKey ??= $antCache->createCacheKey($md, 'markdown');
+        $config = Config::get();
 
         return $antCache->get($cacheKey, function (ItemInterface $item) use ($config, $md): string {
-            $item->expiresAfter(AntCache::$defaultLifespan / 7);
-
             $defaultAttributes = [];
             $themeConfig = AntCMS::getThemeConfig();
             foreach (($themeConfig['defaultAttributes'] ?? []) as $class => $attributes) {
@@ -63,9 +58,7 @@ class AntMarkdown
             $environment->addExtension(new DefaultAttributesExtension());
 
             $markdownConverter = new MarkdownConverter($environment);
-
-            $renderedContent = $markdownConverter->convert($md);
-            return $renderedContent;
+            return $markdownConverter->convert($md)->__toString();
         });
     }
 }

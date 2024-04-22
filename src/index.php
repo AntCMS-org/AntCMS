@@ -1,75 +1,75 @@
 <?php
 
+use AntCMS\PluginController;
+use HostByBelle\CompressionBuffer;
+use AntCMS\AntCMS;
+use AntCMS\Config;
+use AntCMS\Enviroment;
+use AntCMS\Tools;
+
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
+ini_set('error_log', 'php_error.log');
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'Vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'Constants.php';
-
-$classMapPath = __DIR__  . DIRECTORY_SEPARATOR .  'Cache'  . DIRECTORY_SEPARATOR .  'classMap.php';
-$loader = new AntCMS\AntLoader(['path' => $classMapPath]);
-$loader->addNamespace('AntCMS\\', __DIR__  . DIRECTORY_SEPARATOR . 'AntCMS');
-$loader->checkClassMap();
-$loader->register();
-
-use AntCMS\AntCMS;
-use AntCMS\AntConfig;
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'Bootstrap.php';
 
 if (!file_exists(antConfigFile)) {
-    AntConfig::generateConfig();
+    Config::generateConfig();
 }
 
 if (!file_exists(antPagesList)) {
-    \AntCMS\AntPages::generatePages();
+    \AntCMS\Pages::generatePages();
 }
 
-$antCms = new AntCMS();
+$AntCMS = new AntCMS();
 
 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$baseUrl = AntConfig::currentConfig('baseURL');
-$antRouting = new \AntCMS\AntRouting($baseUrl, $requestUri);
 
-if (AntConfig::currentConfig('forceHTTPS') && !\AntCMS\AntEnviroment::isCli()) {
-    $antRouting->redirectHttps();
-}
-
-if ($antRouting->checkMatch('/themes/*/assets')) {
-    $antCms->serveContent(AntDir . $requestUri);
-}
-
-if ($antRouting->checkMatch('/.well-known/acme-challenge/*')) {
-    $antCms->serveContent(AntDir . $requestUri);
-}
-
-if ($antRouting->checkMatch('/sitemap.xml')) {
-    $antRouting->setRequestUri('/plugin/sitemap');
-}
-
-if ($antRouting->checkMatch('/robots.txt')) {
-    $antRouting->setRequestUri('/plugin/robotstxt');
-}
-
-if ($antRouting->checkMatch('/admin/*')) {
-    $antRouting->requestUriUnshift('plugin');
-}
-
-if ($antRouting->checkMatch('/profile/*')) {
-    $antRouting->requestUriUnshift('plugin');
-}
-
-if ($antRouting->checkMatch('/plugin/*')) {
-    $antRouting->routeToPlugin();
-}
-
-if ($antRouting->isIndex()) {
-    // If the users list hasn't been created, redirect to the first-time setup
-    if (!file_exists(antUsersList)) {
-        AntCMS::redirect('/profile/firsttime');
+// Add a response body callback to display mem usage and time spent
+Flight::response()->addResponseBodyCallback(function ($body) {
+    if (Config::get('debug')) {
+        return str_replace('<!--AntCMS-Debug-->', Tools::buildDebugInfo(), $body);
+    } else {
+        return $body;
     }
+});
 
-    echo $antCms->renderPage('/');
-    exit;
-} else {
-    echo $antCms->renderPage($requestUri);
+// Setup CompressionBuffer & enable it in Flight
+CompressionBuffer::setUp(true, false, [Flight::response(), 'header']);
+if (Config::get('performance.doOutputCompression')) {
+    Flight::response()->addResponseBodyCallback([CompressionBuffer::class, 'handler']);
+}
+
+// HTTPS redirects
+if (!Flight::request()->secure && !Enviroment::isCli() && Config::get('forceHTTPS')) {
+    Flight::redirect('https://' . Flight::request()->host . Flight::request()->url);
     exit;
 }
+
+// Asset delivery
+Flight::route('GET /themes/*/assets/*', function () use ($AntCMS, $requestUri): void {
+    $AntCMS->serveContent(AntDir . $requestUri);
+});
+
+/// ACME challenges for certificate renewals
+Flight::route('GET .well-known/acme-challenge/*', function () use ($AntCMS, $requestUri): void {
+    $AntCMS->serveContent(AntDir . $requestUri);
+});
+
+// Register routes for plugins
+PluginController::init();
+
+Flight::route('GET /', function () use ($AntCMS): void {
+    if (!file_exists(antUsersList)) {
+        // TODO for once plugin functionality is rebuilt
+        //AntCMS::redirect('/profile/firsttime');
+    }
+    echo $AntCMS->renderPage('/');
+});
+
+Flight::route('GET /*', function () use ($AntCMS, $requestUri): void {
+    echo $AntCMS->renderPage($requestUri);
+});
+
+Flight::start();

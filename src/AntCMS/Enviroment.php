@@ -2,10 +2,15 @@
 
 namespace AntCMS;
 
-class AntEnviroment
+class Enviroment
 {
     public static function isCli(): bool
     {
         return (php_sapi_name() === 'cli' || !http_response_code());
+    }
+
+    public static function isPHPDevServer(): bool
+    {
+        return PHP_SAPI === 'cli-server';
     }
 }

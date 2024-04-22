@@ -1,5 +1,8 @@
 siteInfo:
     siteTitle: 'AntCMS'
+performance:
+    doOutputCompression: true
+    compressTextAssets: true
 forceHTTPS: true
 activeTheme: Default
 cacheMode: auto

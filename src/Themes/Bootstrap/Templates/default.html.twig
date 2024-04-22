@@ -46,7 +46,7 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
-          <!--AntCMS-Navigation-->
+          {% include 'nav.html.twig' %}
         </ul>
       </div>
     </div>
@@ -60,7 +60,8 @@
         {% if AntCMSAuthor is defined and ThemeConfig.showAuthor %}
         <p>This content was written by {{ AntCMSAuthor }}</p>
         {% endif %}
-        {{ AntCMSBody | raw }}
+        {% block body %}
+        {% endblock %}
       </div>
       <div class="col-md-1"></div>
     </div>

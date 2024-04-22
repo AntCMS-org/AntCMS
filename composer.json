@@ -13,13 +13,19 @@
         "antcms/antloader": "^2.0.0",
         "elgigi/commonmark-emoji": "^2.0",
         "embed/embed": "^4.4",
+        "flightphp/core": "^3.8",
+        "hostbybelle/compressionbuffer": "^1.0",
         "league/commonmark": "^2.3",
+        "liborm85/composer-vendor-cleaner": "^1.7",
         "nyholm/psr7": "^1.8",
-        "shapecode/twig-string-loader": "^1.1",
         "simonvomeyser/commonmark-ext-lazy-image": "^2.0",
         "symfony/cache": "^6.0",
         "symfony/yaml": "^6.0",
         "twig/twig": "^3.5"
+    },
+    "replace": {
+        "symfony/polyfill-mbstring": "*",
+        "symfony/polyfill-php80": "*"
     },
     "authors": [
         {
@@ -29,11 +35,26 @@
     ],
     "config": {
         "vendor-dir": "src/Vendor",
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "liborm85/composer-vendor-cleaner": true
+        }
     },
     "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.54",
         "phpstan/phpstan": "^1.9",
         "phpunit/phpunit": "^9.5",
-        "rector/rector": "^0.15.4"
+        "rector/rector": "^1.0.4"
+    },
+    "extra": {
+        "dev-files": {
+            "/": [
+                "tests/",
+                "docs/",
+                ".travis.yml",
+                ".github/",
+                ".devcontainer/"
+            ]
+        }
     }
 }

@@ -2,31 +2,31 @@
 
 namespace AntCMS;
 
-use AntCMS\AntConfig;
+use AntCMS\Config;
 
-class AntAuth
+class Auth
 {
-    protected $role;
-    protected $username;
-    protected $authenticated;
+    protected string $role;
+    protected string $username;
+    protected bool $authenticated = false;
 
-    public function getRole()
+    public function getRole(): string
     {
         return $this->role;
     }
 
-    public function getUsername()
+    public function getUsername(): string
     {
         return $this->username;
     }
 
-    public function getName()
+    public function getName(): string
     {
-        $currentUser = AntUsers::getUser($this->username);
+        $currentUser = Users::getUser($this->username);
         return $currentUser['name'];
     }
 
-    public function isAuthenticated()
+    public function isAuthenticated(): bool
     {
         return $this->authenticated ?? false;
     }
@@ -35,26 +35,24 @@ class AntAuth
      * Check if the user is authenticated using the credentials in the config file.
      * If the plain text password in the config file is still present, it will be hashed and the config file will be updated.
      * If the user is not authenticated, it will call AntAuth::requireAuth()
-     *
-     * @return void
      */
-    public function checkAuth()
+    public function checkAuth(): void
     {
         $username = $_SERVER['PHP_AUTH_USER'] ?? null;
         $password = $_SERVER['PHP_AUTH_PW'] ?? null;
 
-        $currentUser = AntUsers::getUser($username);
+        $currentUser = Users::getUser($username);
 
-        if (is_null($currentUser) || empty($currentUser['password'])) {
+        if (empty($currentUser['password'])) {
             $this->requireAuth();
         }
 
         // If the stored password is not hashed in the config, hash it
         if ($password == $currentUser['password']) {
-            AntUsers::updateUser($username, ['password' => $password]);
+            Users::updateUser($username, ['password' => $password]);
 
             // Reload the user info so the next step can pass
-            $currentUser = AntUsers::getUser($username);
+            $currentUser = Users::getUser($username);
         }
 
         // If the credentials are still set valid, but the auth cookie has expired, re-require authentication.
@@ -74,21 +72,19 @@ class AntAuth
 
     /**
      * Send an authentication challenge to the browser, with the realm set to the site title in config.
-     *
-     * @return void
      */
-    private function requireAuth()
+    private function requireAuth(): void
     {
         setcookie("auth", "valid");
 
-        $siteInfo = AntConfig::currentConfig('siteInfo');
+        $siteInfo = Config::get('siteInfo');
         header('WWW-Authenticate: Basic realm="' . $siteInfo['siteTitle'] . '"');
         http_response_code(401);
         echo 'You must enter a valid username and password to access this page';
         exit;
     }
 
-    public function invalidateSession()
+    public function invalidateSession(): void
     {
         $this->authenticated = false;
         $this->requireAuth();
