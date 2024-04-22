@@ -11,7 +11,7 @@ class MarkdownTest extends TestCase
 {
     public function testCanRenderMarkdown(): void
     {
-        $result = trim(Markdown::renderMarkdown("# Test Content!"));
+        $result = trim(Markdown::parse("# Test Content!"));
         $this->assertEquals('<h1>Test Content!</h1>', $result);
     }
 
@@ -19,7 +19,7 @@ class MarkdownTest extends TestCase
     {
         $markdown = file_get_contents(antContentPath . DIRECTORY_SEPARATOR . 'index.md');
         $totalTime = 0;
-        $currentConfig = Config::currentConfig();
+        $currentConfig = Config::get();
 
         //Ensure cache is enabled
         $currentConfig['cacheMode'] = 'auto';
@@ -27,7 +27,7 @@ class MarkdownTest extends TestCase
 
         for ($i = 0; $i < 10; ++$i) {
             $start = microtime(true);
-            Markdown::renderMarkdown($markdown);
+            Markdown::parse($markdown);
             $end = microtime(true);
             $totalTime += $end - $start;
         }

@@ -16,7 +16,7 @@ class Twig
 
     public static function registerTwig(?Environment $environment = null): void
     {
-        self::$theme = Config::currentConfig('activeTheme');
+        self::$theme = Config::get('activeTheme');
 
         if (!is_null($environment)) {
             self::$twigEnvironment = $environment;
@@ -30,8 +30,8 @@ class Twig
                     new ArrayLoader(),
                 ]),
                 [
-                    'cache' => (Config::currentConfig('enableCache') !== 'none') ? AntCachePath : false,
-                    'debug' => Config::currentConfig('debug'),
+                    'cache' => (Config::get('enableCache') !== 'none') ? AntCachePath : false,
+                    'debug' => Config::get('debug'),
                     'use_yield' => false,
                 ]
             );

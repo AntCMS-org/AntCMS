@@ -10,6 +10,7 @@ class Config
 {
     private static array $ConfigKeys = [
         'siteInfo',
+        'performance',
         'forceHTTPS',
         'activeTheme',
         'cacheMode',
@@ -26,6 +27,10 @@ class Config
         $defaultOptions = [
             'siteInfo' => [
                 'siteTitle' => 'AntCMS',
+            ],
+            'performance' => [
+                'doOutputCompression' => true,
+                'compressTextAssets' => true,
             ],
             'forceHTTPS' => !Enviroment::isPHPDevServer(),
             'activeTheme' => 'Default',
@@ -46,30 +51,21 @@ class Config
      * @param string|null $key The key of the configuration item to retrieve. Use dot notation to specify nested keys.
      * @return mixed The configuration array or a specific value if the key is specified.
      */
-    public static function currentConfig(?string $key = null)
+    public static function get(?string $key = null)
     {
         $config = AntYaml::parseFile(antConfigFile);
         if (is_null($key)) {
             return $config;
         } else {
-            $keys = explode('.', $key);
-            return self::getArrayValue($config, $keys);
-        }
-    }
-
-    /**
-     * @param array<mixed> $array
-     * @param array<mixed> $keys
-     * @return mixed
-     */
-    private static function getArrayValue(array $array, array $keys)
-    {
-        foreach ($keys as $key) {
-            if (isset($array[$key])) {
-                return $array[$key];
-            } else {
-                return null;
+            foreach (explode('.', $key) as $segment) {
+                if (array_key_exists($segment, $config)) {
+                    $config = $config[$segment];
+                } else {
+                    return null;
+                }
             }
+
+            return $config;
         }
     }
 
@@ -83,7 +79,7 @@ class Config
     {
         foreach (self::$ConfigKeys as $ConfigKey) {
             if (!array_key_exists($ConfigKey, $config)) {
-                throw new Exception("New config is missing the required {$ConfigKey} key from it's array!");
+                throw new Exception("New config is missing the required {$ConfigKey} key from its array!");
             }
         }
 

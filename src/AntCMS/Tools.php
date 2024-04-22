@@ -86,6 +86,12 @@ class Tools
         $cache = new Cache();
         $contents = file_get_contents($path);
         $encoding = 'identity';
+
+        // Skip compression when asset compression is disabled
+        if (!Config::get('performance.compressTextAssets')) {
+            return [$contents, $encoding];
+        }
+
         switch (pathinfo($path, PATHINFO_EXTENSION)) {
             case 'css':
             case 'html':
@@ -107,15 +113,13 @@ class Tools
     {
         $ext = pathinfo($path, PATHINFO_EXTENSION);
         $type = match ($ext) {
-            'html' => 'text/html',
-            'htm' => 'text/html',
+            'html', 'htm' => 'text/html',
             'txt' => 'text/plain',
             'css' => 'text/css',
             'js' => 'application/javascript',
             'json' => 'application/json',
             'xml' => 'application/xml',
-            'jpg' => 'image/jpeg',
-            'jpeg' => 'image/jpeg',
+            'jpg', 'jpeg' => 'image/jpeg',
             'png' => 'image/png',
             'gif' => 'image/gif',
             'svg' => 'image/svg+xml',
@@ -130,5 +134,43 @@ class Tools
             $type = 'application/octet-stream';
         }
         return $type;
+    }
+
+    private static function createDebugLogLine(string $wording, bool|string $value): string
+    {
+        if (is_bool($value)) {
+            $value = $value ? "enabled" : "disabled";
+        }
+        return "<dd>$wording: <strong>$value</strong></dd>";
+    }
+
+    public static function buildDebugInfo(): string
+    {
+        $elapsed_time = round((hrtime(true) - START) / 1e+6, 2);
+        $mem_usage = round(memory_get_peak_usage() / 1e+6, 2);
+
+        // Performance info
+        $result = "<dl><dt>Performance Metrics</dt>";
+        $result .= self::createDebugLogLine('Time to process request', "$elapsed_time ms");
+        $result .= self::createDebugLogLine('Memory usage', "$mem_usage MB");
+
+        // System info
+        $result .= "<dt>System Info</dt>";
+        $result .= self::createDebugLogLine('Output compression', Config::get('performance.doOutputCompression'));
+
+        if (CompressionBuffer::isEnabled() && Config::get('performance.doOutputCompression')) {
+            $method = CompressionBuffer::getFirstMethodChoice();
+            if ($method === 'br') {
+                $method = 'brotli';
+            }
+            $result .= self::createDebugLogLine('Compression method', $method);
+        } else {
+            $result .= self::createDebugLogLine('Output compression', 'disabled');
+        }
+
+        $result .= self::createDebugLogLine('Asset compression', Config::get('performance.compressTextAssets'));
+        $result .= self::createDebugLogLine('PHP version', PHP_VERSION);
+
+        return $result . "</dl>";
     }
 }

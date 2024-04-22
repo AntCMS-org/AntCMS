@@ -1,5 +1,7 @@
 <?php
 
+define('START', hrtime(true));
+
 // Registering constants
 const AntDir = __DIR__;
 const AntCachePath = __DIR__ . DIRECTORY_SEPARATOR . 'Cache';

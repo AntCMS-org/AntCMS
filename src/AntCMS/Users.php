@@ -6,17 +6,17 @@ use Flight;
 
 class Users
 {
-    public static function getUser($username)
+    public static function getUser(string $username): ?array
     {
         $users = self::getUsers();
         return $users[$username] ?? null;
     }
 
-    /** This function is used to get all the info of a user that is safe to publicize.
-     *  Mostly intended to create an array that can be safely passed to twig and used to display user information on the page, such as their name.
-     * @return array
+    /**
+     * This function is used to get all the info of a user that is safe to publicize.
+     * Mostly intended to create an array that can be safely passed to twig and used to display user information on the page, such as their name.
      */
-    public static function getUserPublicalKeys(mixed $username)
+    public static function getUserPublicalKeys(string $username): array
     {
         $user = self::getUser($username);
         if (is_null($user)) {
@@ -59,7 +59,7 @@ class Users
         return AntYaml::saveFile(antUsersList, $users);
     }
 
-    public static function updateUser($username, array $newData): bool
+    public static function updateUser(string $username, array $newData): bool
     {
         foreach ($newData as $key => $value) {
             if (empty($value)) {
@@ -122,7 +122,7 @@ class Users
         return AntYaml::saveFile(antUsersList, $users);
     }
 
-    private static function validateUsername($username): bool
+    private static function validateUsername(string $username): bool
     {
         $pattern = '/^[\p{L}\p{M}*0-9]+$/u';
         if (!preg_match($pattern, $username)) {

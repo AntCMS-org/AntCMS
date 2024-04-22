@@ -20,11 +20,11 @@ class TwigFilters extends AbstractExtension
 
     public function absUrl(string $relative): string
     {
-        return '//' . Tools::repairURL(Config::currentConfig('baseURL') . '/' . trim($relative));
+        return '//' . Tools::repairURL(Config::get('baseURL') . '/' . trim($relative));
     }
 
     public function markdown(string $content): string
     {
-        return Markdown::renderMarkdown($content);
+        return Markdown::parse($content);
     }
 }
