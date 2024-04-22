@@ -28,7 +28,7 @@ $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
 // Add a response body callback to display mem usage and time spent
 Flight::response()->addResponseBodyCallback(function ($body) {
-    if (Config::currentConfig('debug')) {
+    if (Config::get('debug')) {
         return str_replace('<!--AntCMS-Debug-->', Tools::buildDebugInfo(), $body);
     } else {
         return $body;
@@ -37,12 +37,12 @@ Flight::response()->addResponseBodyCallback(function ($body) {
 
 // Setup CompressionBuffer & enable it in Flight
 CompressionBuffer::setUp(true, false, [Flight::response(), 'header']);
-if (Config::currentConfig('performance.doOutputCompression')) {
+if (Config::get('performance.doOutputCompression')) {
     Flight::response()->addResponseBodyCallback([CompressionBuffer::class, 'handler']);
 }
 
 // HTTPS redirects
-if (!Flight::request()->secure && !Enviroment::isCli() && Config::currentConfig('forceHTTPS')) {
+if (!Flight::request()->secure && !Enviroment::isCli() && Config::get('forceHTTPS')) {
     Flight::redirect('https://' . Flight::request()->host . Flight::request()->url);
     exit;
 }

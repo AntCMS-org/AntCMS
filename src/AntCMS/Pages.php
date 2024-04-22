@@ -58,7 +58,7 @@ class Pages
     {
         $pages = self::getPages();
 
-        $baseURL = Config::currentConfig('baseURL');
+        $baseURL = Config::get('baseURL');
         foreach ($pages as $key => $page) {
             $url = "//" . Tools::repairURL($baseURL . $page['functionalPagePath']);
             $pages[$key]['url'] = $url;

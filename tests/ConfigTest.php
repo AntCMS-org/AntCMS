@@ -9,7 +9,7 @@ class ConfigTest extends TestCase
 {
     public function testGetConfig(): void
     {
-        $config = Config::currentConfig();
+        $config = Config::get();
 
         $expectedKeys = ['siteInfo', 'forceHTTPS', 'activeTheme', 'cacheMode', 'debug', 'baseURL'];
 
@@ -35,7 +35,7 @@ class ConfigTest extends TestCase
 
     public function testSaveConfigPassed(): void
     {
-        $currentConfig = Config::currentConfig();
+        $currentConfig = Config::get();
 
         try {
             $result = Config::saveConfig($currentConfig);

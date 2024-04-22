@@ -17,7 +17,7 @@ class Cache
      */
     public function __construct(null|string $mode = null)
     {
-        $mode ??= Config::currentConfig('cacheMode') ?? 'auto';
+        $mode ??= Config::get('cacheMode') ?? 'auto';
         if ($mode == 'auto') {
             if (extension_loaded('apcu') && apcu_enabled()) {
                 $mode = 'apcu';

@@ -21,11 +21,11 @@ use Symfony\Contracts\Cache\ItemInterface;
 
 class Markdown
 {
-    public static function renderMarkdown(string $md, ?string $cacheKey = null): string
+    public static function parse(string $md, ?string $cacheKey = null): string
     {
         $antCache = new Cache();
         $cacheKey ??= $antCache->createCacheKey($md, 'markdown');
-        $config = Config::currentConfig();
+        $config = Config::get();
 
         return $antCache->get($cacheKey, function (ItemInterface $item) use ($config, $md): string {
             $defaultAttributes = [];

@@ -12,8 +12,8 @@ class Controller
     public function __construct()
     {
         Flight::route("GET /sitemap.xml", function (): void {
-            $protocol = Config::currentConfig('forceHTTPS') ? 'https' : Flight::request()->scheme;
-            $baseURL = Config::currentConfig('baseURL');
+            $protocol = Config::get('forceHTTPS') ? 'https' : Flight::request()->scheme;
+            $baseURL = Config::get('baseURL');
 
             $pages = Pages::getPages();
 

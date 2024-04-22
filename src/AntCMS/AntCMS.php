@@ -6,7 +6,6 @@ use AntCMS\Markdown;
 use AntCMS\Pages;
 use AntCMS\Config;
 use Flight;
-use HostByBelle\CompressionBuffer;
 
 class AntCMS
 {
@@ -37,7 +36,7 @@ class AntCMS
             'AntCMSDescription' => $content['description'],
             'AntCMSAuthor' => $content['author'],
             'AntCMSKeywords' => $content['keywords'],
-            'markdown' => Markdown::renderMarkdown($content['content'], $content['cacheKey']),
+            'markdown' => Markdown::parse($content['content'], $content['cacheKey']),
             'ThemeConfig' => $themeConfig['config'] ?? [],
             'pages' => Pages::getNavList($page),
         ];
@@ -110,7 +109,7 @@ class AntCMS
      */
     public static function getThemeTemplate(string $layout = 'default', string $theme = null): string
     {
-        $theme ??= Config::currentConfig('activeTheme');
+        $theme ??= Config::get('activeTheme');
 
         if (!is_dir(antThemePath . DIRECTORY_SEPARATOR . $theme)) {
             $theme = 'Default';
@@ -200,7 +199,7 @@ class AntCMS
 
     public static function getSiteInfo(): array
     {
-        return Config::currentConfig('siteInfo');
+        return Config::get('siteInfo');
     }
 
     public function serveContent(string $path): void
@@ -218,7 +217,7 @@ class AntCMS
 
     public static function getThemeConfig(string|null $theme = null)
     {
-        $theme ??= Config::currentConfig('activeTheme');
+        $theme ??= Config::get('activeTheme');
 
         if (!is_dir(antThemePath . '/' . $theme)) {
             $theme = 'Default';
