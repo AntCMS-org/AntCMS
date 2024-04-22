@@ -10,7 +10,7 @@ use Symfony\Component\Cache\Adapter\ArrayAdapter;
 class Cache
 {
     private ?object $CacheInterface = null;
-    public static $defaultLifespan = 604_800; // 1 week
+    public static int $defaultLifespan = 604_800; // 1 week
 
     /**
      * Creates a new cache object, sets the correct caching type. ('auto', 'filesystem', 'apcu', or 'none')

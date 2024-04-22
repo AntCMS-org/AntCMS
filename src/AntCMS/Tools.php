@@ -113,15 +113,13 @@ class Tools
     {
         $ext = pathinfo($path, PATHINFO_EXTENSION);
         $type = match ($ext) {
-            'html' => 'text/html',
-            'htm' => 'text/html',
+            'html', 'htm' => 'text/html',
             'txt' => 'text/plain',
             'css' => 'text/css',
             'js' => 'application/javascript',
             'json' => 'application/json',
             'xml' => 'application/xml',
-            'jpg' => 'image/jpeg',
-            'jpeg' => 'image/jpeg',
+            'jpg', 'jpeg' => 'image/jpeg',
             'png' => 'image/png',
             'gif' => 'image/gif',
             'svg' => 'image/svg+xml',

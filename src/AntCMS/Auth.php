@@ -6,27 +6,27 @@ use AntCMS\Config;
 
 class Auth
 {
-    protected $role;
-    protected $username;
-    protected $authenticated;
+    protected string $role;
+    protected string $username;
+    protected bool $authenticated = false;
 
-    public function getRole()
+    public function getRole(): string
     {
         return $this->role;
     }
 
-    public function getUsername()
+    public function getUsername(): string
     {
         return $this->username;
     }
 
-    public function getName()
+    public function getName(): string
     {
         $currentUser = Users::getUser($this->username);
         return $currentUser['name'];
     }
 
-    public function isAuthenticated()
+    public function isAuthenticated(): bool
     {
         return $this->authenticated ?? false;
     }

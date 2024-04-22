@@ -42,10 +42,7 @@ class AntYaml
         return (bool) file_put_contents($path, $yaml);
     }
 
-    /**
-     * @return array<mixed>|null
-     */
-    public static function parseYaml(string $yaml): ?array
+    public static function parseYaml(string $yaml): array
     {
         return Yaml::parse($yaml);
     }
