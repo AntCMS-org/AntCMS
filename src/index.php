@@ -5,10 +5,10 @@ use HostByBelle\CompressionBuffer;
 use AntCMS\AntCMS;
 use AntCMS\Config;
 use AntCMS\Enviroment;
+use AntCMS\Tools;
 
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
-define('START', hrtime(true));
 ini_set('error_log', 'php_error.log');
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'Vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
@@ -29,18 +29,7 @@ $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 // Add a response body callback to display mem usage and time spent
 Flight::response()->addResponseBodyCallback(function ($body) {
     if (Config::currentConfig('debug')) {
-        $elapsed_time = round((hrtime(true) - START) / 1e+6, 2);
-        $mem_usage = round(memory_get_peak_usage() / 1e+6, 2);
-        $message = "<p>Took $elapsed_time milliseconds to render the page with $mem_usage MB of RAM used.</p>";
-        if (CompressionBuffer::isEnabled() && Config::currentConfig('performance.doOutputCompression')) {
-            $method = CompressionBuffer::getFirstMethodChoice();
-            if ($method === 'br') {
-                $method = 'brotli';
-            }
-            $message .= PHP_EOL . "<p>$method was used for output compression.</p>";
-        }
-
-        return str_replace('<!--AntCMS-Debug-->', $message, $body);
+        return str_replace('<!--AntCMS-Debug-->', Tools::buildDebugInfo(), $body);
     } else {
         return $body;
     }

@@ -135,4 +135,42 @@ class Tools
         }
         return $type;
     }
+
+    private static function createDebugLogLine(string $wording, bool|string $value): string
+    {
+        if (is_bool($value)) {
+            $value = $value ? "enabled" : "disabled";
+        }
+        return "<dd>$wording: <strong>$value</strong></dd>";
+    }
+
+    public static function buildDebugInfo(): string
+    {
+        $elapsed_time = round((hrtime(true) - START) / 1e+6, 2);
+        $mem_usage = round(memory_get_peak_usage() / 1e+6, 2);
+
+        // Performance info
+        $result = "<dl><dt>Performance Metrics</dt>";
+        $result .= self::createDebugLogLine('Time to process request', "$elapsed_time ms");
+        $result .= self::createDebugLogLine('Memory usage', "$mem_usage MB");
+
+        // System info
+        $result .= "<dt>System Info</dt>";
+        $result .= self::createDebugLogLine('Output compression', Config::currentConfig('performance.doOutputCompression'));
+
+        if (CompressionBuffer::isEnabled() && Config::currentConfig('performance.doOutputCompression')) {
+            $method = CompressionBuffer::getFirstMethodChoice();
+            if ($method === 'br') {
+                $method = 'brotli';
+            }
+            $result .= self::createDebugLogLine('Compression method', $method);
+        } else {
+            $result .= self::createDebugLogLine('Output compression', 'disabled');
+        }
+
+        $result .= self::createDebugLogLine('Asset compression', Config::currentConfig('performance.compressTextAssets'));
+        $result .= self::createDebugLogLine('PHP version', PHP_VERSION);
+
+        return $result . "</dl>";
+    }
 }

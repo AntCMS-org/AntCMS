@@ -9,3 +9,5 @@ parameters:
 	ignoreErrors:
 		- '#^Call to an undefined method AntCMS\\Cache\:\:get\(\)\.$#'
 		- '#^Call to an undefined method AntCMS\\Cache\:\:prune\(\)\.$#'
+	bootstrapFiles:
+		- src/Bootstrap.php
