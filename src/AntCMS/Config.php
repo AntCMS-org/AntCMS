@@ -79,7 +79,7 @@ class Config
     {
         foreach (self::$ConfigKeys as $ConfigKey) {
             if (!array_key_exists($ConfigKey, $config)) {
-                throw new Exception("New config is missing the required {$ConfigKey} key from it's array!");
+                throw new Exception("New config is missing the required {$ConfigKey} key from its array!");
             }
         }
 
