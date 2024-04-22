@@ -32,7 +32,7 @@ Flight::response()->addResponseBodyCallback(function ($body) {
         $elapsed_time = round((hrtime(true) - START) / 1e+6, 2);
         $mem_usage = round(memory_get_peak_usage() / 1e+6, 2);
         $message = "<p>Took $elapsed_time milliseconds to render the page with $mem_usage MB of RAM used.</p>";
-        if (CompressionBuffer::isEnabled()) {
+        if (CompressionBuffer::isEnabled() && Config::currentConfig('performance.doOutputCompression')) {
             $method = CompressionBuffer::getFirstMethodChoice();
             if ($method === 'br') {
                 $method = 'brotli';
@@ -47,8 +47,10 @@ Flight::response()->addResponseBodyCallback(function ($body) {
 });
 
 // Setup CompressionBuffer & enable it in Flight
-CompressionBuffer::setUp();
-Flight::response()->addResponseBodyCallback([CompressionBuffer::class, 'handler']);
+CompressionBuffer::setUp(true, false, [Flight::response(), 'header']);
+if (Config::currentConfig('performance.doOutputCompression')) {
+    Flight::response()->addResponseBodyCallback([CompressionBuffer::class, 'handler']);
+}
 
 // HTTPS redirects
 if (!Flight::request()->secure && !Enviroment::isCli() && Config::currentConfig('forceHTTPS')) {

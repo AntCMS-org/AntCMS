@@ -10,6 +10,7 @@ class Config
 {
     private static array $ConfigKeys = [
         'siteInfo',
+        'performance',
         'forceHTTPS',
         'activeTheme',
         'cacheMode',
@@ -26,6 +27,10 @@ class Config
         $defaultOptions = [
             'siteInfo' => [
                 'siteTitle' => 'AntCMS',
+            ],
+            'performance' => [
+                'doOutputCompression' => true,
+                'compressTextAssets' => true,
             ],
             'forceHTTPS' => !Enviroment::isPHPDevServer(),
             'activeTheme' => 'Default',
@@ -52,24 +57,15 @@ class Config
         if (is_null($key)) {
             return $config;
         } else {
-            $keys = explode('.', $key);
-            return self::getArrayValue($config, $keys);
-        }
-    }
-
-    /**
-     * @param array<mixed> $array
-     * @param array<mixed> $keys
-     * @return mixed
-     */
-    private static function getArrayValue(array $array, array $keys)
-    {
-        foreach ($keys as $key) {
-            if (isset($array[$key])) {
-                return $array[$key];
-            } else {
-                return null;
+            foreach (explode('.', $key) as $segment) {
+                if (array_key_exists($segment, $config)) {
+                    $config = $config[$segment];
+                } else {
+                    return null;
+                }
             }
+
+            return $config;
         }
     }
 

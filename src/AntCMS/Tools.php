@@ -86,6 +86,12 @@ class Tools
         $cache = new Cache();
         $contents = file_get_contents($path);
         $encoding = 'identity';
+
+        // Skip compression when asset compression is disabled
+        if (!Config::currentConfig('performance.compressTextAssets')) {
+            return [$contents, $encoding];
+        }
+
         switch (pathinfo($path, PATHINFO_EXTENSION)) {
             case 'css':
             case 'html':
