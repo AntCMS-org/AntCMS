@@ -4,3 +4,4 @@ src/Cache/*
 src/Config/Config.yaml
 src/Config/Pages.yaml
 .php-cs-fixer.cache
+src/php_error.log

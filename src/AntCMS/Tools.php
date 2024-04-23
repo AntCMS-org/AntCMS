@@ -17,7 +17,7 @@ class Tools
         $files = [];
         foreach ($iterator as $file) {
             if (pathinfo($file, PATHINFO_EXTENSION) == $extension || $extension == null) {
-                $files[] = ($returnPath) ? $file->getPathname() : $file->getFilename();
+                $files[] = ($returnPath === true) ? $file->getPathname() : $file->getFilename();
             }
         }
 
@@ -27,7 +27,7 @@ class Tools
     public static function repairFilePath(string $path): string
     {
         $newPath = realpath($path);
-        if (!$newPath) {
+        if ($newPath === false) {
             $newPath = str_replace('//', '/', $path);
             $newPath = str_replace('\\\\', '/', $newPath);
             $newPath = str_replace('\\', '/', $newPath);
@@ -88,7 +88,7 @@ class Tools
         $encoding = 'identity';
 
         // Skip compression when asset compression is disabled
-        if (!Config::get('performance.compressTextAssets')) {
+        if (!compressTextAssets) {
             return [$contents, $encoding];
         }
 
@@ -131,7 +131,7 @@ class Tools
             default => mime_content_type($path),
         };
         if ($type === false) {
-            $type = 'application/octet-stream';
+            return 'application/octet-stream';
         }
         return $type;
     }
@@ -156,9 +156,9 @@ class Tools
 
         // System info
         $result .= "<dt>System Info</dt>";
-        $result .= self::createDebugLogLine('Output compression', Config::get('performance.doOutputCompression'));
+        $result .= self::createDebugLogLine('Output compression', doOutputCompression);
 
-        if (CompressionBuffer::isEnabled() && Config::get('performance.doOutputCompression')) {
+        if (CompressionBuffer::isEnabled() && doOutputCompression) {
             $method = CompressionBuffer::getFirstMethodChoice();
             if ($method === 'br') {
                 $method = 'brotli';
@@ -168,7 +168,7 @@ class Tools
             $result .= self::createDebugLogLine('Output compression', 'disabled');
         }
 
-        $result .= self::createDebugLogLine('Asset compression', Config::get('performance.compressTextAssets'));
+        $result .= self::createDebugLogLine('Asset compression', compressTextAssets);
         $result .= self::createDebugLogLine('PHP version', PHP_VERSION);
 
         return $result . "</dl>";

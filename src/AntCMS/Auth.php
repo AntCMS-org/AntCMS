@@ -2,8 +2,6 @@
 
 namespace AntCMS;
 
-use AntCMS\Config;
-
 class Auth
 {
     protected string $role;

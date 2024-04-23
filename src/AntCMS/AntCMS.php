@@ -2,9 +2,6 @@
 
 namespace AntCMS;
 
-use AntCMS\Markdown;
-use AntCMS\Pages;
-use AntCMS\Config;
 use Flight;
 
 class AntCMS
@@ -25,12 +22,12 @@ class AntCMS
     public function renderPage(string $page): string
     {
         $content = $this->getPage($page);
-        $themeConfig = self::getThemeConfig();
 
-        if (!$content || !is_array($content)) {
+        if ($content === []) {
             $this->renderException("404");
         }
 
+        $themeConfig = self::getThemeConfig();
         $params = [
             'AntCMSTitle' => $content['title'],
             'AntCMSDescription' => $content['description'],
@@ -43,9 +40,8 @@ class AntCMS
 
         if (Twig::templateExists($page)) {
             return Twig::render($page, $params);
-        } else {
-            return Twig::render('markdown.html.twig', $params);
         }
+        return Twig::render('markdown.html.twig', $params);
     }
 
     /**
@@ -73,9 +69,9 @@ class AntCMS
     }
 
     /**
-     * @return array<mixed>|false
+     * @return array<mixed>
      */
-    public function getPage(string $page): array|false
+    public function getPage(string $page): array
     {
         $page = strtolower($page);
         $pagePath = Tools::convertFunctionaltoFullpath($page);
@@ -97,67 +93,11 @@ class AntCMS
                     'cacheKey' => $this->cache->createCacheKeyFile($pagePath, 'content'),
                 ];
             } catch (\Exception) {
-                return false;
+                return [];
             }
         } else {
-            return false;
+            return [];
         }
-    }
-
-    /**
-     * @param string|null $theme
-     */
-    public static function getThemeTemplate(string $layout = 'default', string $theme = null): string
-    {
-        $theme ??= Config::get('activeTheme');
-
-        if (!is_dir(antThemePath . DIRECTORY_SEPARATOR . $theme)) {
-            $theme = 'Default';
-        }
-
-        $basePath = Tools::repairFilePath(antThemePath . DIRECTORY_SEPARATOR . $theme);
-
-        if (str_contains($layout, '_')) {
-            $layoutPrefix = explode('_', $layout)[0];
-            $templatePath = $basePath . DIRECTORY_SEPARATOR . 'Templates' . DIRECTORY_SEPARATOR . $layoutPrefix;
-            $defaultTemplates = Tools::repairFilePath(antThemePath . '/Default/Templates' . '/' . $layoutPrefix);
-        } else {
-            $templatePath = $basePath . DIRECTORY_SEPARATOR . 'Templates';
-            $defaultTemplates = Tools::repairFilePath(antThemePath . '/Default/Templates');
-        }
-
-        try {
-            $template = @file_get_contents($templatePath . DIRECTORY_SEPARATOR . $layout . '.html.twig');
-            if (empty($template)) {
-                $template = @file_get_contents($defaultTemplates . DIRECTORY_SEPARATOR . $layout . '.html.twig');
-            }
-        } catch (\Exception) {
-        }
-
-        if (empty($template)) {
-            if ($layout == 'default') {
-                $template = '
-                <!DOCTYPE html>
-                <html>
-                    <head>
-                        <title>{{ AntCMSTitle }}</title>
-                        <meta name="description" content="{{ AntCMSDescription }}">
-                        <meta name="author" content="{{ AntCMSAuthor }}">
-                        <meta name="keywords" content="{{ AntCMSKeywords }}">
-                    </head>
-                    <body>
-                        <p>AntCMS had an error when fetching the page template, please contact the site administrator.</p>
-                        {{ AntCMSBody | raw }}
-                    </body>
-                </html>';
-            } else {
-                $template = '
-                <h1>There was an error</h1>
-                <p>AntCMS had an error when fetching the page template, please contact the site administrator.</p>';
-            }
-        }
-
-        return $template;
     }
 
     /**
@@ -195,11 +135,6 @@ class AntCMS
         }
 
         return $pageHeaders;
-    }
-
-    public static function getSiteInfo(): array
-    {
-        return Config::get('siteInfo');
     }
 
     public function serveContent(string $path): void

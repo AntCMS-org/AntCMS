@@ -2,9 +2,6 @@
 
 namespace AntCMS;
 
-use AntCMS\Cache;
-use AntCMS\Config;
-use AntCMS\AntCMS;
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\Autolink\AutolinkExtension;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
@@ -25,9 +22,9 @@ class Markdown
     {
         $antCache = new Cache();
         $cacheKey ??= $antCache->createCacheKey($md, 'markdown');
-        $config = Config::get();
 
-        return $antCache->get($cacheKey, function (ItemInterface $item) use ($config, $md): string {
+        return $antCache->get($cacheKey, function (ItemInterface $item) use ($md): string {
+            $config = Config::get();
             $defaultAttributes = [];
             $themeConfig = AntCMS::getThemeConfig();
             foreach (($themeConfig['defaultAttributes'] ?? []) as $class => $attributes) {

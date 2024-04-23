@@ -2,7 +2,6 @@
 
 namespace AntCMS;
 
-use AntCMS\Config;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Cache\Adapter\ApcuAdapter;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
@@ -19,7 +18,7 @@ class Cache
     {
         $mode ??= Config::get('cacheMode') ?? 'auto';
         if ($mode == 'auto') {
-            if (extension_loaded('apcu') && apcu_enabled()) {
+            if (function_exists('apcu_enabled') && apcu_enabled()) {
                 $mode = 'apcu';
             } else {
                 $mode = 'filesystem';
@@ -38,9 +37,8 @@ class Cache
     {
         if (method_exists($this->CacheInterface, $name)) {
             return call_user_func_array([$this->CacheInterface, $name], $arguments);
-        } else {
-            return false;
         }
+        return false;
     }
 
     /**

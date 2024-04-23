@@ -1,5 +1,8 @@
 <?php
 
+use AntCMS\Config;
+use AntCMS\Pages;
+
 define('START', hrtime(true));
 
 // Registering constants
@@ -34,3 +37,18 @@ $loader->addNamespace('AntCMS\\Plugins\\', __DIR__ . DIRECTORY_SEPARATOR . 'Plug
 
 $loader->checkClassMap();
 $loader->register();
+
+// First-time related checks
+if (!file_exists(antConfigFile)) {
+    Config::generateConfig();
+}
+
+if (!file_exists(antPagesList)) {
+    Pages::generatePages();
+}
+
+// Define config-related constants
+$config = Config::get();
+define('compressTextAssets', $config['performance']['compressTextAssets']);
+define('doOutputCompression', $config['performance']['doOutputCompression']);
+define('baseUrl', $config['baseUrl']);

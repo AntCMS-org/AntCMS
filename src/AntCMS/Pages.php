@@ -2,11 +2,6 @@
 
 namespace AntCMS;
 
-use AntCMS\AntCMS;
-use AntCMS\AntYaml;
-use AntCMS\Config;
-use AntCMS\Tools;
-
 class Pages
 {
     public static function generatePages(): void
@@ -57,10 +52,8 @@ class Pages
     public static function getNavList(string $currentPage = ''): array
     {
         $pages = self::getPages();
-
-        $baseURL = Config::get('baseURL');
         foreach ($pages as $key => $page) {
-            $url = "//" . Tools::repairURL($baseURL . $page['functionalPagePath']);
+            $url = "//" . Tools::repairURL(baseUrl . $page['functionalPagePath']);
             $pages[$key]['url'] = $url;
             $pages[$key]['active'] = $currentPage == $page['functionalPagePath'];
 
