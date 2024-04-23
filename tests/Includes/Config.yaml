@@ -3,7 +3,7 @@ siteInfo:
 performance:
     doOutputCompression: true
     compressTextAssets: true
-forceHTTPS: true
+forceHttps: true
 activeTheme: Default
 cacheMode: auto
 debug: true

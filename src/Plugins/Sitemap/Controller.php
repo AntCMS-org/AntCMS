@@ -12,9 +12,7 @@ class Controller
     public function __construct()
     {
         Flight::route("GET /sitemap.xml", function (): void {
-            $protocol = Config::get('forceHTTPS') ? 'https' : Flight::request()->scheme;
-            $baseURL = Config::get('baseURL');
-
+            $protocol = Config::get('forceHttps') ? 'https' : Flight::request()->scheme;
             $pages = Pages::getPages();
 
             if (extension_loaded('dom')) {
@@ -34,7 +32,7 @@ class Controller
                 foreach ($urls as $url) {
                     $element = $domDocument->createElement('url');
 
-                    $loc = $domDocument->createElement('loc', $protocol . '://' . Tools::repairURL($baseURL . $url['url']));
+                    $loc = $domDocument->createElement('loc', $protocol . '://' . Tools::repairURL(baseUrl . $url['url']));
                     $element->appendChild($loc);
 
                     $lastmod = $domDocument->createElement('lastmod', $url['lastchange']);

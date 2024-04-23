@@ -4,9 +4,6 @@ namespace AntCMS;
 
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
-use AntCMS\Tools;
-use AntCMS\Config;
-use AntCMS\Markdown;
 
 class TwigFilters extends AbstractExtension
 {
@@ -20,7 +17,7 @@ class TwigFilters extends AbstractExtension
 
     public function absUrl(string $relative): string
     {
-        return '//' . Tools::repairURL(Config::get('baseURL') . '/' . trim($relative));
+        return '//' . Tools::repairURL(baseUrl . '/' . trim($relative));
     }
 
     public function markdown(string $content): string

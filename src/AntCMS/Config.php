@@ -2,8 +2,6 @@
 
 namespace AntCMS;
 
-use AntCMS\AntYaml;
-use AntCMS\Enviroment;
 use Exception;
 
 class Config
@@ -11,11 +9,11 @@ class Config
     private static array $ConfigKeys = [
         'siteInfo',
         'performance',
-        'forceHTTPS',
+        'forceHttps',
         'activeTheme',
         'cacheMode',
         'debug',
-        'baseURL',
+        'baseUrl',
         'embed',
     ];
 
@@ -32,11 +30,11 @@ class Config
                 'doOutputCompression' => true,
                 'compressTextAssets' => true,
             ],
-            'forceHTTPS' => !Enviroment::isPHPDevServer(),
+            'forceHttps' => !Enviroment::isPHPDevServer(),
             'activeTheme' => 'Default',
             'cacheMode' => 'auto',
             'debug' => true,
-            'baseURL' => $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']),
+            'baseUrl' => $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']),
             'embed' => [
                 'allowed_domains' => ['youtube.com', 'twitter.com', 'github.com', 'vimeo.com', 'flickr.com', 'instagram.com', 'facebook.com'],
             ]

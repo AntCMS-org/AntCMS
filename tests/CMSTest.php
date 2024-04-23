@@ -8,15 +8,6 @@ include_once 'Includes' . DIRECTORY_SEPARATOR . 'Include.php';
 
 class CMSTest extends TestCase
 {
-    public function testgetSiteInfo(): void
-    {
-        $siteInfo = AntCMS::getSiteInfo();
-
-        $this->assertIsArray($siteInfo);
-        $this->assertArrayHasKey('siteTitle', $siteInfo);
-        $this->assertEquals('AntCMS', $siteInfo['siteTitle']);
-    }
-
     public function testRenderPage(): void
     {
         Pages::generatePages();

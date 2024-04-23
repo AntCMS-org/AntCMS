@@ -11,11 +11,9 @@ class Controller
     public function __construct()
     {
         Flight::route("GET /robots.txt", function (): void {
-            $protocol = Config::get('forceHTTPS') ? 'https' : Flight::request()->scheme;
-            $baseURL = Config::get('baseURL');
-
+            $protocol = Config::get('forceHttps') ? 'https' : Flight::request()->scheme;
             echo 'User-agent: *' . PHP_EOL;
-            echo 'Sitemap: ' . $protocol . '://' . Tools::repairURL($baseURL . '/sitemap.xml' . PHP_EOL);
+            echo 'Sitemap: ' . $protocol . '://' . Tools::repairURL(baseUrl . '/sitemap.xml' . PHP_EOL);
             Flight::response()->setHeader('Content-Type', 'text/plain');
         });
     }

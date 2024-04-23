@@ -88,7 +88,7 @@ class Tools
         $encoding = 'identity';
 
         // Skip compression when asset compression is disabled
-        if (!Config::get('performance.compressTextAssets')) {
+        if (!compressTextAssets) {
             return [$contents, $encoding];
         }
 
@@ -156,9 +156,9 @@ class Tools
 
         // System info
         $result .= "<dt>System Info</dt>";
-        $result .= self::createDebugLogLine('Output compression', Config::get('performance.doOutputCompression'));
+        $result .= self::createDebugLogLine('Output compression', doOutputCompression);
 
-        if (CompressionBuffer::isEnabled() && Config::get('performance.doOutputCompression')) {
+        if (CompressionBuffer::isEnabled() && doOutputCompression) {
             $method = CompressionBuffer::getFirstMethodChoice();
             if ($method === 'br') {
                 $method = 'brotli';
@@ -168,7 +168,7 @@ class Tools
             $result .= self::createDebugLogLine('Output compression', 'disabled');
         }
 
-        $result .= self::createDebugLogLine('Asset compression', Config::get('performance.compressTextAssets'));
+        $result .= self::createDebugLogLine('Asset compression', compressTextAssets);
         $result .= self::createDebugLogLine('PHP version', PHP_VERSION);
 
         return $result . "</dl>";

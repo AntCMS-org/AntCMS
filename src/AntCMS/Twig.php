@@ -2,8 +2,6 @@
 
 namespace AntCMS;
 
-use AntCMS\Config;
-use AntCMS\TwigFilters;
 use Twig\Environment;
 use Twig\Loader\ArrayLoader;
 use Twig\Loader\ChainLoader;
@@ -36,7 +34,7 @@ class Twig
                 ]
             );
             $environment->addExtension(new TwigFilters());
-            $environment->addGlobal('AntCMSSiteTitle', AntCMS::getSiteInfo()['siteTitle']);
+            $environment->addGlobal('AntCMSSiteTitle', Config::get('siteInfo')['siteTitle']);
             self::$twigEnvironment = $environment;
         }
     }
