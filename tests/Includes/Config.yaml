@@ -7,6 +7,6 @@ forceHttps: true
 activeTheme: Default
 cacheMode: auto
 debug: true
-baseURL: antcms.org/
+baseUrl: antcms.org/
 embed:
     allowed_domains: [youtube.com, twitter.com, github.com, vimeo.com, flickr.com, instagram.com, facebook.com]

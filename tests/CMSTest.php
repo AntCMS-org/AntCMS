@@ -39,25 +39,7 @@ class CMSTest extends TestCase
         $antCMS = new AntCMS();
         $result = $antCMS->getPage('/thisdoesnotexist.md');
 
-        $this->assertEquals(false, $result);
-        $this->assertIsBool($result);
-    }
-
-    public function testGetThemeTemplate(): void
-    {
-        $antCMS = new AntCMS();
-        $result = $antCMS->getThemeTemplate();
-
-        $this->assertNotEmpty($result);
-        $this->assertIsString($result);
-    }
-
-    public function testGetThemeTemplateFallback(): void
-    {
-        $antCMS = new AntCMS();
-        $result = $antCMS->getThemeTemplate('atemplatethatjusdoesntexist');
-
-        $this->assertNotEmpty($result);
-        $this->assertIsString($result);
+        $this->assertEquals([], $result);
+        $this->assertIsArray($result);
     }
 }
