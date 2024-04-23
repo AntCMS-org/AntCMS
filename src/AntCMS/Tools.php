@@ -27,7 +27,7 @@ class Tools
     public static function repairFilePath(string $path): string
     {
         $newPath = realpath($path);
-        if ($newPath === '' || $newPath === '0' || $newPath === false) {
+        if ($newPath === false) {
             $newPath = str_replace('//', '/', $path);
             $newPath = str_replace('\\\\', '/', $newPath);
             $newPath = str_replace('\\', '/', $newPath);

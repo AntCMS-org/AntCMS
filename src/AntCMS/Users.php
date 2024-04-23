@@ -124,7 +124,7 @@ class Users
     private static function validateUsername(string $username): bool
     {
         $pattern = '/^[\p{L}\p{M}*0-9]+$/u';
-        if (preg_match($pattern, $username) === 0 || preg_match($pattern, $username) === 0 || preg_match($pattern, $username) === false) {
+        if (preg_match($pattern, $username) === 0 || preg_match($pattern, $username) === false) {
             throw new \Exception("Invalid username: \"$username\". Usernames can only contain letters, numbers, and combining marks.");
         }
         return true;
