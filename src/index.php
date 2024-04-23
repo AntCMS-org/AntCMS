@@ -21,9 +21,8 @@ $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 Flight::response()->addResponseBodyCallback(function ($body) {
     if (Config::get('debug')) {
         return str_replace('<!--AntCMS-Debug-->', Tools::buildDebugInfo(), $body);
-    } else {
-        return $body;
     }
+    return $body;
 });
 
 // Setup CompressionBuffer & enable it in Flight

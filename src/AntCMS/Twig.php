@@ -12,14 +12,14 @@ class Twig
     private static ?Environment $twigEnvironment = null;
     private static ?string $theme = null;
 
-    public static function registerTwig(?Environment $environment = null): void
+    public static function registerTwig(?Environment $twigEnvironment = null): void
     {
         self::$theme = Config::get('activeTheme');
 
-        if (!is_null($environment)) {
-            self::$twigEnvironment = $environment;
+        if (!is_null($twigEnvironment)) {
+            self::$twigEnvironment = $twigEnvironment;
         } else {
-            $environment = new Environment(
+            $twigEnvironment = new Environment(
                 new ChainLoader([
                     new FilesystemLoader([
                         antThemePath . DIRECTORY_SEPARATOR . self::$theme . DIRECTORY_SEPARATOR . 'Templates',
@@ -33,9 +33,9 @@ class Twig
                     'use_yield' => false,
                 ]
             );
-            $environment->addExtension(new TwigFilters());
-            $environment->addGlobal('AntCMSSiteTitle', Config::get('siteInfo')['siteTitle']);
-            self::$twigEnvironment = $environment;
+            $twigEnvironment->addExtension(new TwigFilters());
+            $twigEnvironment->addGlobal('AntCMSSiteTitle', Config::get('siteInfo')['siteTitle']);
+            self::$twigEnvironment = $twigEnvironment;
         }
     }
 

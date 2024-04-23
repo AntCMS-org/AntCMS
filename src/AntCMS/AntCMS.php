@@ -23,7 +23,7 @@ class AntCMS
     {
         $content = $this->getPage($page);
 
-        if (!$content || !is_array($content)) {
+        if ($content === []) {
             $this->renderException("404");
         }
 
@@ -40,9 +40,8 @@ class AntCMS
 
         if (Twig::templateExists($page)) {
             return Twig::render($page, $params);
-        } else {
-            return Twig::render('markdown.html.twig', $params);
         }
+        return Twig::render('markdown.html.twig', $params);
     }
 
     /**
@@ -70,9 +69,9 @@ class AntCMS
     }
 
     /**
-     * @return array<mixed>|false
+     * @return array<mixed>
      */
-    public function getPage(string $page): array|false
+    public function getPage(string $page): array
     {
         $page = strtolower($page);
         $pagePath = Tools::convertFunctionaltoFullpath($page);
@@ -94,10 +93,10 @@ class AntCMS
                     'cacheKey' => $this->cache->createCacheKeyFile($pagePath, 'content'),
                 ];
             } catch (\Exception) {
-                return false;
+                return [];
             }
         } else {
-            return false;
+            return [];
         }
     }
 

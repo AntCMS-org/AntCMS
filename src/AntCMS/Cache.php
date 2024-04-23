@@ -37,9 +37,8 @@ class Cache
     {
         if (method_exists($this->CacheInterface, $name)) {
             return call_user_func_array([$this->CacheInterface, $name], $arguments);
-        } else {
-            return false;
         }
+        return false;
     }
 
     /**

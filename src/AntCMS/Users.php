@@ -30,10 +30,9 @@ class Users
     {
         if (file_exists(antUsersList)) {
             return AntYaml::parseFile(antUsersList);
-        } else {
-            Flight::redirect('/profile/firsttime');
-            exit;
         }
+        Flight::redirect('/profile/firsttime');
+        exit;
     }
 
     public static function addUser(array $data): bool
@@ -125,7 +124,7 @@ class Users
     private static function validateUsername(string $username): bool
     {
         $pattern = '/^[\p{L}\p{M}*0-9]+$/u';
-        if (!preg_match($pattern, $username)) {
+        if (preg_match($pattern, $username) === 0 || preg_match($pattern, $username) === 0 || preg_match($pattern, $username) === false) {
             throw new \Exception("Invalid username: \"$username\". Usernames can only contain letters, numbers, and combining marks.");
         }
         return true;

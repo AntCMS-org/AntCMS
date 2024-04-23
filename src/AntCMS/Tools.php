@@ -17,7 +17,7 @@ class Tools
         $files = [];
         foreach ($iterator as $file) {
             if (pathinfo($file, PATHINFO_EXTENSION) == $extension || $extension == null) {
-                $files[] = ($returnPath) ? $file->getPathname() : $file->getFilename();
+                $files[] = ($returnPath === true) ? $file->getPathname() : $file->getFilename();
             }
         }
 
@@ -27,7 +27,7 @@ class Tools
     public static function repairFilePath(string $path): string
     {
         $newPath = realpath($path);
-        if (!$newPath) {
+        if ($newPath === '' || $newPath === '0' || $newPath === false) {
             $newPath = str_replace('//', '/', $path);
             $newPath = str_replace('\\\\', '/', $newPath);
             $newPath = str_replace('\\', '/', $newPath);
@@ -131,7 +131,7 @@ class Tools
             default => mime_content_type($path),
         };
         if ($type === false) {
-            $type = 'application/octet-stream';
+            return 'application/octet-stream';
         }
         return $type;
     }

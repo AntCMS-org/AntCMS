@@ -49,22 +49,20 @@ class Config
      * @param string|null $key The key of the configuration item to retrieve. Use dot notation to specify nested keys.
      * @return mixed The configuration array or a specific value if the key is specified.
      */
-    public static function get(?string $key = null)
+    public static function get(?string $key = null): mixed
     {
         $config = AntYaml::parseFile(antConfigFile);
         if (is_null($key)) {
             return $config;
-        } else {
-            foreach (explode('.', $key) as $segment) {
-                if (array_key_exists($segment, $config)) {
-                    $config = $config[$segment];
-                } else {
-                    return null;
-                }
-            }
-
-            return $config;
         }
+        foreach (explode('.', $key) as $segment) {
+            if (array_key_exists($segment, $config)) {
+                $config = $config[$segment];
+            } else {
+                return null;
+            }
+        }
+        return $config;
     }
 
     /**
