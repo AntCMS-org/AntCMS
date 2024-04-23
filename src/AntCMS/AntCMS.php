@@ -146,6 +146,7 @@ class AntCMS
             [$result, $encoding] = Tools::doAssetCompression($path);
             Flight::response()->header('Content-Type', $asset_mime_type);
             Flight::response()->header('Content-Encoding', $encoding);
+            Flight::response()->header('Vary', 'Accept-Encoding');
             echo $result;
         }
     }
