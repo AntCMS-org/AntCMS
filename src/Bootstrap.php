@@ -51,4 +51,5 @@ if (!file_exists(antPagesList)) {
 $config = Config::get();
 define('compressTextAssets', $config['performance']['compressTextAssets']);
 define('doOutputCompression', $config['performance']['doOutputCompression']);
+define('compressImageAssets', $config['performance']['compressImageAssets']);
 define('baseUrl', $config['baseUrl']);
