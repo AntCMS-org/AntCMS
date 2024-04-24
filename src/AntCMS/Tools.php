@@ -266,6 +266,7 @@ class Tools
         }
 
         $result .= self::createDebugLogLine('Asset compression', compressTextAssets);
+        $result .= self::createDebugLogLine('Image compression', compressImageAssets);
         $result .= self::createDebugLogLine('PHP version', PHP_VERSION);
 
         return $result . "</dl>";
