@@ -49,7 +49,7 @@ class Cache
      * @param string $salt An optional salt value to use in the cache key generation. Default is 'cache'.
      * @return string The generated cache key.
      */
-    public function createCacheKey(string $content, string $salt = 'cache'): string
+    public static function createCacheKey(string $content, string $salt = 'cache'): string
     {
         return hash(HASH_ALGO, $content . $salt);
     }
@@ -62,7 +62,7 @@ class Cache
      * @param string $salt An optional salt value to use in the cache key generation. Default is 'cache'.
      * @return string The generated cache key.
      */
-    public function createCacheKeyFile(string $filePath, string $salt = 'cache'): string
+    public static function createCacheKeyFile(string $filePath, string $salt = 'cache'): string
     {
         $differentiator = filemtime($filePath) ?: hash_file(HASH_ALGO, $filePath);
         return hash(HASH_ALGO, $filePath) . ".$differentiator.$salt";
