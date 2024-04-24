@@ -18,6 +18,7 @@ AntCMS is being largely rebuilt for better, faser, easier functionality the foll
 
  - Built in support for gzip, brotli, and zstd compression.
  - Automatic compression for text-based assets (JS, HTML, CSS, ect).
+ - Automatic image compression for JPEG, JPG, PNG, and WEBP image formats.
  - Insanely fast with zero tuning.
  - Minimal load on system resources.
  - Easy SEO with automatic handling of the robots.txt and sitemap files.
@@ -35,4 +36,5 @@ For improved performance, the following PHP extensions are suggested:
  - `zstd` for zstd compression.
  - `brotli` for brotli compression.
  - `zlib` for gzip / deflate compression.
+ - `gd` for automatic image compression.
  - `ctype`

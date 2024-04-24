@@ -29,6 +29,7 @@ class Config
             'performance' => [
                 'doOutputCompression' => true,
                 'compressTextAssets' => true,
+                'compressImageAssets' => true,
             ],
             'forceHttps' => !Enviroment::isPHPDevServer(),
             'activeTheme' => 'Default',
