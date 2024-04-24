@@ -7,6 +7,16 @@ use Symfony\Contracts\Cache\ItemInterface;
 
 class Tools
 {
+    private static array $textAssets = [
+        'css',
+        'html',
+        'js',
+        'xml',
+        'md',
+        'log',
+        'json',
+    ];
+
     /**
      * @return array<string>
      */
@@ -77,38 +87,6 @@ class Tools
         return true;
     }
 
-    /**
-     * Automatically selects an ideal compression method for various types of assets.
-     * Impliments caching to prevent repeat processing of assets.
-     */
-    public static function doAssetCompression(string $path): array
-    {
-        $cache = new Cache();
-        $contents = file_get_contents($path);
-        $encoding = 'identity';
-
-        // Skip compression when asset compression is disabled
-        if (!compressTextAssets) {
-            return [$contents, $encoding];
-        }
-
-        switch (pathinfo($path, PATHINFO_EXTENSION)) {
-            case 'css':
-            case 'html':
-            case 'js':
-            case 'xml':
-            case 'md':
-            case 'log':
-            case 'json':
-                CompressionBuffer::enable(); // We will use CompressionBuffer to handle text content
-                $encoding = CompressionBuffer::getFirstMethodChoice();
-                $cacheKey = $cache->createCacheKeyFile($path, "assetCompression-$encoding");
-                $contents = $cache->get($cacheKey, fn (ItemInterface $item): string => CompressionBuffer::handler($contents));
-        }
-        CompressionBuffer::disable();
-        return [$contents, $encoding];
-    }
-
     public static function getContentType(string $path): string
     {
         $ext = pathinfo($path, PATHINFO_EXTENSION);
@@ -134,6 +112,52 @@ class Tools
             return 'application/octet-stream';
         }
         return $type;
+    }
+
+    private static function isCompressableTextAsset(string $path): bool
+    {
+        return in_array(pathinfo($path, PATHINFO_EXTENSION), self::$textAssets) || str_starts_with(self::getContentType($path), 'text/');
+    }
+
+    public static function getAssetCacheKey(string $path): string|bool
+    {
+        $encoding = CompressionBuffer::getFirstMethodChoice();
+        if (self::isCompressableTextAsset($path)) {
+            return Cache::createCacheKeyFile($path, "assetCompression-$encoding");
+        }
+        return false;
+    }
+
+    /**
+     * Automatically selects an ideal compression method for various types of assets.
+     * Impliments caching to prevent repeat processing of assets.
+     */
+    public static function doAssetCompression(string $path): array
+    {
+        $contents = file_get_contents($path);
+        $encoding = 'identity';
+
+        // Skip compression when asset compression is disabled
+        if (!compressTextAssets) {
+            return [$contents, $encoding];
+        }
+
+        $cache = new Cache();
+        $cacheKey = self::getAssetCacheKey($path);
+
+        if (self::isCompressableTextAsset($path)) {
+            CompressionBuffer::enable(); // We will use CompressionBuffer to handle text content
+            $encoding = CompressionBuffer::getFirstMethodChoice();
+            $contents = $cache->get($cacheKey, function (ItemInterface $item) use ($contents): string {
+                $item->expiresAfter(604800);
+                return CompressionBuffer::handler($contents);
+            });
+        }
+
+        // Ensure CompressionBuffer won't accidentally cause issues for us
+        CompressionBuffer::disable();
+
+        return [$contents, $encoding];
     }
 
     private static function createDebugLogLine(string $wording, bool|string $value): string

@@ -90,7 +90,7 @@ class AntCMS
                     'keywords' => $pageHeaders['keywords'],
                     'template' => $pageHeaders['template'],
                     'lastMod' => filemtime($pagePath),
-                    'cacheKey' => $this->cache->createCacheKeyFile($pagePath, 'content'),
+                    'cacheKey' => Cache::createCacheKeyFile($pagePath, 'content'),
                 ];
             } catch (\Exception) {
                 return [];
@@ -142,11 +142,30 @@ class AntCMS
         if (!file_exists($path)) {
             $this->renderException('404');
         } else {
+            // Needed info for ETag caching
+            $key = Tools::getAssetCacheKey($path);
+            $existingEtag = Flight::request()->getHeader('If-None-Match');
+
+            // Send a 304 not modified if the client's ETag matches ours
+            if ($key === $existingEtag) {
+                Flight::response()->clear();
+                Flight::halt(304);
+            }
+
+            // Otherwise, it's time to compress the asset and send it to the client
             $asset_mime_type = Tools::getContentType($path);
             [$result, $encoding] = Tools::doAssetCompression($path);
+
+            // Send the needed headers for the content encoding
             Flight::response()->header('Content-Type', $asset_mime_type);
             Flight::response()->header('Content-Encoding', $encoding);
             Flight::response()->header('Vary', 'Accept-Encoding');
+
+            // If it was actually compressed, send an ETag for client-side compressing
+            if ($key !== false) {
+                Flight::response()->header('ETag', $key);
+            }
+
             echo $result;
         }
     }
