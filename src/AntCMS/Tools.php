@@ -119,13 +119,13 @@ class Tools
         return in_array(pathinfo($path, PATHINFO_EXTENSION), self::$textAssets) || str_starts_with(self::getContentType($path), 'text/');
     }
 
-    public static function getAssetCacheKey(string $path): string|bool
+    public static function getAssetCacheKey(string $path): string
     {
         $encoding = CompressionBuffer::getFirstMethodChoice();
         if (self::isCompressableTextAsset($path)) {
             return Cache::createCacheKeyFile($path, "assetCompression-$encoding");
         }
-        return false;
+        return Cache::createCacheKeyFile($path, 'asset');
     }
 
     /**

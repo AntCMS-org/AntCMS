@@ -1,0 +1,5 @@
+:80 {
+    root * /path/to/your/root/directory
+    rewrite * /index.php?{query}
+    php_fastcgi unix//var/run/php/php-fpm.sock
+}

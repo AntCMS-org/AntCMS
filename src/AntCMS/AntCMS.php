@@ -148,7 +148,7 @@ class AntCMS
 
             // Send a 304 not modified if the client's ETag matches ours
             if ($key === $existingEtag) {
-                Flight::response()->clear();
+                Flight::response()->clearBody();
                 Flight::halt(304);
             }
 
@@ -161,8 +161,8 @@ class AntCMS
             Flight::response()->header('Content-Encoding', $encoding);
             Flight::response()->header('Vary', 'Accept-Encoding');
 
-            // If it was actually compressed, send an ETag for client-side compressing
-            if ($key !== false) {
+            // Send an ETag for client-side caching except on Caddy where it inexplicably breaks everything
+            if (!str_contains($_SERVER['SERVER_SOFTWARE'] ?? '', 'Caddy')) {
                 Flight::response()->header('ETag', $key);
             }
 
