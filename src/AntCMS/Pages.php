@@ -18,7 +18,7 @@ class Pages
             // Doing this creates more profesional looking URLs as AntCMS can automatically add the 'md' extenstion during the page rendering process.
             $pageFunctionalPath = substr(str_replace(antContentPath, "", $page), 0, -3);
 
-            if ($pageFunctionalPath == '/index') {
+            if ($pageFunctionalPath === '/index') {
                 $pageFunctionalPath = '/';
             }
 
@@ -29,12 +29,12 @@ class Pages
             $currentPage = [
                 'pageTitle' => $pageHeader['title'],
                 'fullPagePath' => $page,
-                'functionalPagePath' => ($pageFunctionalPath == DIRECTORY_SEPARATOR) ? DIRECTORY_SEPARATOR : rtrim($pageFunctionalPath, DIRECTORY_SEPARATOR),
+                'functionalPagePath' => ($pageFunctionalPath === DIRECTORY_SEPARATOR) ? DIRECTORY_SEPARATOR : rtrim($pageFunctionalPath, DIRECTORY_SEPARATOR),
                 'showInNav' => true
             ];
 
             // Move the index page to the first item in the page list, so it appears as the first item in the navbar.
-            if ($pageFunctionalPath == DIRECTORY_SEPARATOR) {
+            if ($pageFunctionalPath === DIRECTORY_SEPARATOR) {
                 array_unshift($pageList, $currentPage);
             } else {
                 $pageList[] = $currentPage;

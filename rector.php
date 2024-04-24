@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Rector\CodeQuality\Rector\Array_\CallableThisArrayToAnonymousFunctionRector;
 use Rector\Config\RectorConfig;
 use Rector\Set\ValueObject\SetList;
 
@@ -19,5 +20,9 @@ return RectorConfig::configure()
         SetList::INSTANCEOF,
         SetList::NAMING,
         SetList::STRICT_BOOLEANS,
+        SetList::CODE_QUALITY,
+    ])
+    ->withSkip([
+        CallableThisArrayToAnonymousFunctionRector::class,
     ])
     ->withPhpSets();

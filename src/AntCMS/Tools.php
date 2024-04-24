@@ -79,7 +79,7 @@ class Tools
     public static function valuesNotNull(array $required, array $actual): bool
     {
         foreach ($required as $key) {
-            if (!key_exists($key, $actual) or is_null($actual[$key])) {
+            if (!array_key_exists($key, $actual) || is_null($actual[$key])) {
                 return false;
             }
         }

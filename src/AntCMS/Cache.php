@@ -18,11 +18,7 @@ class Cache
     {
         $mode ??= Config::get('cacheMode') ?? 'auto';
         if ($mode == 'auto') {
-            if (function_exists('apcu_enabled') && apcu_enabled()) {
-                $mode = 'apcu';
-            } else {
-                $mode = 'filesystem';
-            }
+            $mode = function_exists('apcu_enabled') && apcu_enabled() ? 'apcu' : 'filesystem';
         }
 
         $this->CacheInterface = match ($mode) {

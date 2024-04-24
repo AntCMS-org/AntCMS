@@ -42,7 +42,7 @@ class Users
         self::validateUsername($data['username']);
 
         $users = self::getUsers();
-        if (key_exists($data['username'], $users)) {
+        if (array_key_exists($data['username'], $users)) {
             return false;
         }
 
@@ -67,7 +67,7 @@ class Users
         }
 
         $users = self::getUsers();
-        if (!key_exists($username, $users)) {
+        if (!array_key_exists($username, $users)) {
             throw new \Exception("There was an error when updating the selected user.");
         }
 
@@ -87,7 +87,7 @@ class Users
         if (isset($newData['username'])) {
             $newData['username'] = trim($newData['username']);
             self::validateUsername($newData['username']);
-            if (key_exists($newData['username'], $users) && $newData['username'] !== $username) {
+            if (array_key_exists($newData['username'], $users) && $newData['username'] !== $username) {
                 throw new \Exception("Username is already taken.");
             }
 
