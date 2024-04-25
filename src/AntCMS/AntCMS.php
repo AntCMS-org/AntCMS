@@ -35,7 +35,7 @@ class AntCMS
             'AntCMSKeywords' => $content['keywords'],
             'markdown' => Markdown::parse($content['content'], $content['cacheKey']),
             'ThemeConfig' => $themeConfig['config'] ?? [],
-            'pages' => Pages::getNavList($page),
+            'pages' => Pages::getPages($page),
         ];
 
         if (Twig::templateExists($page)) {
@@ -59,7 +59,7 @@ class AntCMS
         $params = [
             'AntCMSTitle' => 'An Error Ocurred',
             'message' => $exceptionString,
-            'pages' => Pages::getNavList(),
+            'pages' => Pages::getPages(),
         ];
 
         $page = Twig::render('error.html.twig', $params);

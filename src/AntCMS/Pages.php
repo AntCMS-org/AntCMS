@@ -4,65 +4,104 @@ namespace AntCMS;
 
 class Pages
 {
-    public static function generatePages(): void
+    private static string $currentPage = "";
+
+    private static function generatePageInfo(string $path): array
     {
-        $pages = Tools::getFileList(antContentPath, 'md', true);
-        $pageList = [];
+        $contents = file_get_contents($path);
+        $functionalPath = substr(str_replace(antContentPath, "", $path), 0, -3);
+        if (str_ends_with($functionalPath, '/index')) {
+            $functionalPath = substr($functionalPath, 0, -5);
+        }
+        return [
+            'title' => AntCMS::getPageHeaders($contents)['title'],
+            'realPath' => $path,
+            'functionalPath' => $functionalPath,
+            'url' => "//" . Tools::repairURL(baseUrl . $functionalPath),
+            'active' => $functionalPath === self::$currentPage,
+            'navItem' => true,
+        ];
+    }
 
-        foreach ($pages as $page) {
-            $page = Tools::repairFilePath($page);
-            $pageContent = file_get_contents($page);
-            $pageHeader = AntCMS::getPageHeaders($pageContent);
+    /**
+     * @return mixed[]
+     */
+    private static function buildList(string $path = antContentPath): array
+    {
+        $result = [];
+        $list = array_flip(scandir($path) ?: []);
+        unset($list['.'], $list['..']);
 
-            // Because we are only getting a list of files with the 'md' extension, we can blindly strip off the extension from each path.
-            // Doing this creates more profesional looking URLs as AntCMS can automatically add the 'md' extenstion during the page rendering process.
-            $pageFunctionalPath = substr(str_replace(antContentPath, "", $page), 0, -3);
+        // Loop through each item and builds the list of pages. Directories will recursively call this function again.
+        foreach (array_keys($list) as $key) {
+            $currentPath = $path . DIRECTORY_SEPARATOR . $key;
+            if (is_dir($currentPath)) {
+                $directoryListing = self::buildList($currentPath);
 
-            if ($pageFunctionalPath === '/index') {
-                $pageFunctionalPath = '/';
-            }
+                // Remove non markdown files
+                foreach ($directoryListing as $subKey => $item) {
+                    if (is_array($item)) {
+                        continue;
+                    }
+                    if (is_dir($currentPath . DIRECTORY_SEPARATOR . $item)) {
+                        continue;
+                    }
+                    if (str_ends_with($item, '.md')) {
+                        continue;
+                    }
+                    unset($directoryListing[$subKey]);
+                }
 
-            if (str_ends_with($pageFunctionalPath, 'index')) {
-                $pageFunctionalPath = substr($pageFunctionalPath, 0, -5);
-            }
+                // Skip directories that are empty
+                if ($directoryListing === []) {
+                    continue;
+                }
 
-            $currentPage = [
-                'pageTitle' => $pageHeader['title'],
-                'fullPagePath' => $page,
-                'functionalPagePath' => ($pageFunctionalPath === DIRECTORY_SEPARATOR) ? DIRECTORY_SEPARATOR : rtrim($pageFunctionalPath, DIRECTORY_SEPARATOR),
-                'showInNav' => true
-            ];
-
-            // Move the index page to the first item in the page list, so it appears as the first item in the navbar.
-            if ($pageFunctionalPath === DIRECTORY_SEPARATOR) {
-                array_unshift($pageList, $currentPage);
+                // Finally append it to the end result
+                $result[$key] = $directoryListing;
             } else {
-                $pageList[] = $currentPage;
+                // Skip non markdown files
+                if (!str_ends_with($currentPath, '.md')) {
+                    continue;
+                }
+
+                $result[$key] = self::generatePageInfo($currentPath);
             }
         }
 
-        AntYaml::saveFile(antPagesList, $pageList);
-    }
-
-    public static function getPages(): array
-    {
-        return AntYaml::parseFile(antPagesList);
-    }
-
-    public static function getNavList(string $currentPage = ''): array
-    {
-        $pages = self::getPages();
-        foreach ($pages as $key => $page) {
-            $url = "//" . Tools::repairURL(baseUrl . $page['functionalPagePath']);
-            $pages[$key]['url'] = $url;
-            $pages[$key]['active'] = $currentPage == $page['functionalPagePath'];
-
-            //Remove pages that are hidden from the nav from the array before sending it to twig.
-            if (!(bool) $page['showInNav']) {
-                unset($pages[$key]);
+        // Finally sort it 1-9 and then a-z
+        uksort($result, function ($a, $b): int|float {
+            // Ensure index items come first
+            if ($a === 'index.md') {
+                return -1;
             }
-        }
+            if ($b === 'index.md') {
+                return 1;
+            }
+            if (is_numeric($a) && is_numeric($b)) {
+                return $a - $b;
+            }
+            if (is_numeric($a)) {
+                return -1;
+            }
+            if (is_numeric($b)) {
+                return 1;
+            }
+            return strcmp($a, $b);
+        });
 
-        return $pages;
+        return $result;
+    }
+
+    public static function getPages(string $currentPage = ''): array
+    {
+        self::$currentPage = $currentPage;
+
+        $startTime = hrtime(true);
+        $result = self::buildList();
+        $elapsedTime = (hrtime(true) - $startTime) / 1e+6;
+        error_log("Generating pages took $elapsedTime milliseconds");
+        error_log(print_r($result, true));
+        return $result;
     }
 }

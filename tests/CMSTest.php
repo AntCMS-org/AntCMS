@@ -10,8 +10,6 @@ class CMSTest extends TestCase
 {
     public function testRenderPage(): void
     {
-        Pages::generatePages();
-
         $antCMS = new AntCMS();
         $pagePath = '/index.md';
         $result = $antCMS->renderPage($pagePath);
