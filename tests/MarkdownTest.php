@@ -17,7 +17,7 @@ class MarkdownTest extends TestCase
 
     public function testMarkdownIsFast(): void
     {
-        $markdown = file_get_contents(antContentPath . DIRECTORY_SEPARATOR . 'index.md');
+        $markdown = file_get_contents(PATH_CONTENT . DIRECTORY_SEPARATOR . 'index.md');
         $totalTime = 0;
         $currentConfig = Config::get();
 
@@ -43,7 +43,7 @@ class MarkdownTest extends TestCase
     /* PHP's file modified time cache is causing issues. I should look at this later
     public function testMarkdownCacheWorks(): void
     {
-        $markdown = file_get_contents(antContentPath . DIRECTORY_SEPARATOR . 'index.md');
+        $markdown = file_get_contents(PATH_CONTENT . DIRECTORY_SEPARATOR . 'index.md');
         $currentConfig = Config::currentConfig();
 
         //Disable cache

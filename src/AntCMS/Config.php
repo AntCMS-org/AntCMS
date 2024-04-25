@@ -52,7 +52,7 @@ class Config
      */
     public static function get(?string $key = null): mixed
     {
-        $config = AntYaml::parseFile(antConfigFile);
+        $config = AntYaml::parseFile(PATH_CONFIG);
         if (is_null($key)) {
             return $config;
         }
@@ -80,6 +80,6 @@ class Config
             }
         }
 
-        return AntYaml::saveFile(antConfigFile, $config);
+        return AntYaml::saveFile(PATH_CONFIG, $config);
     }
 }

@@ -38,19 +38,19 @@ if (!Flight::request()->secure && !Enviroment::isCli() && Config::get('forceHttp
 
 // Asset delivery
 Flight::route('GET /themes/*/assets/*', function () use ($AntCMS, $requestUri): void {
-    $AntCMS->serveContent(AntDir . $requestUri);
+    $AntCMS->serveContent(BASE_DIR . $requestUri);
 });
 
 /// ACME challenges for certificate renewals
 Flight::route('GET .well-known/acme-challenge/*', function () use ($AntCMS, $requestUri): void {
-    $AntCMS->serveContent(AntDir . $requestUri);
+    $AntCMS->serveContent(BASE_DIR . $requestUri);
 });
 
 // Register routes for plugins
 PluginController::init();
 
 Flight::route('GET /', function () use ($AntCMS): void {
-    if (!file_exists(antUsersList)) {
+    if (!file_exists(PATH_USERS)) {
         // TODO for once plugin functionality is rebuilt
         //AntCMS::redirect('/profile/firsttime');
     }

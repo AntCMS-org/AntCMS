@@ -174,11 +174,11 @@ class AntCMS
     {
         $theme ??= Config::get('activeTheme');
 
-        if (!is_dir(antThemePath . '/' . $theme)) {
+        if (!is_dir(PATH_THEMES . '/' . $theme)) {
             $theme = 'Default';
         }
 
-        $configPath = Tools::repairFilePath(antThemePath . '/' . $theme . '/' . 'Config.yaml');
+        $configPath = Tools::repairFilePath(PATH_THEMES . '/' . $theme . '/' . 'Config.yaml');
         if (file_exists($configPath)) {
             $config = AntYaml::parseFile($configPath);
         }

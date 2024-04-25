@@ -9,7 +9,7 @@ class Pages
     private static function generatePageInfo(string $path): array
     {
         $contents = file_get_contents($path);
-        $functionalPath = substr(str_replace(antContentPath, "", $path), 0, -3);
+        $functionalPath = substr(str_replace(PATH_CONTENT, "", $path), 0, -3);
         if (str_ends_with($functionalPath, '/index')) {
             $functionalPath = substr($functionalPath, 0, -5);
         }
@@ -26,7 +26,7 @@ class Pages
     /**
      * @return mixed[]
      */
-    private static function buildList(string $path = antContentPath): array
+    private static function buildList(string $path = PATH_CONTENT): array
     {
         $result = [];
         $list = array_flip(scandir($path) ?: []);

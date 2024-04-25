@@ -63,7 +63,7 @@ class Tools
 
     public static function convertFunctionaltoFullpath(string $path): string
     {
-        $pagePath = Tools::repairFilePath(antContentPath . '/' . $path);
+        $pagePath = Tools::repairFilePath(PATH_CONTENT . '/' . $path);
 
         if (is_dir($pagePath)) {
             $pagePath .= '/index.md';
