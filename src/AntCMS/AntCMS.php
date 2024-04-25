@@ -34,7 +34,7 @@ class AntCMS
             'AntCMSAuthor' => $content['author'],
             'AntCMSKeywords' => $content['keywords'],
             'markdown' => Markdown::parse($content['content'], $content['cacheKey']),
-            'ThemeConfig' => $themeConfig['config'] ?? [],
+            'themeConfig' => $themeConfig['config'] ?? [],
             'pages' => Pages::getPages($page),
         ];
 
@@ -182,6 +182,8 @@ class AntCMS
         if (file_exists($configPath)) {
             $config = AntYaml::parseFile($configPath);
         }
+
+        error_log(print_r($config, true));
 
         return $config ?? [];
     }

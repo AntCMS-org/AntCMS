@@ -1,20 +1,19 @@
-{% macro generateNav(list) %}
+{% macro generateNav(list, nested) %}
     {% for key, item in list %}
         {% if item.url %}
-            {% if item.active %}
-                <li>
-                    <a class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-200 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent" href="{{ item.url }}">{{ item.title }}</a>
-                </li>
-            {% else %}
-                <li>
-                    <a class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent" href="{{ item.url }}">{{ item.title }}</a>
-                </li>
-            {% endif %}
+            <li class="{% if nested %}dropdown-item{% else %}nav-item{% endif %}">
+                <a
+                    {% if item.active %} class="nav-link active" aria-current="page" {% else %} class="nav-link" {% endif %}
+                    href="{{ item.url }}"
+                >{{ item.title }}</a
+            </li>
         {% else %}
-            <li>
-                <span>{{ key }}</span>
-                <ul>
-                    {{ _self.generateNav(item) }}
+            <li class="nav-item {% if nested %}ms-3{% endif %} dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="{{ key }}-Dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    {{ key }}
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="{{ key }}-Dropdown">
+                    {{ _self.generateNav(item, true) }}
                 </ul>
             </li>
         {% endif %}

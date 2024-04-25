@@ -57,6 +57,8 @@ class Pages
                     continue;
                 }
 
+                $key = ucfirst($key);
+
                 // Finally append it to the end result
                 $result[$key] = $directoryListing;
             } else {
@@ -87,7 +89,7 @@ class Pages
             if (is_numeric($b)) {
                 return 1;
             }
-            return strcmp($a, $b);
+            return strcasecmp($a, $b);
         });
 
         return $result;
@@ -101,7 +103,6 @@ class Pages
         $result = self::buildList();
         $elapsedTime = (hrtime(true) - $startTime) / 1e+6;
         error_log("Generating pages took $elapsedTime milliseconds");
-        error_log(print_r($result, true));
         return $result;
     }
 }
