@@ -19,8 +19,9 @@ class AntCMS
      * @param string $page The name of the page to be rendered
      * @return string The rendered HTML of the page
      */
-    public function renderPage(string $page): string
+    public function renderPage(?string $page = null): string
     {
+        $page ??= Flight::request()->url;
         $content = $this->getPage($page);
 
         if ($content === []) {
@@ -137,8 +138,10 @@ class AntCMS
         return $pageHeaders;
     }
 
-    public function serveContent(string $path): void
+    public function serveContent(?string $path = null): void
     {
+        $path ??= BASE_DIR . Flight::request()->url;
+
         if (!file_exists($path)) {
             $this->renderException('404');
         } else {

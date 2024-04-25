@@ -14,7 +14,6 @@ ini_set('error_log', 'php_error.log');
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'Bootstrap.php';
 
 $AntCMS = new AntCMS();
-$requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
 // Add a response body callback to display mem usage and time spent
 Flight::response()->addResponseBodyCallback(function ($body) {
@@ -37,14 +36,10 @@ if (!Flight::request()->secure && !Enviroment::isCli() && Config::get('forceHttp
 }
 
 // Asset delivery
-Flight::route('GET /themes/*/assets/*', function () use ($AntCMS, $requestUri): void {
-    $AntCMS->serveContent(BASE_DIR . $requestUri);
-});
+Flight::route('GET /themes/*/assets/*', [$AntCMS, 'serveContent']);
 
 /// ACME challenges for certificate renewals
-Flight::route('GET .well-known/acme-challenge/*', function () use ($AntCMS, $requestUri): void {
-    $AntCMS->serveContent(BASE_DIR . $requestUri);
-});
+Flight::route('GET .well-known/acme-challenge/*', [$AntCMS, 'serveContent']);
 
 // Register routes for plugins
 PluginController::init();
@@ -57,8 +52,6 @@ Flight::route('GET /', function () use ($AntCMS): void {
     echo $AntCMS->renderPage('/');
 });
 
-Flight::route('GET /*', function () use ($AntCMS, $requestUri): void {
-    echo $AntCMS->renderPage($requestUri);
-});
+Flight::route('GET /*', [$AntCMS, 'renderPage']);
 
 Flight::start();
