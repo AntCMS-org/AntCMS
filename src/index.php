@@ -44,14 +44,12 @@ Flight::route('GET .well-known/acme-challenge/*', [$AntCMS, 'serveContent']);
 // Register routes for plugins
 PluginController::init();
 
-Flight::route('GET /', function () use ($AntCMS): void {
-    if (!file_exists(PATH_USERS)) {
+Flight::route('GET /*', function () use ($AntCMS): void {
+    if ((Flight::request()->url === '' || Flight::request()->url == '/') && !file_exists(PATH_USERS)) {
         // TODO for once plugin functionality is rebuilt
         //AntCMS::redirect('/profile/firsttime');
     }
-    echo $AntCMS->renderPage('/');
+    echo $AntCMS->renderPage();
 });
-
-Flight::route('GET /*', [$AntCMS, 'renderPage']);
 
 Flight::start();
