@@ -183,8 +183,6 @@ class AntCMS
             $config = AntYaml::parseFile($configPath);
         }
 
-        error_log(print_r($config, true));
-
         return $config ?? [];
     }
 }
