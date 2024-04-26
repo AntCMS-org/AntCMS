@@ -29,18 +29,24 @@
       z-index: 999;
       backdrop-filter: blur(5px);
     }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
   </style>
 
   <title>{{ AntCMSTitle }}</title>
 </head>
 
 <body>
-  <div class="container">
+  <div class="container" style="flex:1;">
     <div class="row">
       <div class="col-md-1"></div>
       <div class="col-md-10">
         <!-- Navigation -->
-        <nav class="navbar navbar-expand-lg">
+        <nav class="navbar navbar-expand-lg mb-4">
           <div class="container-fluid">
             <a class="navbar-brand" href="{{ ""|absUrl }}">{{ AntCMSSiteTitle}}</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
