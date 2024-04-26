@@ -2,6 +2,7 @@
 Title: AntCMS Readme
 Author: The AntCMS Team
 Description: The ReadMe file for AntCMS, rendered quickly and simply using AntCMS.
+NavItem: true
 --AntCMS--
 
 # AntCMS

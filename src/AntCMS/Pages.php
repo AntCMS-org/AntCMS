@@ -13,13 +13,16 @@ class Pages
         if (str_ends_with($functionalPath, '/index')) {
             $functionalPath = substr($functionalPath, 0, -5);
         }
+
+        $pageHeader = AntCMS::getPageHeaders($contents);
+
         return [
-            'title' => AntCMS::getPageHeaders($contents)['title'],
+            'title' => $pageHeader['title'],
             'realPath' => $path,
             'functionalPath' => $functionalPath,
             'url' => "//" . Tools::repairURL(baseUrl . $functionalPath),
             'active' => $functionalPath === self::$currentPage,
-            'navItem' => true,
+            'navItem' => $pageHeader['NavItem'] !== 'false',
         ];
     }
 
@@ -97,7 +100,7 @@ class Pages
         // Finally sort it 1-9 and then a-z
         uksort($result, function ($a, $b) use ($directoryMeta): int|float {
             // Respect the user provided order
-            if (isset ($directoryMeta['pageOrder'][$a]) && isset ($directoryMeta['pageOrder'][$b])) {
+            if (isset($directoryMeta['pageOrder'][$a]) && isset($directoryMeta['pageOrder'][$b])) {
                 return $directoryMeta['pageOrder'][$a] > $directoryMeta['pageOrder'][$b] ? 1 : -1;
             }
 

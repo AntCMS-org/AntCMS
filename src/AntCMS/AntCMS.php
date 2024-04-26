@@ -133,6 +133,9 @@ class AntCMS
 
             preg_match('/Template: (.*)/', $header, $matches);
             $pageHeaders['template'] = trim($matches[1] ?? '');
+
+            preg_match('/NavItem: (.*)/', $header, $matches);
+            $pageHeaders['NavItem'] = trim($matches[1] ?? '');
         }
 
         return $pageHeaders;
