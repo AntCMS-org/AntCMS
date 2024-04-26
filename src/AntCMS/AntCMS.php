@@ -19,8 +19,9 @@ class AntCMS
      * @param string $page The name of the page to be rendered
      * @return string The rendered HTML of the page
      */
-    public function renderPage(string $page): string
+    public function renderPage(?string $page = null): string
     {
+        $page ??= Flight::request()->url;
         $content = $this->getPage($page);
 
         if ($content === []) {
@@ -34,8 +35,8 @@ class AntCMS
             'AntCMSAuthor' => $content['author'],
             'AntCMSKeywords' => $content['keywords'],
             'markdown' => Markdown::parse($content['content'], $content['cacheKey']),
-            'ThemeConfig' => $themeConfig['config'] ?? [],
-            'pages' => Pages::getNavList($page),
+            'themeConfig' => $themeConfig['config'] ?? [],
+            'pages' => Pages::getPages($page),
         ];
 
         if (Twig::templateExists($page)) {
@@ -59,7 +60,7 @@ class AntCMS
         $params = [
             'AntCMSTitle' => 'An Error Ocurred',
             'message' => $exceptionString,
-            'pages' => Pages::getNavList(),
+            'pages' => Pages::getPages(),
         ];
 
         $page = Twig::render('error.html.twig', $params);
@@ -132,13 +133,18 @@ class AntCMS
 
             preg_match('/Template: (.*)/', $header, $matches);
             $pageHeaders['template'] = trim($matches[1] ?? '');
+
+            preg_match('/NavItem: (.*)/', $header, $matches);
+            $pageHeaders['NavItem'] = trim($matches[1] ?? '');
         }
 
         return $pageHeaders;
     }
 
-    public function serveContent(string $path): void
+    public function serveContent(?string $path = null): void
     {
+        $path ??= BASE_DIR . Flight::request()->url;
+
         if (!file_exists($path)) {
             $this->renderException('404');
         } else {
@@ -174,11 +180,11 @@ class AntCMS
     {
         $theme ??= Config::get('activeTheme');
 
-        if (!is_dir(antThemePath . '/' . $theme)) {
+        if (!is_dir(PATH_THEMES . '/' . $theme)) {
             $theme = 'Default';
         }
 
-        $configPath = Tools::repairFilePath(antThemePath . '/' . $theme . '/' . 'Config.yaml');
+        $configPath = Tools::repairFilePath(PATH_THEMES . '/' . $theme . '/' . 'Config.yaml');
         if (file_exists($configPath)) {
             $config = AntYaml::parseFile($configPath);
         }

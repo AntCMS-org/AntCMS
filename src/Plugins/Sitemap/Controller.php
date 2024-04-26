@@ -24,10 +24,7 @@ class Controller
                 $domDocument->appendChild($domElement);
 
                 $urls = [];
-                foreach ($pages as $key => $value) {
-                    $urls[$key]['url'] = $value['functionalPagePath'];
-                    $urls[$key]['lastchange'] = date('Y-m-d', filemtime($value['fullPagePath']));
-                }
+                $this->addPages($pages, $urls);
 
                 foreach ($urls as $url) {
                     $element = $domDocument->createElement('url');
@@ -47,5 +44,20 @@ class Controller
                 Flight::halt(503, "AntCMS is unable to generate a sitemap without having the DOM extension loadded in PHP.");
             }
         });
+    }
+
+    private function addPages(array $list, array &$urls): void
+    {
+        foreach ($list as $item) {
+            if (!array_key_exists('functionalPath', $item)) {
+                $this->addPages($item, $urls);
+                continue;
+            }
+
+            $urls[] = [
+                'url' => $item['functionalPath'],
+                'lastchange' => date('Y-m-d', filemtime($item['realPath'])),
+            ];
+        }
     }
 }

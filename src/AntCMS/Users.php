@@ -28,8 +28,8 @@ class Users
 
     public static function getUsers(): array
     {
-        if (file_exists(antUsersList)) {
-            return AntYaml::parseFile(antUsersList);
+        if (file_exists(PATH_USERS)) {
+            return AntYaml::parseFile(PATH_USERS);
         }
         Flight::redirect('/profile/firsttime');
         exit;
@@ -55,7 +55,7 @@ class Users
             'role' => $data['role'],
             'name' => $data['display-name'],
         ];
-        return AntYaml::saveFile(antUsersList, $users);
+        return AntYaml::saveFile(PATH_USERS, $users);
     }
 
     public static function updateUser(string $username, array $newData): bool
@@ -96,12 +96,12 @@ class Users
             $users[$newData['username']] = $user;
         }
 
-        return AntYaml::saveFile(antUsersList, $users);
+        return AntYaml::saveFile(PATH_USERS, $users);
     }
 
     public static function setupFirstUser(array $data): bool
     {
-        if (file_exists(antUsersList)) {
+        if (file_exists(PATH_USERS)) {
             Flight::redirect('/');
             exit;
         }
@@ -118,7 +118,7 @@ class Users
             ],
         ];
 
-        return AntYaml::saveFile(antUsersList, $users);
+        return AntYaml::saveFile(PATH_USERS, $users);
     }
 
     private static function validateUsername(string $username): bool

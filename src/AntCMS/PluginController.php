@@ -11,7 +11,7 @@ class PluginController
      */
     public static function init(): void
     {
-        $list = scandir(antPluginPath);
+        $list = scandir(PATH_PLUGINS);
         if (count($list) >= 2 && $list[0] === '.' && $list[1] === '..') {
             unset($list[0]);
             unset($list[1]);

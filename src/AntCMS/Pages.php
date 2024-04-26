@@ -4,65 +4,131 @@ namespace AntCMS;
 
 class Pages
 {
-    public static function generatePages(): void
+    private static string $currentPage = "";
+
+    private static function generatePageInfo(string $path): array
     {
-        $pages = Tools::getFileList(antContentPath, 'md', true);
-        $pageList = [];
+        $contents = file_get_contents($path);
+        $functionalPath = substr(str_replace(PATH_CONTENT, "", $path), 0, -3);
+        if (str_ends_with($functionalPath, '/index')) {
+            $functionalPath = substr($functionalPath, 0, -5);
+        }
 
-        foreach ($pages as $page) {
-            $page = Tools::repairFilePath($page);
-            $pageContent = file_get_contents($page);
-            $pageHeader = AntCMS::getPageHeaders($pageContent);
+        $pageHeader = AntCMS::getPageHeaders($contents);
 
-            // Because we are only getting a list of files with the 'md' extension, we can blindly strip off the extension from each path.
-            // Doing this creates more profesional looking URLs as AntCMS can automatically add the 'md' extenstion during the page rendering process.
-            $pageFunctionalPath = substr(str_replace(antContentPath, "", $page), 0, -3);
+        return [
+            'title' => $pageHeader['title'],
+            'realPath' => $path,
+            'functionalPath' => $functionalPath,
+            'url' => "//" . Tools::repairURL(baseUrl . $functionalPath),
+            'active' => $functionalPath === self::$currentPage,
+            'navItem' => $pageHeader['NavItem'] !== 'false',
+        ];
+    }
 
-            if ($pageFunctionalPath === '/index') {
-                $pageFunctionalPath = '/';
+    private static function getDirectoryMeta(string $path): array
+    {
+        $metaPath = $path . DIRECTORY_SEPARATOR . 'meta.yaml';
+        $result = [
+            'title' => ucfirst(basename($path)),
+            'pageOrder' => []
+        ];
+
+        if (file_exists($metaPath)) {
+            try {
+                $directoryMetaData = AntYaml::parseFile($metaPath);
+                $result = array_merge($result, $directoryMetaData);
+            } catch (\Exception $e) {
+                error_log("Error while loading the meta data for the $path directory:");
+                error_log("YAML error: " . $e->getMessage());
             }
+        }
 
-            if (str_ends_with($pageFunctionalPath, 'index')) {
-                $pageFunctionalPath = substr($pageFunctionalPath, 0, -5);
-            }
+        return $result;
+    }
 
-            $currentPage = [
-                'pageTitle' => $pageHeader['title'],
-                'fullPagePath' => $page,
-                'functionalPagePath' => ($pageFunctionalPath === DIRECTORY_SEPARATOR) ? DIRECTORY_SEPARATOR : rtrim($pageFunctionalPath, DIRECTORY_SEPARATOR),
-                'showInNav' => true
-            ];
+    /**
+     * @return mixed[]
+     */
+    private static function buildList(string $path = PATH_CONTENT): array
+    {
+        $result = [];
+        $list = array_flip(scandir($path) ?: []);
+        unset($list['.'], $list['..']);
+        $directoryMeta = self::getDirectoryMeta($path);
 
-            // Move the index page to the first item in the page list, so it appears as the first item in the navbar.
-            if ($pageFunctionalPath === DIRECTORY_SEPARATOR) {
-                array_unshift($pageList, $currentPage);
+        // Loop through each item and builds the list of pages. Directories will recursively call this function again.
+        foreach (array_keys($list) as $key) {
+            $currentPath = $path . DIRECTORY_SEPARATOR . $key;
+            if (is_dir($currentPath)) {
+                $subDirectoryMeta = self::getDirectoryMeta($currentPath);
+                $directoryListing = self::buildList($currentPath);
+
+                // Remove non markdown files
+                foreach ($directoryListing as $subKey => $item) {
+                    if (is_array($item)) {
+                        continue;
+                    }
+                    if (is_dir($currentPath . DIRECTORY_SEPARATOR . $item)) {
+                        continue;
+                    }
+                    if (str_ends_with($item, '.md')) {
+                        continue;
+                    }
+                    unset($directoryListing[$subKey]);
+                }
+
+                // Skip directories that are empty
+                if ($directoryListing === []) {
+                    continue;
+                }
+
+                // Finally append it to the end result
+                $result[$subDirectoryMeta['title']] = $directoryListing;
             } else {
-                $pageList[] = $currentPage;
+                // Skip non markdown files
+                if (!str_ends_with($currentPath, '.md')) {
+                    continue;
+                }
+
+                $key = substr($key, 0, -3);
+
+                $result[$key] = self::generatePageInfo($currentPath);
             }
         }
 
-        AntYaml::saveFile(antPagesList, $pageList);
-    }
-
-    public static function getPages(): array
-    {
-        return AntYaml::parseFile(antPagesList);
-    }
-
-    public static function getNavList(string $currentPage = ''): array
-    {
-        $pages = self::getPages();
-        foreach ($pages as $key => $page) {
-            $url = "//" . Tools::repairURL(baseUrl . $page['functionalPagePath']);
-            $pages[$key]['url'] = $url;
-            $pages[$key]['active'] = $currentPage == $page['functionalPagePath'];
-
-            //Remove pages that are hidden from the nav from the array before sending it to twig.
-            if (!(bool) $page['showInNav']) {
-                unset($pages[$key]);
+        // Finally sort it 1-9 and then a-z
+        uksort($result, function ($a, $b) use ($directoryMeta): int|float {
+            // Respect the user provided order
+            if (isset($directoryMeta['pageOrder'][$a]) && isset($directoryMeta['pageOrder'][$b])) {
+                return $directoryMeta['pageOrder'][$a] > $directoryMeta['pageOrder'][$b] ? 1 : -1;
             }
-        }
 
-        return $pages;
+            // Ensure index items come first
+            if ($a === 'index') {
+                return -1;
+            }
+            if ($b === 'index') {
+                return 1;
+            }
+            if (is_numeric($a) && is_numeric($b)) {
+                return $a - $b;
+            }
+            if (is_numeric($a)) {
+                return -1;
+            }
+            if (is_numeric($b)) {
+                return 1;
+            }
+            return strcasecmp($a, $b);
+        });
+
+        return $result;
+    }
+
+    public static function getPages(string $currentPage = ''): array
+    {
+        self::$currentPage = $currentPage;
+        return self::buildList();
     }
 }

@@ -23,7 +23,7 @@ class Cache
 
         $this->CacheInterface = match ($mode) {
             'none' => new ArrayAdapter(0, true, 0, 150),
-            'filesystem' => new FilesystemAdapter('', self::$defaultLifespan, AntCachePath),
+            'filesystem' => new FilesystemAdapter('', self::$defaultLifespan, PATH_CACHE),
             'apcu' => new ApcuAdapter('AntCMS_' . hash('md5', __DIR__), self::$defaultLifespan),
             default => throw new \Exception("Invalid cache type. Must be 'auto', 'filesystem', 'apcu', or 'none'."),
         };

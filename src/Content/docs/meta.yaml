@@ -1,0 +1,8 @@
+# Sets the title of the dropdown menu
+title: 'Documentation'
+
+# Overrides the automatically selected order
+pageOrder:
+  gettingstarted: 1
+  webservers: 2
+  markdown: 3

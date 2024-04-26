@@ -22,13 +22,13 @@ class Twig
             $twigEnvironment = new Environment(
                 new ChainLoader([
                     new FilesystemLoader([
-                        antThemePath . DIRECTORY_SEPARATOR . self::$theme . DIRECTORY_SEPARATOR . 'Templates',
-                        antThemePath . DIRECTORY_SEPARATOR . 'Default' . DIRECTORY_SEPARATOR . 'Templates',
+                        PATH_THEMES . DIRECTORY_SEPARATOR . self::$theme . DIRECTORY_SEPARATOR . 'Templates',
+                        PATH_THEMES . DIRECTORY_SEPARATOR . 'Default' . DIRECTORY_SEPARATOR . 'Templates',
                     ]),
                     new ArrayLoader(),
                 ]),
                 [
-                    'cache' => (Config::get('enableCache') !== 'none') ? AntCachePath : false,
+                    'cache' => (Config::get('enableCache') !== 'none') ? PATH_CACHE : false,
                     'debug' => Config::get('debug'),
                     'use_yield' => false,
                 ]

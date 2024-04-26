@@ -1,0 +1,23 @@
+{% macro generateNav(list, nested) %}
+    {% for key, item in list %}
+        {% if item.url %}
+            {% if item.navItem %}
+                <li class="{% if nested %}dropdown-item{% else %}nav-item{% endif %}">
+                    <a
+                        {% if item.active %} class="nav-link active" aria-current="page" {% else %} class="nav-link" {% endif %}
+                        href="{{ item.url }}"
+                    >{{ item.title }}</a
+                </li>
+            {% endif %}
+        {% else %}
+            <li class="nav-item {% if nested %}ms-3{% endif %} dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="{{ key }}-Dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    {{ key }}
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="{{ key }}-Dropdown">
+                    {{ _self.generateNav(item, true) }}
+                </ul>
+            </li>
+        {% endif %}
+    {% endfor %}
+{% endmacro %}

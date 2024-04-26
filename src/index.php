@@ -11,11 +11,9 @@ error_reporting(E_ALL);
 ini_set('display_errors', '1');
 ini_set('error_log', 'php_error.log');
 
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'Vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'Bootstrap.php';
 
 $AntCMS = new AntCMS();
-$requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
 // Add a response body callback to display mem usage and time spent
 Flight::response()->addResponseBodyCallback(function ($body) {
@@ -38,28 +36,20 @@ if (!Flight::request()->secure && !Enviroment::isCli() && Config::get('forceHttp
 }
 
 // Asset delivery
-Flight::route('GET /themes/*/assets/*', function () use ($AntCMS, $requestUri): void {
-    $AntCMS->serveContent(AntDir . $requestUri);
-});
+Flight::route('GET /themes/*/assets/*', [$AntCMS, 'serveContent']);
 
 /// ACME challenges for certificate renewals
-Flight::route('GET .well-known/acme-challenge/*', function () use ($AntCMS, $requestUri): void {
-    $AntCMS->serveContent(AntDir . $requestUri);
-});
+Flight::route('GET .well-known/acme-challenge/*', [$AntCMS, 'serveContent']);
 
 // Register routes for plugins
 PluginController::init();
 
-Flight::route('GET /', function () use ($AntCMS): void {
-    if (!file_exists(antUsersList)) {
+Flight::route('GET /*', function () use ($AntCMS): void {
+    if ((Flight::request()->url === '' || Flight::request()->url == '/') && !file_exists(PATH_USERS)) {
         // TODO for once plugin functionality is rebuilt
         //AntCMS::redirect('/profile/firsttime');
     }
-    echo $AntCMS->renderPage('/');
-});
-
-Flight::route('GET /*', function () use ($AntCMS, $requestUri): void {
-    echo $AntCMS->renderPage($requestUri);
+    echo $AntCMS->renderPage();
 });
 
 Flight::start();
