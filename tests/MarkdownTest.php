@@ -33,7 +33,7 @@ class MarkdownTest extends TestCase
         }
 
         $averageTime = $totalTime / 10;
-        $this->assertLessThan($averageTime, 0.015, 'AntMarkdown::renderMarkdown took too long on average!');
+        $this->assertLessThan(0.015, $averageTime, 'AntMarkdown::renderMarkdown took too long on average!');
     }
 
 
