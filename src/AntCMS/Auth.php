@@ -76,7 +76,7 @@ class Auth
         setcookie("auth", "valid");
 
         $siteInfo = Config::get('siteInfo');
-        header('WWW-Authenticate: Basic realm="' . $siteInfo['siteTitle'] . '"');
+        header('WWW-Authenticate: Basic realm="' . $siteInfo['title'] . '"');
         http_response_code(401);
         echo 'You must enter a valid username and password to access this page';
         exit;

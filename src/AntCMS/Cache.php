@@ -16,7 +16,7 @@ class Cache
      */
     public function __construct(null|string $mode = null)
     {
-        $mode ??= Config::get('cacheMode') ?? 'auto';
+        $mode ??= Config::get('performance.cacheMode') ?? 'auto';
         if ($mode == 'auto') {
             $mode = function_exists('apcu_enabled') && apcu_enabled() ? 'apcu' : 'filesystem';
         }

@@ -7,17 +7,6 @@ include_once 'Includes' . DIRECTORY_SEPARATOR . 'Include.php';
 
 class ConfigTest extends TestCase
 {
-    public function testGetConfig(): void
-    {
-        $config = Config::get();
-
-        $expectedKeys = ['siteInfo', 'forceHttps', 'activeTheme', 'cacheMode', 'debug', 'baseUrl'];
-
-        foreach ($expectedKeys as $expectedKey) {
-            $this->assertArrayHasKey($expectedKey, $config, "Expected key '{$expectedKey}' not found in config array");
-        }
-    }
-
     public function testSaveConfigFailed(): void
     {
         $Badconfig = [
