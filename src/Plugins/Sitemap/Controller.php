@@ -29,7 +29,7 @@ class Controller
                 foreach ($urls as $url) {
                     $element = $domDocument->createElement('url');
 
-                    $loc = $domDocument->createElement('loc', $protocol . '://' . Tools::repairURL(baseUrl . $url['url']));
+                    $loc = $domDocument->createElement('loc', $protocol . '://' . Tools::repairURL(BASE_URL . $url['url']));
                     $element->appendChild($loc);
 
                     $lastmod = $domDocument->createElement('lastmod', $url['lastchange']);

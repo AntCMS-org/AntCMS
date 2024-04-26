@@ -11,7 +11,7 @@ class ConfigTest extends TestCase
     {
         $config = Config::get();
 
-        $expectedKeys = ['siteInfo', 'forceHttps', 'activeTheme', 'cacheMode', 'debug', 'baseUrl'];
+        $expectedKeys = ['siteInfo', 'forceHttps', 'activeTheme', 'cacheMode', 'debugLevel', 'baseUrl'];
 
         foreach ($expectedKeys as $expectedKey) {
             $this->assertArrayHasKey($expectedKey, $config, "Expected key '{$expectedKey}' not found in config array");

@@ -28,13 +28,13 @@ class Twig
                     new ArrayLoader(),
                 ]),
                 [
-                    'cache' => (Config::get('enableCache') !== 'none') ? PATH_CACHE : false,
-                    'debug' => Config::get('debug'),
+                    'cache' => (Config::get('performance.cacheMode') !== 'none') ? PATH_CACHE : false,
+                    'debug' => DEBUG_LEVEL >= 2,
                     'use_yield' => false,
                 ]
             );
             $twigEnvironment->addExtension(new TwigFilters());
-            $twigEnvironment->addGlobal('AntCMSSiteTitle', Config::get('siteInfo')['siteTitle']);
+            $twigEnvironment->addGlobal('AntCMSSiteTitle', Config::get('siteInfo')['title']);
             self::$twigEnvironment = $twigEnvironment;
         }
     }

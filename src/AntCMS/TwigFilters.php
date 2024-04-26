@@ -17,7 +17,7 @@ class TwigFilters extends AbstractExtension
 
     public function absUrl(string $relative): string
     {
-        return '//' . Tools::repairURL(baseUrl . '/' . trim($relative));
+        return '//' . Tools::repairURL(BASE_URL . '/' . trim($relative));
     }
 
     public function markdown(string $content): string

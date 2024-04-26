@@ -190,7 +190,7 @@ class Tools
     public static function getAssetCacheKey(string $path): string
     {
         $encoding = CompressionBuffer::getFirstMethodChoice();
-        if (compressTextAssets && self::isCompressableTextAsset($path)) {
+        if (COMPRESS_TEXT_ASSETS && self::isCompressableTextAsset($path)) {
             return Cache::createCacheKeyFile($path, "assetCompression-$encoding");
         }
         return Cache::createCacheKeyFile($path, 'asset');
@@ -206,7 +206,7 @@ class Tools
         $cacheKey = self::getAssetCacheKey($path);
         $encoding = 'identity';
 
-        if (compressTextAssets && self::isCompressableTextAsset($path)) {
+        if (COMPRESS_TEXT_ASSETS && self::isCompressableTextAsset($path)) {
             CompressionBuffer::enable(); // We will use CompressionBuffer to handle text content
             $encoding = CompressionBuffer::getFirstMethodChoice();
 
@@ -217,7 +217,7 @@ class Tools
             });
         }
 
-        if (compressImageAssets && self::isCompressableImage($path)) {
+        if (COMPRESS_IMAGES && self::isCompressableImage($path)) {
             $contents = $cache->get($cacheKey, function (ItemInterface $item) use ($path): string {
                 $item->expiresAfter(604800);
                 return self::compressImage($path);
@@ -245,6 +245,10 @@ class Tools
 
     public static function buildDebugInfo(): string
     {
+        if (DEBUG_LEVEL === 0) {
+            return '';
+        }
+
         $elapsed_time = round((hrtime(true) - START) / 1e+6, 2);
         $mem_usage = round(memory_get_peak_usage() / 1e+6, 2);
 
@@ -253,21 +257,23 @@ class Tools
         $result .= self::createDebugLogLine('Time to process request', "$elapsed_time ms");
         $result .= self::createDebugLogLine('Memory usage', "$mem_usage MB");
 
-        // System info
-        $result .= "<dt>System Info</dt>";
-        $result .= self::createDebugLogLine('Output compression', doOutputCompression);
+        if (DEBUG_LEVEL >= 2) {
+            // System info
+            $result .= "<dt>System Info</dt>";
+            $result .= self::createDebugLogLine('Output compression', COMPRESS_OUTPUT);
 
-        if (CompressionBuffer::isEnabled() && doOutputCompression) {
-            $method = CompressionBuffer::getFirstMethodChoice();
-            if ($method === 'br') {
-                $method = 'brotli';
+            if (CompressionBuffer::isEnabled() && COMPRESS_OUTPUT) {
+                $method = CompressionBuffer::getFirstMethodChoice();
+                if ($method === 'br') {
+                    $method = 'brotli';
+                }
+                $result .= self::createDebugLogLine('This page was compressed with', $method);
             }
-            $result .= self::createDebugLogLine('This page was compressed with', $method);
-        }
 
-        $result .= self::createDebugLogLine('Asset compression', compressTextAssets);
-        $result .= self::createDebugLogLine('Image compression', compressImageAssets);
-        $result .= self::createDebugLogLine('PHP version', PHP_VERSION);
+            $result .= self::createDebugLogLine('Asset compression', COMPRESS_TEXT_ASSETS);
+            $result .= self::createDebugLogLine('Image compression', COMPRESS_IMAGES);
+            $result .= self::createDebugLogLine('PHP version', PHP_VERSION);
+        }
 
         return $result . "</dl>";
     }

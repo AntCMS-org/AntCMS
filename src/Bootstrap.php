@@ -43,7 +43,8 @@ if (!file_exists(PATH_CONFIG)) {
 
 // Define config-related constants
 $config = Config::get();
-define('compressTextAssets', $config['performance']['compressTextAssets']);
-define('doOutputCompression', $config['performance']['doOutputCompression']);
-define('compressImageAssets', $config['performance']['compressImageAssets']);
-define('baseUrl', $config['baseUrl']);
+define('COMPRESS_TEXT_ASSETS', $config['performance']['compressTextAssets']);
+define('COMPRESS_OUTPUT', $config['performance']['doOutputCompression']);
+define('COMPRESS_IMAGES', $config['performance']['compressImageAssets']);
+define('BASE_URL', $config['baseUrl']);
+define('DEBUG_LEVEL', $config['debugLevel']);

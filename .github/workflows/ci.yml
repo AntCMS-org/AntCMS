@@ -38,8 +38,6 @@ jobs:
       - name: Install Dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
-      - run: cp ./tests/Includes/Config.yaml ./src/Config/Config.yaml
-
       - run: php src/Vendor/bin/phpunit tests 
 
   PHPStan:

@@ -15,17 +15,12 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'Bootstrap.php';
 
 $AntCMS = new AntCMS();
 
-// Add a response body callback to display mem usage and time spent
-Flight::response()->addResponseBodyCallback(function ($body) {
-    if (Config::get('debug')) {
-        return str_replace('<!--AntCMS-Debug-->', Tools::buildDebugInfo(), $body);
-    }
-    return $body;
-});
+// Add a response body callback to display debug info
+Flight::response()->addResponseBodyCallback(fn ($body): string => str_replace('<!--AntCMS-Debug-->', Tools::buildDebugInfo(), $body));
 
 // Setup CompressionBuffer & enable it in Flight
 CompressionBuffer::setUp(true, false, [Flight::response(), 'header']);
-if (doOutputCompression) {
+if (COMPRESS_OUTPUT) {
     Flight::response()->addResponseBodyCallback([CompressionBuffer::class, 'handler']);
 }
 

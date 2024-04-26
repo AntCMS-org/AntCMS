@@ -20,7 +20,7 @@ class Pages
             'title' => $pageHeader['title'],
             'realPath' => $path,
             'functionalPath' => $functionalPath,
-            'url' => "//" . Tools::repairURL(baseUrl . $functionalPath),
+            'url' => "//" . Tools::repairURL(BASE_URL . $functionalPath),
             'active' => $functionalPath === self::$currentPage,
             'navItem' => $pageHeader['NavItem'] !== 'false',
         ];
