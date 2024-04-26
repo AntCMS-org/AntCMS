@@ -22,7 +22,11 @@ AntCMS is being largely rebuilt for better, faser, easier functionality the foll
  - Insanely fast with zero tuning.
  - Minimal load on system resources.
  - Easy SEO with automatic handling of the robots.txt and sitemap files.
- - Automatic usage of ETags when serving assets to allow client-side caching. (Note: ETags are disabled with Caddy due to errors)
+ - Automatic usage of ETags when serving assets to allow client-side caching.
+ - Support for custom themes.
+ - Per-theme additional styles applied to markdown content.
+ - Plugin suppport.
+ - Uses Markdown to write content and YAML for the infrequently needed configuration setup..
 
 ## System Requirements
 

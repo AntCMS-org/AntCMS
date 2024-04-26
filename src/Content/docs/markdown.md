@@ -1,31 +1,8 @@
 --AntCMS--
-Title: Features
+Title: Markdown support
 Author: The AntCMS Team
-Description: The features AntCMS has.
+Description: Learn about what Markdown syntax and features AntCMS supports.
 --AntCMS--
-
-# Features
-
-## Speed and Size
-
-AntCMS is a lightweight and speedy content management system, with a small footprint of less than a few megabytes. Its design focuses on two key features: speed and simplicity. The default theme utilizes Tailwind CSS and has a total size of 25kb, further enhancing the system's swift performance. The efficient backend caching of content ensures that pages load quickly for visitors, even under heavy traffic.
-
-## Advanced Performance
-
-- Includes built-in support for zstd, brotli, and gzip compression on both page content and page assets.
-- Utilizes caching to reduce system load and eliminate excess processing.
-- Low usage of system resources.
-
-## SEO
-
-AntCMS simplifies the often complex and tedious task of SEO, making it effortless to achieve optimal scores on Google's PageSpeed Insight report. With AntCMS, achieving 100% in all categories is virtually effortless.
-
-AntCMS streamlines SEO with the following features:
-- Automated generation of a sitemap, allowing search engines to easily index all of your content.
-- Automated management of the robots.txt file, linking to the generated sitemap and specifying which content should not be crawled.
-- Exceptional speed and minimal file size.
-- Default themes that are optimized for both desktop and mobile devices.
-- Simple customization of important metadata such as the title, description, author, and keywords for your content.
 
 ## Markdown
 
