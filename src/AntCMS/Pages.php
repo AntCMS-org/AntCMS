@@ -23,6 +23,27 @@ class Pages
         ];
     }
 
+    private static function getDirectoryMeta(string $path): array
+    {
+        $metaPath = $path . DIRECTORY_SEPARATOR . 'meta.yaml';
+        $result = [
+            'title' => ucfirst(basename($path)),
+            'pageOrder' => []
+        ];
+
+        if (file_exists($metaPath)) {
+            try {
+                $directoryMetaData = AntYaml::parseFile($metaPath);
+                $result = array_merge($result, $directoryMetaData);
+            } catch (\Exception $e) {
+                error_log("Error while loading the meta data for the $path directory:");
+                error_log("YAML error: " . $e->getMessage());
+            }
+        }
+
+        return $result;
+    }
+
     /**
      * @return mixed[]
      */
@@ -31,11 +52,13 @@ class Pages
         $result = [];
         $list = array_flip(scandir($path) ?: []);
         unset($list['.'], $list['..']);
+        $directoryMeta = self::getDirectoryMeta($path);
 
         // Loop through each item and builds the list of pages. Directories will recursively call this function again.
         foreach (array_keys($list) as $key) {
             $currentPath = $path . DIRECTORY_SEPARATOR . $key;
             if (is_dir($currentPath)) {
+                $subDirectoryMeta = self::getDirectoryMeta($currentPath);
                 $directoryListing = self::buildList($currentPath);
 
                 // Remove non markdown files
@@ -57,27 +80,32 @@ class Pages
                     continue;
                 }
 
-                $key = ucfirst($key);
-
                 // Finally append it to the end result
-                $result[$key] = $directoryListing;
+                $result[$subDirectoryMeta['title']] = $directoryListing;
             } else {
                 // Skip non markdown files
                 if (!str_ends_with($currentPath, '.md')) {
                     continue;
                 }
 
+                $key = substr($key, 0, -3);
+
                 $result[$key] = self::generatePageInfo($currentPath);
             }
         }
 
         // Finally sort it 1-9 and then a-z
-        uksort($result, function ($a, $b): int|float {
+        uksort($result, function ($a, $b) use ($directoryMeta): int|float {
+            // Respect the user provided order
+            if (isset ($directoryMeta['pageOrder'][$a]) && isset ($directoryMeta['pageOrder'][$b])) {
+                return $directoryMeta['pageOrder'][$a] > $directoryMeta['pageOrder'][$b] ? 1 : -1;
+            }
+
             // Ensure index items come first
-            if ($a === 'index.md') {
+            if ($a === 'index') {
                 return -1;
             }
-            if ($b === 'index.md') {
+            if ($b === 'index') {
                 return 1;
             }
             if (is_numeric($a) && is_numeric($b)) {
@@ -98,11 +126,6 @@ class Pages
     public static function getPages(string $currentPage = ''): array
     {
         self::$currentPage = $currentPage;
-
-        $startTime = hrtime(true);
-        $result = self::buildList();
-        $elapsedTime = (hrtime(true) - $startTime) / 1e+6;
-        error_log("Generating pages took $elapsedTime milliseconds");
-        return $result;
+        return self::buildList();
     }
 }

@@ -1,0 +1,7 @@
+# This file is 100% optional and may be placed inside of a directory to change the display name or reorder content under it
+title: 'Documentation'
+
+# Uncomment these to order getting started before features
+#pageOrder:
+#  features: 2
+#  gettingstarted: 1

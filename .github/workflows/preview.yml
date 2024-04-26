@@ -15,10 +15,13 @@ jobs:
         with:
           dev: no
           php_version: "8.0"
+          args: "--optimize-autoloader"
+
       - run: |
           sudo apt-get install zip -y
           zip -r AntCMS.zip .
         working-directory: ./src
+
       - uses: ncipollo/release-action@v1
         with:
           artifacts: "./src/AntCMS.zip"

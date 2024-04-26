@@ -3,6 +3,7 @@
 namespace AntCMS;
 
 use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Yaml\Exception\ParseException;
 
 /**
  * This class acts as a fairly simple wrapper for the Symfony YAML component.
@@ -15,7 +16,7 @@ class AntYaml
 
     /**
      * Parses a YAML file and returns the content as an array.
-     *
+     * @throws ParseException;
      */
     public static function parseFile(string $path): array
     {
