@@ -36,4 +36,5 @@ For improved performance, the following PHP extensions are suggested:
  - `brotli` for brotli compression.
  - `zlib` for gzip / deflate compression.
  - `gd` for automatic image compression.
+ - `opcache` as it optimizes all PHP applications & in AntCMS allows for a faster caching implementation to be used.
  - `ctype`
