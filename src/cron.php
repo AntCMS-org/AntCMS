@@ -2,5 +2,4 @@
 
 require __DIR__ . '/Bootstrap.php';
 
-$antCache = new \AntCMS\Cache();
-$antCache->prune();
+AntCMS\Cache::prune();

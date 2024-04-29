@@ -29,7 +29,7 @@ class Config
                 'doOutputCompression' => true,
                 'compressTextAssets' => true,
                 'compressImageAssets' => true,
-                'cacheMode' => 'auto',
+                'allowedCacheMethods' => ['acpu', 'php_files', 'filesystem'],
             ],
             'forceHttps' => !Enviroment::isPHPDevServer(),
             'activeTheme' => 'Default',

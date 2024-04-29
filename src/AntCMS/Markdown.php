@@ -20,10 +20,9 @@ class Markdown
 {
     public static function parse(string $md, ?string $cacheKey = null): string
     {
-        $antCache = new Cache();
-        $cacheKey ??= $antCache->createCacheKey($md, 'markdown');
+        $cacheKey ??= Cache::createCacheKey($md, 'markdown');
 
-        return $antCache->get($cacheKey, function (ItemInterface $item) use ($md): string {
+        return Cache::get($cacheKey, function (ItemInterface $item) use ($md): string {
             $config = Config::get();
             $defaultAttributes = [];
             $themeConfig = AntCMS::getThemeConfig();

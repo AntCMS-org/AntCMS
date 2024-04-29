@@ -1,11 +1,12 @@
 <?php
 
 use AntCMS\Config;
+use AntCMS\Cache;
 
 define('START', hrtime(true));
 
 // Registering constants
-const BASE_DIR = __DIR__;
+const PATH_ROOT = __DIR__;
 const PATH_CACHE = __DIR__ . DIRECTORY_SEPARATOR . 'Cache';
 const PATH_CONFIG = __DIR__ . DIRECTORY_SEPARATOR . 'Config' . DIRECTORY_SEPARATOR . 'Config.yaml';
 const PATH_USERS = __DIR__ . DIRECTORY_SEPARATOR . 'Config' . DIRECTORY_SEPARATOR . 'Users.yaml';
@@ -48,3 +49,6 @@ define('COMPRESS_OUTPUT', $config['performance']['doOutputCompression']);
 define('COMPRESS_IMAGES', $config['performance']['compressImageAssets']);
 define('BASE_URL', $config['baseUrl']);
 define('DEBUG_LEVEL', $config['debugLevel']);
+
+// Setup the cache item
+Cache::setup($config['performance']['allowedCacheMethods'] ?? ['acpu', 'php_files', 'filesystem']);

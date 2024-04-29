@@ -2,39 +2,53 @@
 
 namespace AntCMS;
 
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Cache\Adapter\ApcuAdapter;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
+use Symfony\Component\Cache\Adapter\ChainAdapter;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Component\Cache\Adapter\PhpFilesAdapter;
+use Symfony\Contracts\Cache\CallbackInterface;
 
 class Cache
 {
-    private ?object $CacheInterface = null;
-    public static int $defaultLifespan = 604_800; // 1 week
+    private static ArrayAdapter|ChainAdapter $adapter;
+    public static int $longLifespan = 86400 * 30; // 1 month (essentially cold-storage items)
+    public static int $mediumLifespan = 86400 * 7; // 1 week
+    public static int $shortLifespan = 300; // 5 min (in-memory)
 
-    /**
-     * Creates a new cache object, sets the correct caching type. ('auto', 'filesystem', 'apcu', or 'none')
-     */
-    public function __construct(null|string $mode = null)
+    public static function setup(array $allowed = []): void
     {
-        $mode ??= Config::get('performance.cacheMode') ?? 'auto';
-        if ($mode == 'auto') {
-            $mode = function_exists('apcu_enabled') && apcu_enabled() ? 'apcu' : 'filesystem';
-        }
+        // Setup the caching system
+        if ([] === $allowed) {
+            self::$adapter = new ArrayAdapter();
+        } else {
+            $adapters = [];
 
-        $this->CacheInterface = match ($mode) {
-            'none' => new ArrayAdapter(0, true, 0, 150),
-            'filesystem' => new FilesystemAdapter('', self::$defaultLifespan, PATH_CACHE),
-            'apcu' => new ApcuAdapter('AntCMS_' . hash('md5', __DIR__), self::$defaultLifespan),
-            default => throw new \Exception("Invalid cache type. Must be 'auto', 'filesystem', 'apcu', or 'none'."),
-        };
+            // Load the APCu adapter if allowed
+            if (in_array('apcu', $allowed) && ApcuAdapter::isSupported()) {
+                $adapters[] = new ApcuAdapter('AntCMS_' . hash(HASH_ALGO, PATH_ROOT), self::$shortLifespan);
+            }
+
+            // Use the PHP files adapter if it's supported
+            if (in_array('php_file', $allowed) && PhpFilesAdapter::isSupported()) {
+                $adapters[] = new PhpFilesAdapter('php_files', self::$mediumLifespan, PATH_CACHE);
+            }
+
+            // We will always have the file system adapter
+            $adapters[] = new FilesystemAdapter('filesystem', self::$longLifespan, PATH_CACHE);
+
+            self::$adapter = new ChainAdapter($adapters, self::$shortLifespan);
+        }
     }
 
-    public function __call(string $name, array $arguments): mixed
+    public static function get(string $key, callable|CallbackInterface $callable, ?float $beta = null, ?array &$metadata = []): mixed
     {
-        if (method_exists($this->CacheInterface, $name)) {
-            return call_user_func_array([$this->CacheInterface, $name], $arguments);
-        }
-        return false;
+        return self::$adapter->get($key, $callable, $beta, $metadata);
+    }
+
+    public static function prune(): bool
+    {
+        return self::$adapter->prune();
     }
 
     /**

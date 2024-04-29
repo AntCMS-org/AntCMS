@@ -6,13 +6,6 @@ use Flight;
 
 class AntCMS
 {
-    protected Cache $cache;
-
-    public function __construct()
-    {
-        $this->cache = new Cache();
-    }
-
     /**
      * Renders a page based on the provided page name.
      *
@@ -143,7 +136,7 @@ class AntCMS
 
     public function serveContent(?string $path = null): void
     {
-        $path ??= BASE_DIR . Flight::request()->url;
+        $path ??= PATH_ROOT . Flight::request()->url;
 
         if (!file_exists($path)) {
             $this->renderException('404');
@@ -176,7 +169,7 @@ class AntCMS
         }
     }
 
-    public static function getThemeConfig(string|null $theme = null)
+    public static function getThemeConfig(string|null $theme = null): array
     {
         $theme ??= Config::get('activeTheme');
 
@@ -186,9 +179,9 @@ class AntCMS
 
         $configPath = Tools::repairFilePath(PATH_THEMES . '/' . $theme . '/' . 'Config.yaml');
         if (file_exists($configPath)) {
-            $config = AntYaml::parseFile($configPath);
+            return AntYaml::parseFile($configPath);
         }
 
-        return $config ?? [];
+        return [];
     }
 }
