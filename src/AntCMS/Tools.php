@@ -202,7 +202,6 @@ class Tools
      */
     public static function doAssetCompression(string $path): array
     {
-        $cache = new Cache();
         $cacheKey = self::getAssetCacheKey($path);
         $encoding = 'identity';
 
@@ -210,7 +209,7 @@ class Tools
             CompressionBuffer::enable(); // We will use CompressionBuffer to handle text content
             $encoding = CompressionBuffer::getFirstMethodChoice();
 
-            $contents = $cache->get($cacheKey, function (ItemInterface $item) use ($path): string {
+            $contents = Cache::get($cacheKey, function (ItemInterface $item) use ($path): string {
                 $item->expiresAfter(604800);
                 $contents = file_get_contents($path);
                 return CompressionBuffer::handler($contents);
@@ -218,7 +217,7 @@ class Tools
         }
 
         if (COMPRESS_IMAGES && self::isCompressableImage($path)) {
-            $contents = $cache->get($cacheKey, function (ItemInterface $item) use ($path): string {
+            $contents = Cache::get($cacheKey, function (ItemInterface $item) use ($path): string {
                 $item->expiresAfter(604800);
                 return self::compressImage($path);
             });
