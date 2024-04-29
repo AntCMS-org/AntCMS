@@ -37,7 +37,7 @@ class Cache
             // We will always have the file system adapter
             $adapters[] = new FilesystemAdapter('filesystem', self::$longLifespan, PATH_CACHE);
 
-            self::$adapter = new ChainAdapter($adapters, self::$shortLifespan);
+            self::$adapter = new ChainAdapter($adapters);
         }
     }
 

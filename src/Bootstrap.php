@@ -35,7 +35,7 @@ $loader->addNamespace('AntCMS\\', __DIR__ . DIRECTORY_SEPARATOR . 'AntCMS');
 $loader->addNamespace('AntCMS\\Plugins\\', __DIR__ . DIRECTORY_SEPARATOR . 'Plugins');
 
 $loader->checkClassMap();
-$loader->register();
+$loader->register(true);
 
 // First-time related checks
 if (!file_exists(PATH_CONFIG)) {
