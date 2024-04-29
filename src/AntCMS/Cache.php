@@ -14,22 +14,22 @@ class Cache
     private static ArrayAdapter|ChainAdapter $adapter;
     public static int $longLifespan = 86400 * 30; // 1 month (essentially cold-storage items)
     public static int $mediumLifespan = 86400 * 7; // 1 week
-    public static int $shortLifespan = 300; // 5 min (in-memory)
+    public static int $shortLifespan = 900; // 15 min (in-memory)
 
     public static function setup(array $allowed = []): void
     {
         // Setup the caching system
-        if ([] === $allowed) {
+        if ($allowed === []) {
             self::$adapter = new ArrayAdapter();
         } else {
             $adapters = [];
 
-            // Load the APCu adapter if allowed
+            // Add the APCu adapter first if allowed & supported
             if (in_array('apcu', $allowed) && ApcuAdapter::isSupported()) {
                 $adapters[] = new ApcuAdapter('AntCMS_' . hash(HASH_ALGO, PATH_ROOT), self::$shortLifespan);
             }
 
-            // Use the PHP files adapter if it's supported
+            // Add the PHP files adapter if allowed & supported
             if (in_array('php_file', $allowed) && PhpFilesAdapter::isSupported()) {
                 $adapters[] = new PhpFilesAdapter('php_files', self::$mediumLifespan, PATH_CACHE);
             }
