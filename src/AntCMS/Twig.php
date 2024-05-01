@@ -12,9 +12,9 @@ class Twig
     private static ?Environment $twigEnvironment = null;
     private static ?string $theme = null;
 
-    public static function registerTwig(?Environment $twigEnvironment = null): void
+    public static function registerTwig(?Environment $twigEnvironment = null, ?string $theme = null): void
     {
-        self::$theme = Config::get('activeTheme');
+        self::$theme = $theme ?? Config::get('activeTheme');
 
         if (!is_null($twigEnvironment)) {
             self::$twigEnvironment = $twigEnvironment;
@@ -39,16 +39,8 @@ class Twig
         }
     }
 
-    private static function doSelfCheck(): void
-    {
-        if (is_null(self::$twigEnvironment)) {
-            self::registerTwig();
-        }
-    }
-
     public static function setArrayLoaderTemplate(string $name, string $template): void
     {
-        self::doSelfCheck();
         $loaders = self::$twigEnvironment->getLoader()->getLoaders(); /** @phpstan-ignore-line */
         foreach ($loaders as $loader) {
             if (method_exists($loader, 'setTemplate')) {
@@ -59,7 +51,6 @@ class Twig
 
     public static function addLoaderPath(string $path, string $namespace = FilesystemLoader::MAIN_NAMESPACE): void
     {
-        self::doSelfCheck();
         $loaders = self::$twigEnvironment->getLoader()->getLoaders(); /** @phpstan-ignore-line */
         foreach ($loaders as $loader) {
             if (method_exists($loader, 'addPath')) {
@@ -70,13 +61,11 @@ class Twig
 
     public static function templateExists(string $name): bool
     {
-        self::doSelfCheck();
         return self::$twigEnvironment->getLoader()->exists($name);
     }
 
     public static function render(string $template, array $data = []): string
     {
-        self::doSelfCheck();
         return self::$twigEnvironment->render($template, $data);
     }
 }

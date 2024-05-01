@@ -2,6 +2,7 @@
 
 use AntCMS\Config;
 use AntCMS\Cache;
+use AntCMS\Twig;
 
 define('START', hrtime(true));
 
@@ -29,11 +30,9 @@ if (in_array('xxh128', hash_algos())) {
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'Vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 
 // Setup and register AntLoader
-$classMapPath = PATH_CACHE . DIRECTORY_SEPARATOR . 'classMap.php';
-$loader = new \AntCMS\AntLoader(['path' => $classMapPath]);
+$loader = new \AntCMS\AntLoader(['path' => PATH_CACHE . DIRECTORY_SEPARATOR . 'classMap.php']);
 $loader->addNamespace('AntCMS\\', __DIR__ . DIRECTORY_SEPARATOR . 'AntCMS');
 $loader->addNamespace('AntCMS\\Plugins\\', __DIR__ . DIRECTORY_SEPARATOR . 'Plugins');
-
 $loader->checkClassMap();
 $loader->register(true);
 
@@ -50,5 +49,8 @@ define('COMPRESS_IMAGES', $config['performance']['compressImageAssets']);
 define('BASE_URL', $config['baseUrl']);
 define('DEBUG_LEVEL', $config['debugLevel']);
 
-// Setup the cache item
+// Setup our cache adapter
 Cache::setup($config['performance']['allowedCacheMethods'] ?? ['acpu', 'php_files', 'filesystem']);
+
+// Setup our twig enviroment
+Twig::registerTwig(null, $config['activeTheme']);

@@ -18,25 +18,24 @@ class Cache
 
     public static function setup(array $allowed = []): void
     {
-        // Setup the caching system
-        if ($allowed === []) {
+        $adapters = [];
+
+        // Register cache adapters in order of fastest to slowest
+        if (in_array('apcu', $allowed) && ApcuAdapter::isSupported()) {
+            $adapters[] = new ApcuAdapter('AntCMS_' . hash(HASH_ALGO, PATH_ROOT), self::$shortLifespan);
+        }
+
+        if (in_array('php_file', $allowed) && PhpFilesAdapter::isSupported()) {
+            $adapters[] = new PhpFilesAdapter('php_files', self::$mediumLifespan, PATH_CACHE);
+        }
+
+        if (in_array('filesystem', $allowed)) {
+            $adapters[] = new FilesystemAdapter('filesystem', self::$longLifespan, PATH_CACHE);
+        }
+
+        if ($adapters === []) {
             self::$adapter = new ArrayAdapter();
         } else {
-            $adapters = [];
-
-            // Add the APCu adapter first if allowed & supported
-            if (in_array('apcu', $allowed) && ApcuAdapter::isSupported()) {
-                $adapters[] = new ApcuAdapter('AntCMS_' . hash(HASH_ALGO, PATH_ROOT), self::$shortLifespan);
-            }
-
-            // Add the PHP files adapter if allowed & supported
-            if (in_array('php_file', $allowed) && PhpFilesAdapter::isSupported()) {
-                $adapters[] = new PhpFilesAdapter('php_files', self::$mediumLifespan, PATH_CACHE);
-            }
-
-            // We will always have the file system adapter
-            $adapters[] = new FilesystemAdapter('filesystem', self::$longLifespan, PATH_CACHE);
-
             self::$adapter = new ChainAdapter($adapters);
         }
     }
@@ -75,6 +74,6 @@ class Cache
     public static function createCacheKeyFile(string $filePath, string $salt = 'cache'): string
     {
         $differentiator = filemtime($filePath) ?: hash_file(HASH_ALGO, $filePath);
-        return hash(HASH_ALGO, $filePath) . ".$differentiator.$salt";
+        return hash(HASH_ALGO, $filePath . ".$differentiator.$salt");
     }
 }
