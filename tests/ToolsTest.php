@@ -3,8 +3,6 @@
 use AntCMS\Tools;
 use PHPUnit\Framework\TestCase;
 
-include_once 'Includes' . DIRECTORY_SEPARATOR . 'Include.php';
-
 class ToolsTest extends TestCase
 {
     public function testPathRepair(): void

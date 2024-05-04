@@ -5,8 +5,9 @@ namespace AntCMS\Plugins\Robotstxt;
 use Flight;
 use AntCMS\Config;
 use AntCMS\Tools;
+use AntCMS\AbstractPlugin;
 
-class Controller
+class Controller extends AbstractPlugin
 {
     public function __construct()
     {
