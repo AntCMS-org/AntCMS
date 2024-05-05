@@ -21,7 +21,6 @@
             <directory suffix=".php">src/Cache</directory>
             <directory suffix=".php">src/index.php</directory>
             <directory suffix=".php">src/cron.php</directory>
-            <directory suffix=".php">src/bootstrap.php</directory>
             <directory suffix=".php">src/AntCMS/Enviroment.php</directory>
             <directory suffix=".php">src/AntCMS/Auth.php</directory>
             <directory suffix=".php">src/AntCMS/Users.php</directory>
