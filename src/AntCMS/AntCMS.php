@@ -21,6 +21,8 @@ class AntCMS
             $this->renderException("404");
         }
 
+        HookController::fire('contentHit', ['contentUri' => $page]);
+
         $themeConfig = self::getThemeConfig();
         $params = [
             'AntCMSTitle' => $content['title'],

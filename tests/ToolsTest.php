@@ -3,10 +3,9 @@
 use AntCMS\Tools;
 use PHPUnit\Framework\TestCase;
 
-include_once 'Includes' . DIRECTORY_SEPARATOR . 'Include.php';
-
 class ToolsTest extends TestCase
 {
+    private string $testAsset = PATH_THEMES . DIRECTORY_SEPARATOR . 'Default' . DIRECTORY_SEPARATOR . 'Assets' . DIRECTORY_SEPARATOR . 'TinyZoom.js';
     public function testPathRepair(): void
     {
         $badPaths = ["path/to/file", "path\\to\\file", "/path/to/file", "C:\\path\\to\\file", "~/path/to/file"];
@@ -52,4 +51,20 @@ class ToolsTest extends TestCase
             $this->assertEquals('md', pathinfo($file, PATHINFO_EXTENSION), "Expected file extension to be 'md', but got '" . pathinfo($file, PATHINFO_EXTENSION) . "' for file '{$file}'");
         }
     }
+
+    public function testGetContentType(): void
+    {
+        $result = Tools::getContentType($this->testAsset);
+        $this->assertIsString($result);
+        $this->assertEquals('application/javascript', $result);
+    }
+
+    /*
+    public function testGetAssetCacheKey()
+    {
+        $result = Tools::getAssetCacheKey($this->testAsset);
+        $this->assertIsString($result);
+        $this->assertNotEmpty($result);
+    }
+    */
 }

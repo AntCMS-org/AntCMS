@@ -1,10 +1,7 @@
 <?php
 
-use AntCMS\AntCMS;
-use AntCMS\Pages;
+use AntCMS\{AntCMS};
 use PHPUnit\Framework\TestCase;
-
-include_once 'Includes' . DIRECTORY_SEPARATOR . 'Include.php';
 
 class CMSTest extends TestCase
 {

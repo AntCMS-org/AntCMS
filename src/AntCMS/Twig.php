@@ -3,9 +3,7 @@
 namespace AntCMS;
 
 use Twig\Environment;
-use Twig\Loader\ArrayLoader;
-use Twig\Loader\ChainLoader;
-use Twig\Loader\FilesystemLoader;
+use Twig\Loader\{ArrayLoader, ChainLoader, FilesystemLoader};
 
 class Twig
 {

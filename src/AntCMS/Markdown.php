@@ -2,18 +2,18 @@
 
 namespace AntCMS;
 
+use ElGigi\CommonMarkEmoji\EmojiExtension;
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\Autolink\AutolinkExtension;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
+use League\CommonMark\Extension\DefaultAttributes\DefaultAttributesExtension;
+use League\CommonMark\Extension\Embed\Bridge\OscaroteroEmbedAdapter;
+use League\CommonMark\Extension\Embed\EmbedExtension;
 use League\CommonMark\Extension\Strikethrough\StrikethroughExtension;
 use League\CommonMark\Extension\Table\TableExtension;
 use League\CommonMark\Extension\TaskList\TaskListExtension;
 use League\CommonMark\MarkdownConverter;
-use ElGigi\CommonMarkEmoji\EmojiExtension;
-use League\CommonMark\Extension\Embed\Bridge\OscaroteroEmbedAdapter;
-use League\CommonMark\Extension\Embed\EmbedExtension;
 use SimonVomEyser\CommonMarkExtension\LazyImageExtension;
-use League\CommonMark\Extension\DefaultAttributes\DefaultAttributesExtension;
 use Symfony\Contracts\Cache\ItemInterface;
 
 class Markdown

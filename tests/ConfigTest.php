@@ -3,8 +3,6 @@
 use AntCMS\Config;
 use PHPUnit\Framework\TestCase;
 
-include_once 'Includes' . DIRECTORY_SEPARATOR . 'Include.php';
-
 class ConfigTest extends TestCase
 {
     public function testSaveConfigFailed(): void

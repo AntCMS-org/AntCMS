@@ -1,17 +1,13 @@
 <?php
 
-use AntCMS\PluginController;
+use AntCMS\{AntCMS, Config, Enviroment, HookController, PluginController, Tools};
 use HostByBelle\CompressionBuffer;
-use AntCMS\AntCMS;
-use AntCMS\Enviroment;
-use AntCMS\Tools;
-use AntCMS\Config;
 
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 ini_set('error_log', 'php_error.log');
 
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'Bootstrap.php';
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'bootstrap.php';
 
 $AntCMS = new AntCMS();
 
@@ -23,6 +19,11 @@ CompressionBuffer::setUp(true, false, [Flight::response(), 'header']);
 if (COMPRESS_OUTPUT) {
     Flight::response()->addResponseBodyCallback([CompressionBuffer::class, 'handler']);
 }
+
+Flight::response()->addResponseBodyCallback(function ($body) {
+    HookController::fire('performanceMetricsBuilt', tools::getPerformanceMetrics());
+    return $body;
+});
 
 // HTTPS redirects
 if (!Flight::request()->secure && !Enviroment::isCli() && Config::get('forceHttps')) {

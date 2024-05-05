@@ -1,11 +1,7 @@
 <?php
 
-use AntCMS\Markdown;
-use AntCMS\Config;
+use AntCMS\{Config, Markdown};
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\Constraint\Callback;
-
-include_once 'Includes' . DIRECTORY_SEPARATOR . 'Include.php';
 
 class MarkdownTest extends TestCase
 {

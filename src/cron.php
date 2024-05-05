@@ -1,5 +1,5 @@
 <?php
 
-require __DIR__ . '/Bootstrap.php';
+require __DIR__ . '/bootstrap.php';
 
 AntCMS\Cache::prune();
