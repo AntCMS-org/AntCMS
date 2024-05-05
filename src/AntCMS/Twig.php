@@ -12,7 +12,7 @@ class Twig
 
     public static function registerTwig(?Environment $twigEnvironment = null, ?string $theme = null): void
     {
-        self::$theme = $theme ?? Config::get('activeTheme');
+        self::$theme = $theme ?? CURRENT_THEME;
 
         if (!is_null($twigEnvironment)) {
             self::$twigEnvironment = $twigEnvironment;

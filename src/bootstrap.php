@@ -46,6 +46,8 @@ define('COMPRESS_OUTPUT', $config['performance']['doOutputCompression']);
 define('COMPRESS_IMAGES', $config['performance']['compressImageAssets']);
 define('BASE_URL', $config['baseUrl']);
 define('DEBUG_LEVEL', $config['debugLevel']);
+define('CURRENT_THEME', $config['activeTheme']);
+define('PATH_CURRENT_THEME', PATH_THEMES . DIRECTORY_SEPARATOR . CURRENT_THEME);
 
 // Setup our cache adapter
 Cache::setup($config['performance']['allowedCacheMethods'] ?? ['acpu', 'php_files', 'filesystem']);

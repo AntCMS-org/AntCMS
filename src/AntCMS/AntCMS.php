@@ -173,7 +173,7 @@ class AntCMS
 
     public static function getThemeConfig(string|null $theme = null): array
     {
-        $theme ??= Config::get('activeTheme');
+        $theme ??= CURRENT_THEME;
 
         if (!is_dir(PATH_THEMES . '/' . $theme)) {
             $theme = 'Default';

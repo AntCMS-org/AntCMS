@@ -33,6 +33,9 @@ if (!Flight::request()->secure && !Enviroment::isCli() && Config::get('forceHttp
 
 // Asset delivery
 Flight::route('GET /themes/*/assets/*', [$AntCMS, 'serveContent']);
+Flight::route('GET /favicon.ico', function () use ($AntCMS): void {
+    $AntCMS->serveContent(PATH_CURRENT_THEME . DIRECTORY_SEPARATOR . 'Assets' . DIRECTORY_SEPARATOR . 'favicon.ico');
+});
 
 /// ACME challenges for certificate renewals
 Flight::route('GET .well-known/acme-challenge/*', [$AntCMS, 'serveContent']);
