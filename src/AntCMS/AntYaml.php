@@ -2,8 +2,8 @@
 
 namespace AntCMS;
 
-use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Yaml\Exception\ParseException;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * This class acts as a fairly simple wrapper for the Symfony YAML component.

@@ -2,8 +2,7 @@
 
 namespace AntCMS\Plugins\System;
 
-use AntCMS\AbstractPlugin;
-use AntCMS\HookController;
+use AntCMS\{AbstractPlugin, HookController};
 
 class Controller extends AbstractPlugin
 {

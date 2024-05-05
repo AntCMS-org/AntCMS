@@ -2,10 +2,8 @@
 
 namespace AntCMS\Plugins\Robotstxt;
 
+use AntCMS\{AbstractPlugin, Config, Tools};
 use Flight;
-use AntCMS\Config;
-use AntCMS\Tools;
-use AntCMS\AbstractPlugin;
 
 class Controller extends AbstractPlugin
 {

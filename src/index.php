@@ -1,12 +1,7 @@
 <?php
 
-use AntCMS\PluginController;
+use AntCMS\{AntCMS, Config, Enviroment, HookController, PluginController, Tools};
 use HostByBelle\CompressionBuffer;
-use AntCMS\AntCMS;
-use AntCMS\Enviroment;
-use AntCMS\Tools;
-use AntCMS\Config;
-use AntCMS\HookController;
 
 error_reporting(E_ALL);
 ini_set('display_errors', '1');

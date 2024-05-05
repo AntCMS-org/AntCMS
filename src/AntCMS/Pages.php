@@ -31,7 +31,7 @@ class Pages
         $metaPath = $path . DIRECTORY_SEPARATOR . 'meta.yaml';
         $result = [
             'title' => ucfirst(basename($path)),
-            'pageOrder' => []
+            'pageOrder' => [],
         ];
 
         if (file_exists($metaPath)) {
