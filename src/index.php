@@ -6,6 +6,7 @@ use AntCMS\AntCMS;
 use AntCMS\Enviroment;
 use AntCMS\Tools;
 use AntCMS\Config;
+use AntCMS\HookController;
 
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
@@ -23,6 +24,11 @@ CompressionBuffer::setUp(true, false, [Flight::response(), 'header']);
 if (COMPRESS_OUTPUT) {
     Flight::response()->addResponseBodyCallback([CompressionBuffer::class, 'handler']);
 }
+
+Flight::response()->addResponseBodyCallback(function ($body) {
+    HookController::fire('performanceMetricsBuilt', tools::getPerformanceMetrics());
+    return $body;
+});
 
 // HTTPS redirects
 if (!Flight::request()->secure && !Enviroment::isCli() && Config::get('forceHttps')) {

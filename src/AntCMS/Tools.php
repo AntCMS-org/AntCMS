@@ -234,6 +234,14 @@ class Tools
         return [$contents, $encoding];
     }
 
+    public static function getPerformanceMetrics(): array
+    {
+        return [
+            'elapsedTime' => round((hrtime(true) - START) / 1e+6, 2),
+            'memoryUsage' => round(memory_get_peak_usage() / 1e+6, 2),
+        ];
+    }
+
     private static function createDebugLogLine(string $wording, bool|string $value): string
     {
         if (is_bool($value)) {
@@ -248,13 +256,12 @@ class Tools
             return '';
         }
 
-        $elapsed_time = round((hrtime(true) - START) / 1e+6, 2);
-        $mem_usage = round(memory_get_peak_usage() / 1e+6, 2);
+        $performance = self::getPerformanceMetrics();
 
         // Performance info
         $result = "<dl><dt>Performance Metrics</dt>";
-        $result .= self::createDebugLogLine('Time to process request', "$elapsed_time ms");
-        $result .= self::createDebugLogLine('Memory usage', "$mem_usage MB");
+        $result .= self::createDebugLogLine('Time to process request', $performance['elapsedTime'] . " ms");
+        $result .= self::createDebugLogLine('Memory usage', $performance['memoryUsage'] . " MB");
 
         if (DEBUG_LEVEL >= 2) {
             // System info

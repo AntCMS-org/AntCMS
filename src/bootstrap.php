@@ -3,6 +3,7 @@
 use AntCMS\Config;
 use AntCMS\Cache;
 use AntCMS\Twig;
+use AntCMS\HookController;
 
 define('START', hrtime(true));
 
