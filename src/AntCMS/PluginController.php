@@ -17,10 +17,15 @@ class PluginController
             unset($list[1]);
         }
 
-        foreach($list as $pluginName) {
+        foreach ($list as $pluginName) {
             $className = "\AntCMS\\Plugins\\$pluginName\\Controller";
-            if(class_exists($className)) {
+            if (class_exists($className)) {
                 new $className();
+            }
+
+            $templateDir = PATH_PLUGINS . DIRECTORY_SEPARATOR . $pluginName . DIRECTORY_SEPARATOR . 'Templates';
+            if (is_dir($templateDir)) {
+                Twig::addLoaderPath($templateDir);
             }
         }
     }

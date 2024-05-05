@@ -21,6 +21,7 @@ All plugins reside under the `Plugins` folder.
 - Be sure to have a Controller class so AntCMS can register your plugin routes & hooks.
 - Plugin controllers should extend the `AntCMS\AbstractPlugin` class.
 - AntCMS uses [FlightPHP](https://docs.flightphp.com/?lang=en) for routing, routes should be registered per their docs.
+- Create a `Templates` directory in your plugin folder to have it automatically be added to the twig loader.
 
 ### Example Plugin
 
@@ -29,7 +30,7 @@ All plugins reside under the `Plugins` folder.
 
 namespace AntCMS\Plugins\Example;
 
-use AntCMS\{AbstractPlugin, Config, Tools};
+use AntCMS\AbstractPlugin;
 use Flight;
 
 class Controller extends AbstractPlugin
@@ -79,6 +80,7 @@ class myCoolClass
          * Since our hook modifies the data, our array should now look like this:
          * ['some', 'data', 'in', 'an', 'array', '!']
          */
+        print_r($data);
     }
 
     public function hookCallback(array &$data)
