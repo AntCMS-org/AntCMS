@@ -7,3 +7,5 @@ src/Config/Pages.yaml
 src/php_error.log
 /.phpunit.cache
 /reports
+/src/Themes/Default/Assets/build
+/tmp

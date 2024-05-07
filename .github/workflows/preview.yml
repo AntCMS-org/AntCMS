@@ -11,6 +11,15 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 'lts'
+
+      - run: |
+          npm i
+          npm run build
+
       - uses: php-actions/composer@v6
         with:
           dev: no
