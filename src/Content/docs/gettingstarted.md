@@ -28,7 +28,7 @@ All content is stored in the `/Content` directory as `.md` files. Subfolders can
 
 All pages must include a page header, this is used by AntCMS to get important page data. Please see this example for a page header:
 
-```
+```yaml
 --AntCMS--
 Title: An Example!
 Author: The AntCMS Team
