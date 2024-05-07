@@ -108,5 +108,5 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          path: "./src/AntCMS.zip"
+          path: "./src"
           name: "AntCMS"
