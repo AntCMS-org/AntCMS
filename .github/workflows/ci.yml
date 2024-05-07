@@ -69,3 +69,44 @@ jobs:
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
       - run: php src/Vendor/bin/phpstan
+
+  build-preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.0
+          tools: composer:v2
+          extensions: apcu
+
+
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+  
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install Dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 'latest'
+
+      - name: Install NPM packages and build frontend
+        run: |
+          npm i
+          npm run build
+
+      - uses: actions/upload-artifact@v4
+        with:
+          path: "./src"
+          name: "AntCMS"

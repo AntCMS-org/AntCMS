@@ -12,7 +12,7 @@ Not sure what markdown is? Here's a [cheat sheet](https://www.markdownguide.org/
 
 AntCMS supports the full basic markdown syntax, plus added support for the GitHub Flavored Markdown (GFM) and some additional options. Here is a code example of all syntax AntCMS supports with the rendered example below:
 
-```
+```markdown
 ## Basic Syntax
 ## Headers!
 
@@ -29,11 +29,11 @@ AntCMS supports the full basic markdown syntax, plus added support for the GitHu
 `code blocks`
 
 Horizontal rules:
+
 ---
 
-Links:
+Links: [title](https://www.example.com)
 
-[title](https://www.example.com)
 Pictures:
 ![alt text](https://picsum.photos/seed/picsum/128/128)
 
@@ -82,11 +82,11 @@ And now the same content, but rendered through AntCMS:
 `code blocks`
 
 Horizontal rules:
+
 ---
 
-Links:
+Links: [title](https://www.example.com)
 
-[title](https://www.example.com)
 Pictures:
 ![alt text](https://picsum.photos/seed/picsum/128/128)
 

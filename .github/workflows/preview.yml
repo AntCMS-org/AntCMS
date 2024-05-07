@@ -11,6 +11,16 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 'latest'
+
+      - name: Install NPM packages and build frontend
+        run: |
+          npm i
+          npm run build
+
       - uses: php-actions/composer@v6
         with:
           dev: no
