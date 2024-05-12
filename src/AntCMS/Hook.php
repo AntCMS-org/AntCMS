@@ -33,7 +33,7 @@ class Hook
      *
      * @param array $params An array of values to pass to the callbacks registered for this hook
      */
-    public function fire(array &$params): void
+    public function fire(array $params): void
     {
         foreach ($this->callbacks as $callback) {
             call_user_func($callback, $params);

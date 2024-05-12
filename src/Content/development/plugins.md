@@ -75,21 +75,11 @@ class myCoolClass
         // Fire a hook
         $data = ['some', 'data', 'in', 'an', 'array'];
         HookController::fire('myCoolHook', $data);
-
-        /**
-         * Since our hook modifies the data, our array should now look like this:
-         * ['some', 'data', 'in', 'an', 'array', '!']
-         */
-        print_r($data);
     }
 
     public function hookCallback(array &$data)
     {
-        // When our callback is called from the hook, we have access to the data associated with it
-        print_r($data);
-
-        // Additionally, callbacks may modify the hook data
-        $data[] = '!';
+        error_log(print_r($data, true));
     }
 }
 ```
