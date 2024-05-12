@@ -1,6 +1,8 @@
 <?php
 
-use AntCMS\{Cache, Config, Twig};
+use AntCMS\Cache;
+use AntCMS\Config;
+use AntCMS\Twig;
 
 define('START', hrtime(true));
 

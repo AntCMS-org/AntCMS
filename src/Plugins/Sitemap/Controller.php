@@ -2,8 +2,11 @@
 
 namespace AntCMS\Plugins\Sitemap;
 
+use AntCMS\AbstractPlugin;
+use AntCMS\Config;
+use AntCMS\Pages;
 use AntCMS\PluginController;
-use AntCMS\{AbstractPlugin, Config, Pages, Tools};
+use AntCMS\Tools;
 use Flight;
 
 class Controller extends AbstractPlugin

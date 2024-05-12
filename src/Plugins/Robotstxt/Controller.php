@@ -2,7 +2,10 @@
 
 namespace AntCMS\Plugins\Robotstxt;
 
-use AntCMS\{AbstractPlugin, Config, PluginController, Tools};
+use AntCMS\AbstractPlugin;
+use AntCMS\Config;
+use AntCMS\PluginController;
+use AntCMS\Tools;
 
 use Flight;
 
