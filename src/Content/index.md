@@ -1,7 +1,7 @@
 --AntCMS--
-Title: AntCMS Readme
+Title: AntCMS
 Author: The AntCMS Team
-Description: The ReadMe file for AntCMS, rendered quickly and simply using AntCMS.
+Description: AntCMS is a very fast CMS which provides easy SEO, low system resource usage, and makes writing content easy utilizing markdown. 
 NavItem: true
 --AntCMS--
 

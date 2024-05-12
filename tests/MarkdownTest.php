@@ -1,6 +1,7 @@
 <?php
 
-use AntCMS\{Config, Markdown};
+use AntCMS\Config;
+use AntCMS\Markdown;
 use PHPUnit\Framework\TestCase;
 
 class MarkdownTest extends TestCase

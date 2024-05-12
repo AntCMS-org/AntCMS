@@ -2,7 +2,11 @@
 
 namespace AntCMS;
 
-use Symfony\Component\Cache\Adapter\{ApcuAdapter, ArrayAdapter, ChainAdapter, FilesystemAdapter, PhpFilesAdapter};
+use Symfony\Component\Cache\Adapter\ApcuAdapter;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
+use Symfony\Component\Cache\Adapter\ChainAdapter;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Component\Cache\Adapter\PhpFilesAdapter;
 use Symfony\Contracts\Cache\CallbackInterface;
 
 class Cache

@@ -2,7 +2,11 @@
 
 namespace AntCMS\Plugins\Sitemap;
 
-use AntCMS\{AbstractPlugin, Config, Pages, Tools};
+use AntCMS\AbstractPlugin;
+use AntCMS\Config;
+use AntCMS\Pages;
+use AntCMS\PluginController;
+use AntCMS\Tools;
 use Flight;
 
 class Controller extends AbstractPlugin
@@ -21,19 +25,21 @@ class Controller extends AbstractPlugin
                 $domElement->setAttribute('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
                 $domDocument->appendChild($domElement);
 
-                $urls = [];
+                $urls = PluginController::getSitemapUrls();
                 $this->addPages($pages, $urls);
 
                 foreach ($urls as $url) {
-                    $element = $domDocument->createElement('url');
+                    $entry = $domDocument->createElement('url');
 
                     $loc = $domDocument->createElement('loc', $protocol . '://' . Tools::repairURL(BASE_URL . $url['url']));
-                    $element->appendChild($loc);
+                    $entry->appendChild($loc);
 
-                    $lastmod = $domDocument->createElement('lastmod', $url['lastchange']);
-                    $element->appendChild($lastmod);
+                    if ($url['lastmod']) {
+                        $lastmod = $domDocument->createElement('lastmod', date('Y-m-d', $url['lastmod']));
+                        $entry->appendChild($lastmod);
+                    }
 
-                    $domElement->appendChild($element);
+                    $domElement->appendChild($entry);
                 }
 
                 echo $domDocument->saveXML();
@@ -54,7 +60,7 @@ class Controller extends AbstractPlugin
 
             $urls[] = [
                 'url' => $item['functionalPath'],
-                'lastchange' => date('Y-m-d', filemtime($item['realPath'])),
+                'lastmod' => filemtime($item['realPath']),
             ];
         }
     }

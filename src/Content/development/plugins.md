@@ -23,7 +23,26 @@ All plugins reside under the `Plugins` folder.
 - AntCMS uses [FlightPHP](https://docs.flightphp.com/?lang=en) for routing, routes should be registered per their docs.
 - Create a `Templates` directory in your plugin folder to have it automatically be added to the twig loader.
 
-### Example Plugin
+## Hooks
+
+ - Hooks should be created, registered, and fired using the `AntCMS\HookController` class.
+ - Hooks may be interacted with anywhere in your code and point to any function.
+ - When fired, hook callbacks will be fired in the order they were registered.
+ - You may register a callback before the hook itself has been registered.
+ - Registering a hook for a second time will simply update the description.
+
+---
+
+## Example Plugin with Hooks
+
+The following is an example AntCMS plugin. It should be installed to `Plugins/Example/Controller.php`.
+
+This plugin has the following examples:
+
+ - The usage of hooks.
+ - Registering routes & outputting data to the browser.
+ - Adding a new entry to the `sitemap.xml` file.
+ - Add allow / deny entries to the `robots.txt` file.
 
 ```PHP
 <?php
@@ -31,38 +50,14 @@ All plugins reside under the `Plugins` folder.
 namespace AntCMS\Plugins\Example;
 
 use AntCMS\AbstractPlugin;
+use AntCMS\HookController;
 use Flight;
 
 class Controller extends AbstractPlugin
 {
     public function __construct()
     {
-        Flight::route("GET /hi", function (): void {
-            echo "Hello!";
-        });
-    }
-}
-```
-
-<hr/>
-
-## Hooks
-
-Creating, registering, and firing hooks all go through the `AntCMS\HookController` class.
-You may register and fire a hook as well as register callbacks from anywhere within your code.
-
-### Real-world example
-
-```PHP
-<?php
-
-use AntCMS\HookController;
-
-class myCoolClass
-{
-    public function __construct()
-    {
-        // Registers a hook and sets the description for it
+        // Register a hook and sets the description for it
         HookController::registerHook('myCoolHook', 'The helpful description of my hook');
 
         /**
@@ -72,24 +67,36 @@ class myCoolClass
          */
         HookController::registerCallback('myCoolHook', [$this, 'hookCallback']);
 
-        // Fire a hook
-        $data = ['some', 'data', 'in', 'an', 'array'];
-        HookController::fire('myCoolHook', $data);
+        // Register a route
+        Flight::route("GET /hi", function (): void {
+            // write out content to the user
+            echo "<h1>Hello!</h1>";
+            echo "<p>This is an example page for a custom AntCMS plugin!</p>";
 
-        /**
-         * Since our hook modifies the data, our array should now look like this:
-         * ['some', 'data', 'in', 'an', 'array', '!']
-         */
-        print_r($data);
+            // We can also fire that hook we made when this page is loaded
+            HookController::fire('myCoolHook', ['some', 'data', 'in', 'an', 'array']);
+
+            echo "<h2>Hooks</h2>";
+            // And we list the registered hooks
+            $hooks = HookController::getHookList();
+            foreach ($hooks as $hook) {
+                echo "<p><strong>$hook->name:</strong> $hook->description</p>";
+            }
+        });
+
+        // Add a new sitemap entry
+        $this->appendSitemap('/hi');
+
+        // Disallow it from being indexed via the robots.txt file
+        $this->addDisallow('/hi');
+
+        // Or we could explicitly allow indexing it
+        //$this->addAllow('/hi');
     }
 
-    public function hookCallback(array &$data)
+    public function hookCallback(array $data)
     {
-        // When our callback is called from the hook, we have access to the data associated with it
-        print_r($data);
-
-        // Additionally, callbacks may modify the hook data
-        $data[] = '!';
+        error_log(print_r($data, true));
     }
 }
 ```

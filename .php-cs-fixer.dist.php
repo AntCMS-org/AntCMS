@@ -14,9 +14,8 @@ return (new PhpCsFixer\Config())
         '@PHP80Migration' => true,
         'ordered_imports' => true,
         'no_unused_imports' => true,
-        'group_import' => true,
         'no_unneeded_import_alias' => true,
-        'single_import_per_statement' => false,
+        'single_import_per_statement' => true,
     ])
     ->setFinder($finder)
 ;
