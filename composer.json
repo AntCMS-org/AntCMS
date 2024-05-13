@@ -56,7 +56,14 @@
                 "docs/",
                 ".travis.yml",
                 ".github/",
-                ".devcontainer/"
+                ".devcontainer/",
+                ".editorconfig"
+            ],
+            "ml/json-ld": [
+                "Test/"
+            ],
+            "ml/iri": [
+                "Test/"
             ]
         }
     }
