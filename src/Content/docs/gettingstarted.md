@@ -8,7 +8,7 @@ Description: Getting started with AntCMS.
 
 Due to it's simplistic nature, getting started with AntCMS is very easy compared to some CMS solutions. Simply follow the steps we have laid out below, and you'll be off to the races!
 
-<hr/>
+---
 
 ## Installing AntCMS
 

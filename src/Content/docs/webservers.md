@@ -6,7 +6,7 @@ Description: Learn about what Markdown syntax and features AntCMS supports.
 
 # Compatible Web Servers
 
-<hr/>
+---
 
 ## Apache, Litespeed, and OpenLitespeed
 
