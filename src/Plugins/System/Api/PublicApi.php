@@ -6,7 +6,7 @@ use AntCMS\ApiResponse as Response;
 
 class PublicApi
 {
-    public function status(): Response
+    public function status(array $data): Response
     {
         return new Response('okay');
     }

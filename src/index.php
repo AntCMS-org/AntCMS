@@ -49,8 +49,8 @@ Flight::route('GET .well-known/acme-challenge/*', [$AntCMS, 'serveContent']);
 // API Controller
 Flight::group('/api/v0', function (): void {
     $controller = new ApiController();
-    Flight::route('/public/@plugin/@method', [$controller, 'publicController']);
-    Flight::route('/protected/@plugin/@method', [$controller, 'privateController']);
+    Flight::route('/public/@plugin/@method/*', [$controller, 'publicController']);
+    Flight::route('/protected/@plugin/@method/*', [$controller, 'privateController']);
 });
 
 // Register routes for plugins

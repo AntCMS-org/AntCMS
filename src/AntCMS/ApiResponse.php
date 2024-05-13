@@ -10,11 +10,19 @@ class ApiResponse
 
     public function getBody(): array
     {
-        return [
+        $result = [
             'status' => $this->error ? 'error' : 'success',
-            'message' => $this->message,
-            'result' => $this->result,
         ];
+
+        if ($this->message !== '') {
+            $result['message'] = $this->message;
+        }
+
+        if ($this->result) {
+            $result['result'] = $this->result;
+        }
+
+        return $result;
     }
 
     public function getCode(): int
