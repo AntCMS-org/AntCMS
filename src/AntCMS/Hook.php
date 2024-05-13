@@ -9,6 +9,8 @@ namespace AntCMS;
 class Hook
 {
     public string $name;
+    public int $timesFired = 0;
+    public int $registeredCallbacks = 0;
 
     /** @var callable[] */
     private array $callbacks = [];
@@ -35,6 +37,7 @@ class Hook
      */
     public function fire(array $params): void
     {
+        $this->timesFired++;
         foreach ($this->callbacks as $callback) {
             call_user_func($callback, $params);
         }
@@ -45,6 +48,7 @@ class Hook
      */
     public function registerCallback(callable $callback): void
     {
+        $this->registeredCallbacks++;
         $this->callbacks[] = $callback;
     }
 }

@@ -21,6 +21,6 @@ class Controller extends AbstractPlugin
             HookController::registerHook($name, $description);
         }
 
-        $this->addDisallow('/Api/*');
+        $this->addDisallow('/api/*');
     }
 }
