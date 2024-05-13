@@ -21,7 +21,7 @@ AntCMS is a flat-file CMS that's built to have very low system resource usage wh
  - Support for custom themes.
  - Per-theme additional styles applied to markdown content.
  - Plugin suppport.
- - Uses Markdown to write content and YAML for the infrequently needed configuration setup..
+ - Uses Markdown to write content and YAML for the infrequently needed configuration setup.
 
 ## System Requirements
 
