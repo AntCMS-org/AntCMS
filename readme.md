@@ -28,7 +28,7 @@ AntCMS is being largely rebuilt for better, faser, easier functionality the foll
  - Support for custom themes.
  - Per-theme additional styles applied to markdown content.
  - Plugin suppport.
- - Uses Markdown to write content and YAML for the infrequently needed configuration setup..
+ - Uses Markdown to write content and YAML for the infrequently needed configuration setup.
 
 ## System Requirements
 
