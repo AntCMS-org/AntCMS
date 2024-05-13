@@ -20,5 +20,7 @@ class Controller extends AbstractPlugin
         foreach ($this->hooks as $name => $description) {
             HookController::registerHook($name, $description);
         }
+
+        $this->addDisallow('/Api/*');
     }
 }
