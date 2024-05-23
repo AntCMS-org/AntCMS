@@ -57,7 +57,8 @@
                 ".travis.yml",
                 ".github/",
                 ".devcontainer/",
-                ".editorconfig"
+                ".editorconfig",
+                "CHANGELOG.md"
             ],
             "ml/json-ld": [
                 "Test/"
