@@ -50,6 +50,7 @@ define('BASE_URL', $config['baseUrl']);
 define('DEBUG_LEVEL', $config['debugLevel']);
 define('CURRENT_THEME', $config['activeTheme']);
 define('PATH_CURRENT_THEME', PATH_THEMES . DIRECTORY_SEPARATOR . CURRENT_THEME);
+define('IMAGE_QUALITY', $config['performance']['imageQuality'] ?? 85);
 
 // Setup our cache adapter
 Cache::setup($config['performance']['allowedCacheMethods'] ?? ['acpu', 'php_files', 'filesystem']);

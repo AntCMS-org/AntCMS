@@ -27,3 +27,7 @@ The default Caddy behavior for PHP applications is compatible, however relying o
 For your convience, a pre-built [caddyfile](https://github.com/AntCMS-org/AntCMS/blob/main/configs/caddyfile) is available which will ensure all routing behaves as originally intended.
 
 **Note:** ETags are broken in AntCMS when paired with Caddy and are automatically disabled. Due to this, using Caddy will result in reduced caching capabilities for assets.
+
+## Development servers
+
+ - PHP Local Development Server (without asset delivery)

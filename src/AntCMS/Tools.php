@@ -141,8 +141,10 @@ class Tools
         };
     }
 
-    private static function compressImage(string $path, int $quality = 85): string
+    private static function compressImage(string $path, ?int $quality = null): string
     {
+        $quality ??= IMAGE_QUALITY;
+
         // Get the image type
         $imageInfo = getimagesize($path);
         $original = file_get_contents($path);
@@ -168,7 +170,8 @@ class Tools
                 imagejpeg($image, null, $quality);
                 break;
             case 'image/png':
-                imagepng($image, null, intval(round(9 * ($quality - 15) / 100)));
+                // PNG compression is lossless, so there's no reason to use the passed quality level
+                imagepng($image, null, -1);
                 break;
             case 'image/webp':
                 imagewebp($image, null, $quality);

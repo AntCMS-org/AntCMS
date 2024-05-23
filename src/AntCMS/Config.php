@@ -29,6 +29,7 @@ class Config
                 'doOutputCompression' => true,
                 'compressTextAssets' => true,
                 'compressImageAssets' => true,
+                'imageQuality' => 85,
                 'allowedCacheMethods' => ['acpu', 'php_files', 'filesystem'],
             ],
             'forceHttps' => !Enviroment::isPHPDevServer(),
