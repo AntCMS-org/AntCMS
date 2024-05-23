@@ -25,7 +25,7 @@ AntCMS is a flat-file CMS that's built to have very low system resource usage wh
 
 ## System Requirements
 
- - PHP 8.0 or greater
+ - PHP 8.1 or greater
  - PHP Extensions: `curl`, `dom`, `mbstring`
 
 ## Extensions for Improved Performance

@@ -4,7 +4,7 @@ namespace AntCMS;
 
 class ApiResponse
 {
-    public function __construct(private mixed $result, private bool $error = false, private int $code = 200, private string $message = '')
+    public function __construct(private mixed $result, private readonly bool $error = false, private readonly int $code = 200, private string $message = '')
     {
     }
 

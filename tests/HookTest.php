@@ -34,7 +34,7 @@ class HookTest extends TestCase
         $this->assertIsBool($result);
         $this->assertTrue($result);
 
-        HookController::registerCallback($name, [$this, 'hookCallback']);
+        HookController::registerCallback($name, $this->hookCallback(...));
         HookController::fire($name, ['test' => 'data']);
     }
 

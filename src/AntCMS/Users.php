@@ -37,8 +37,8 @@ class Users
 
     public static function addUser(array $data): bool
     {
-        $data['username'] = trim($data['username']);
-        $data['name'] = trim($data['name']);
+        $data['username'] = trim((string) $data['username']);
+        $data['name'] = trim((string) $data['name']);
         self::validateUsername($data['username']);
 
         $users = self::getUsers();
@@ -51,7 +51,7 @@ class Users
         }
 
         $users[$data['username']] = [
-            'password' => password_hash($data['password'], PASSWORD_DEFAULT),
+            'password' => password_hash((string) $data['password'], PASSWORD_DEFAULT),
             'role' => $data['role'],
             'name' => $data['display-name'],
         ];
@@ -72,7 +72,7 @@ class Users
         }
 
         if (isset($newData['password'])) {
-            $users[$username]['password'] = password_hash($newData['password'], PASSWORD_DEFAULT);
+            $users[$username]['password'] = password_hash((string) $newData['password'], PASSWORD_DEFAULT);
         }
 
         if (isset($newData['role'])) {
@@ -80,12 +80,12 @@ class Users
         }
 
         if (isset($newData['name'])) {
-            $newData['name'] = trim($newData['name']);
+            $newData['name'] = trim((string) $newData['name']);
             $users[$username]['name'] = $newData['name'];
         }
 
         if (isset($newData['username'])) {
-            $newData['username'] = trim($newData['username']);
+            $newData['username'] = trim((string) $newData['username']);
             self::validateUsername($newData['username']);
             if (array_key_exists($newData['username'], $users) && $newData['username'] !== $username) {
                 throw new \Exception("Username is already taken.");
@@ -106,13 +106,13 @@ class Users
             exit;
         }
 
-        $data['username'] = trim($data['username']);
-        $data['name'] = trim($data['name']);
+        $data['username'] = trim((string) $data['username']);
+        $data['name'] = trim((string) $data['name']);
         self::validateUsername($data['username']);
 
         $users = [
             $data['username'] => [
-                'password' => password_hash($data['password'], PASSWORD_DEFAULT),
+                'password' => password_hash((string) $data['password'], PASSWORD_DEFAULT),
                 'role' => 'admin',
                 'name' => $data['name'],
             ],

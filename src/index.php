@@ -23,7 +23,7 @@ Flight::response()->addResponseBodyCallback(fn ($body): string => str_replace('<
 // Setup CompressionBuffer & enable it in Flight
 CompressionBuffer::setUp(true, false, [Flight::response(), 'header']);
 if (COMPRESS_OUTPUT) {
-    Flight::response()->addResponseBodyCallback([CompressionBuffer::class, 'handler']);
+    Flight::response()->addResponseBodyCallback(CompressionBuffer::handler(...));
 }
 
 Flight::response()->addResponseBodyCallback(function ($body) {
@@ -38,19 +38,19 @@ if (!Flight::request()->secure && !Enviroment::isCli() && Config::get('forceHttp
 }
 
 // Asset delivery
-Flight::route('GET /themes/*/assets/*', [$AntCMS, 'serveContent']);
+Flight::route('GET /themes/*/assets/*', $AntCMS->serveContent(...));
 Flight::route('GET /favicon.ico', function () use ($AntCMS): void {
     $AntCMS->serveContent(PATH_CURRENT_THEME . DIRECTORY_SEPARATOR . 'Assets' . DIRECTORY_SEPARATOR . 'favicon.ico');
 });
 
 /// ACME challenges for certificate renewals
-Flight::route('GET .well-known/acme-challenge/*', [$AntCMS, 'serveContent']);
+Flight::route('GET .well-known/acme-challenge/*', $AntCMS->serveContent(...));
 
 // API Controller
 Flight::group('/api/v0', function (): void {
     $controller = new ApiController();
-    Flight::route('/public/@plugin/@method/*', [$controller, 'publicController']);
-    Flight::route('/protected/@plugin/@method/*', [$controller, 'privateController']);
+    Flight::route('/public/@plugin/@method/*', $controller->publicController(...));
+    Flight::route('/protected/@plugin/@method/*', $controller->privateController(...));
 });
 
 // Register routes for plugins

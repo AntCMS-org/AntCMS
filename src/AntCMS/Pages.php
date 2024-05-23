@@ -72,7 +72,7 @@ class Pages
                     if (is_dir($currentPath . DIRECTORY_SEPARATOR . $item)) {
                         continue;
                     }
-                    if (str_ends_with($item, '.md')) {
+                    if (str_ends_with((string) $item, '.md')) {
                         continue;
                     }
                     unset($directoryListing[$subKey]);

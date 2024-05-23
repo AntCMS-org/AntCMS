@@ -10,8 +10,8 @@ class TwigFilters extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            new TwigFilter('absUrl', [$this, 'absUrl']),
-            new TwigFilter('markdown', [$this, 'markdown']),
+            new TwigFilter('absUrl', $this->absUrl(...)),
+            new TwigFilter('markdown', $this->markdown(...)),
         ];
     }
 

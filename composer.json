@@ -9,7 +9,7 @@
         "issues": "https://github.com/AntCMS-org/AntCMS/issues"
     },
     "require": {
-        "php": ">=8.0",
+        "php": ">=8.1",
         "antcms/antloader": "^2.0.0",
         "elgigi/commonmark-emoji": "^2.0",
         "embed/embed": "^4.4",

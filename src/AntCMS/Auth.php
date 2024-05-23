@@ -58,7 +58,7 @@ class Auth
             $this->requireAuth();
         }
 
-        if (password_verify($password, $currentUser['password'])) {
+        if (password_verify((string) $password, (string) $currentUser['password'])) {
             $this->username = $username;
             $this->role = $currentUser['role'] ?? '';
 

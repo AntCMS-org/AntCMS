@@ -35,7 +35,7 @@ class Config
             'forceHttps' => !Enviroment::isPHPDevServer(),
             'activeTheme' => 'Default',
             'debugLevel' => 1, // 0-2 at the moment
-            'baseUrl' => $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']),
+            'baseUrl' => $_SERVER['HTTP_HOST'] . dirname((string) $_SERVER['PHP_SELF']),
             'embed' => [
                 'allowed_domains' => ['youtube.com', 'twitter.com', 'github.com', 'vimeo.com', 'flickr.com', 'instagram.com', 'facebook.com'],
             ],

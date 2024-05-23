@@ -39,10 +39,4 @@ abstract class AbstractPlugin
     {
         PluginController::addDisallowToRobotsTxt($url);
     }
-
-    /** @TODO */
-    public function registerApiRoute()
-    {
-
-    }
 }

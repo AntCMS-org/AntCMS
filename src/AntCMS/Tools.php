@@ -26,7 +26,7 @@ class Tools
         $iterator = new \RecursiveIteratorIterator($dir);
         $files = [];
         foreach ($iterator as $file) {
-            if (pathinfo($file, PATHINFO_EXTENSION) == $extension || $extension == null) {
+            if (pathinfo((string) $file, PATHINFO_EXTENSION) == $extension || $extension == null) {
                 $files[] = ($returnPath === true) ? $file->getPathname() : $file->getFilename();
             }
         }

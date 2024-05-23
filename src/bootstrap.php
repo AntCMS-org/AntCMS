@@ -15,17 +15,6 @@ const PATH_CONTENT = __DIR__ . DIRECTORY_SEPARATOR . 'Content';
 const PATH_THEMES = __DIR__ . DIRECTORY_SEPARATOR . 'Themes';
 const PATH_PLUGINS = __DIR__ . DIRECTORY_SEPARATOR . 'Plugins';
 
-/**
- * If the server is modern enough to have xxh128, use that. It is really fast and still produces long hashes
- * If not, use MD4 since it's still quite fast.
- * Source: https://php.watch/articles/php-hash-benchmark
- */
-if (in_array('xxh128', hash_algos())) {
-    define('HASH_ALGO', 'xxh128');
-} else {
-    define('HASH_ALGO', 'md4');
-}
-
 // Load the Vendor autoloader
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'Vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 

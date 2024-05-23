@@ -20,7 +20,7 @@ class AntYaml
      */
     public static function parseFile(string $path): array
     {
-        $cacheKey = hash(HASH_ALGO, $path);
+        $cacheKey = hash('xxh3', $path);
         self::$yamlCache[$cacheKey] ??= Yaml::parseFile($path);
         return self::$yamlCache[$cacheKey];
     }
@@ -35,7 +35,7 @@ class AntYaml
     public static function saveFile(string $path, array $data): bool
     {
         // First update / set the cached data for this file
-        $cacheKey = hash(HASH_ALGO, $path);
+        $cacheKey = hash('xxh3', $path);
         self::$yamlCache[$cacheKey] = $data;
 
         // Then we can actually convert it to YAML and dump it
