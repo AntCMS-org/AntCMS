@@ -16,6 +16,9 @@ class Cache
     public static int $mediumLifespan = 86400 * 7; // 1 week
     public static int $shortLifespan = 900; // 15 min (in-memory)
 
+    /**
+     * @param string[] $allowed
+     */
     public static function setup(array $allowed = []): void
     {
         $adapters = [];
@@ -40,6 +43,9 @@ class Cache
         }
     }
 
+    /**
+     * @param mixed[] $metadata
+     */
     public static function get(string $key, callable|CallbackInterface $callable, ?float $beta = null, ?array &$metadata = []): mixed
     {
         return self::$adapter->get($key, $callable, $beta, $metadata);

@@ -7,6 +7,9 @@ use AntCMS\HookController;
 
 class Controller extends AbstractPlugin
 {
+    /**
+     * @var array<string, string>
+     */
     private array $hooks = [
         'contentHit' => 'This is fired when markdown content is accessed. The URI will be passed in the data.',
         'performanceMetricsBuilt' => 'When fired, this event contains all performance metrics AntCMS was able to collect on a request. These are more complete & accurate than the metrics shown on the bottom of the screen.',

@@ -50,6 +50,10 @@ class Controller extends AbstractPlugin
         });
     }
 
+    /**
+     * @param array<string, mixed> $list
+     * @param string[] $urls
+     */
     private function addPages(array $list, array &$urls): void
     {
         foreach ($list as $item) {

@@ -6,6 +6,9 @@ class Pages
 {
     private static string $currentPage = "";
 
+    /**
+     * @return array<string, mixed>
+     */
     private static function generatePageInfo(string $path): array
     {
         $contents = file_get_contents($path);
@@ -26,6 +29,9 @@ class Pages
         ];
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private static function getDirectoryMeta(string $path): array
     {
         $metaPath = $path . DIRECTORY_SEPARATOR . 'meta.yaml';
@@ -131,6 +137,9 @@ class Pages
         return $result;
     }
 
+    /**
+     * @return mixed[]
+     */
     public static function getPages(string $currentPage = ''): array
     {
         self::$currentPage = $currentPage;

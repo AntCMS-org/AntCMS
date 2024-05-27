@@ -4,8 +4,13 @@ namespace AntCMS;
 
 class PluginController
 {
+    /** @var string[] */
     private static array $plugins = [];
+
+    /** @var array<string, string[]> */
     private static array $sitemapUrls = [];
+
+    /** @var array<string, string[]> */
     private static array $robotsTxtAdditons = [
         'allow' => [],
         'disallow' => [],
@@ -47,16 +52,25 @@ class PluginController
         }
     }
 
+    /**
+     * @return string[]
+     */
     public static function getLoadedPlugins(): array
     {
         return self::$plugins;
     }
 
+    /**
+     * @return array<string, string[]>
+     */
     public static function getSitemapUrls(): array
     {
         return self::$sitemapUrls;
     }
 
+    /**
+     * @return array<string, string[]>
+     */
     public static function getRobotsTxtEntries(): array
     {
         return self::$robotsTxtAdditons;

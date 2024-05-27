@@ -33,7 +33,7 @@ class Hook
     /**
      * Fires the hook
      *
-     * @param array $params An array of values to pass to the callbacks registered for this hook
+     * @param mixed[] $params An array of values to pass to the callbacks registered for this hook
      */
     public function fire(array $params): void
     {

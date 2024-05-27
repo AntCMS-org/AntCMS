@@ -6,6 +6,7 @@ use Exception;
 
 class Config
 {
+    /** @var string[] */
     private static array $ConfigKeys = [
         'siteInfo',
         'performance',

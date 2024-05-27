@@ -1,4 +1,4 @@
-![PHPStan Level](https://img.shields.io/badge/PHPStan-level%205-brightgreen)
+![PHPStan Level](https://img.shields.io/badge/PHPStan-level%206-brightgreen)
 [![CI](https://github.com/AntCMS-org/AntCMS/actions/workflows/ci.yml/badge.svg)](https://github.com/AntCMS-org/AntCMS/actions/workflows/ci.yml)
 ![Supported PHP Versions](https://img.shields.io/badge/PHP%20Versions-8.1%7C8.2%7C8.3-brightgreen)
 ![GitHub Release](https://img.shields.io/github/v/release/AntCMS-org/AntCMS)
