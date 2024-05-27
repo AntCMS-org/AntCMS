@@ -8,6 +8,9 @@ class ApiResponse
     {
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function getBody(): array
     {
         $result = [

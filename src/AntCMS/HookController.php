@@ -7,6 +7,9 @@ class HookController
     /** @var Hook[] */
     private static array $hooks = [];
 
+    /**
+     * @return Hook[]
+     */
     public static function getHookList(): array
     {
         return self::$hooks;
@@ -38,6 +41,9 @@ class HookController
         self::$hooks[$name]->registerCallback($callback);
     }
 
+    /**
+     * @param mixed[] $params
+     */
     public static function fire(string $name, array $params): void
     {
         if (self::isRegistered($name)) {

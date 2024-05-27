@@ -64,6 +64,9 @@ class Twig
         return self::$twigEnvironment->getLoader()->exists($name);
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     public static function render(string $template, array $data = []): string
     {
         return self::$twigEnvironment->render($template, $data);

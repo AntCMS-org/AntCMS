@@ -7,6 +7,9 @@ use Symfony\Contracts\Cache\ItemInterface;
 
 class Tools
 {
+    /**
+     * @var string[]
+     */
     private static array $textAssets = [
         'css',
         'html',
@@ -76,6 +79,10 @@ class Tools
         return Tools::repairFilePath($pagePath);
     }
 
+    /**
+     * @param string[] $required
+     * @param mixed[] $actual
+     */
     public static function valuesNotNull(array $required, array $actual): bool
     {
         foreach ($required as $key) {
@@ -202,6 +209,8 @@ class Tools
     /**
      * Automatically selects an ideal compression method for various types of assets.
      * Impliments caching to prevent repeat processing of assets.
+     *
+     * @return string[] [contents, content encoding]
      */
     public static function doAssetCompression(string $path): array
     {
@@ -237,6 +246,9 @@ class Tools
         return [$contents, $encoding];
     }
 
+    /**
+     * @return array<string, float>
+     */
     public static function getPerformanceMetrics(): array
     {
         return [

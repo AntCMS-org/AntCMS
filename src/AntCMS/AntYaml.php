@@ -11,12 +11,13 @@ use Symfony\Component\Yaml\Yaml;
  */
 class AntYaml
 {
-    /** @var array $yamlCache An in-memory cache for parsed YAML files to prevent repeat hits from slowing down AntCMS. */
+    /** @var array<string, mixed> $yamlCache An in-memory cache for parsed YAML files to prevent repeat hits from slowing down AntCMS. */
     private static array $yamlCache = [];
 
     /**
      * Parses a YAML file and returns the content as an array.
-     * @throws ParseException;
+     * @throws ParseException
+     * @return mixed[]
      */
     public static function parseFile(string $path): array
     {
@@ -43,6 +44,9 @@ class AntYaml
         return (bool) file_put_contents($path, $yaml);
     }
 
+    /**
+     * @return mixed[]
+     */
     public static function parseYaml(string $yaml): array
     {
         return Yaml::parse($yaml);

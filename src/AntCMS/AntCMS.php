@@ -171,6 +171,9 @@ class AntCMS
         }
     }
 
+    /**
+     * @return mixed[]
+     */
     public static function getThemeConfig(string|null $theme = null): array
     {
         $theme ??= CURRENT_THEME;
