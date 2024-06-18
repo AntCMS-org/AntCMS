@@ -23,7 +23,7 @@
         "symfony/polyfill-php81": "^1.29",
         "symfony/polyfill-php82": "^1.29",
         "symfony/polyfill-php83": "^1.29",
-        "symfony/yaml": "^6.0",
+        "symfony/yaml": "^7.1",
         "twig/twig": "^3.5"
     },
     "replace": {
