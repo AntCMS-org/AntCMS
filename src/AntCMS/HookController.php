@@ -24,7 +24,7 @@ class HookController
     {
         if (self::isRegistered($name)) {
             if ($description !== '') {
-                self::$hooks[$name]->$description = $description;
+                self::$hooks[$name]->description = $description;
             }
             return true;
         }

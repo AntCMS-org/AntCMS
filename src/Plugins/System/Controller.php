@@ -16,6 +16,8 @@ class Controller extends AbstractPlugin
         'beforeApiCalled' => 'This event is fired before an API endpoint is called',
         'afterApiCalled' => 'This event is fired after an API endpoint is called and the response is available',
         'onHookFireComplete' => 'This event is fired when others have completed. The data provided will include the hook name, timing data, and parameter read / update statistics.',
+        'onBeforeMarkdownParsed' => 'This event is fired before markdown is converted, allowing for pre-processing before the markdown is run through the parser',
+        'onAfterMarkdownParsed' => 'This is fired after markdown is converted, allowing you to modify generated markdown content',
     ];
 
     public function __construct()

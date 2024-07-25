@@ -23,6 +23,11 @@ class Markdown
         $cacheKey ??= Cache::createCacheKey($md, 'markdown');
 
         return Cache::get($cacheKey, function (ItemInterface $item) use ($md): string {
+
+            // Fire the `onBeforeMarkdownParsed` and use the potentially modified markdown content for parsing
+            $event = HookController::fire('onBeforeMarkdownParsed', ['markdown' => $md]);
+            $markdown = $event-> getParameters()['markdown'] ?? $md;
+
             $config = Config::get();
             $defaultAttributes = [];
             $themeConfig = AntCMS::getThemeConfig();
@@ -54,7 +59,10 @@ class Markdown
             $environment->addExtension(new DefaultAttributesExtension());
 
             $markdownConverter = new MarkdownConverter($environment);
-            return $markdownConverter->convert($md)->__toString();
+
+            $parsed = $markdownConverter->convert($markdown)->__toString();
+            $event = HookController::fire('onAfterMarkdownParsed', ['html' => $parsed]);
+            return $event->getParameters()['html'] ?? $parsed;
         });
     }
 }
