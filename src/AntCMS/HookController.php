@@ -44,12 +44,11 @@ class HookController
     /**
      * @param mixed[] $params
      */
-    public static function fire(string $name, array $params): void
+    public static function fire(string $name, array $params): Event
     {
         if (self::isRegistered($name)) {
-            self::$hooks[$name]->fire($params);
-        } else {
-            error_log("Hook '$name' is not registed and cannot be fired");
+            return self::$hooks[$name]->fire($params);
         }
+        throw new \Exception("Hook '$name' is not registed and cannot be fired");
     }
 }
