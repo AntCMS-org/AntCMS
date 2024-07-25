@@ -24,7 +24,7 @@ class Markdown
 
         return Cache::get($cacheKey, function (ItemInterface $item) use ($md): string {
 
-            // Fire the `onBeforeMarkdownParsed` and use the potentially modified markdown content for parsing
+            // Fire the `onBeforeMarkdownParsed` event and use the potentially modified markdown content for parsing
             $event = HookController::fire('onBeforeMarkdownParsed', ['markdown' => $md]);
             $markdown = $event-> getParameters()['markdown'] ?? $md;
 
@@ -61,6 +61,8 @@ class Markdown
             $markdownConverter = new MarkdownConverter($environment);
 
             $parsed = $markdownConverter->convert($markdown)->__toString();
+
+            // Fire the `onAfterMarkdownParsed` hook and allow any updated HTML content to be used
             $event = HookController::fire('onAfterMarkdownParsed', ['html' => $parsed]);
             return $event->getParameters()['html'] ?? $parsed;
         });
