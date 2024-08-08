@@ -11,7 +11,7 @@ class TwigFilters extends AbstractExtension
     {
         return [
             new TwigFilter('absUrl', $this->absUrl(...)),
-            new TwigFilter('markdown', $this->markdown(...)),
+            new TwigFilter('markdown', $this->markdown(...), ['is_safe' => ['html']]),
         ];
     }
 
