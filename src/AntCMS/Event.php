@@ -13,14 +13,14 @@ class Event
 
     private int $paramUpdateCount = 0;
     private int $paramReadCount = 0;
-    private bool $isDone = false;
+    private int $lastCallback = 0;
 
     /**
      * @param string $associatedHook The hook that this event is associated with. Hook must exist.
      *
      * @param mixed[] $parameters
      */
-    public function __construct(string $associatedHook, private array $parameters)
+    public function __construct(string $associatedHook, private array $parameters, private readonly int $totalCallbacks)
     {
         if (!HookController::isRegistered($associatedHook)) {
             throw new \Exception("Hook $associatedHook is not registered!");
@@ -36,29 +36,42 @@ class Event
      */
     public function isDone(): bool
     {
-        return $this->isDone;
+        return $this->lastCallback === $this->totalCallbacks;
     }
 
     /**
-     * Marks the hook as done and fires a `onHookFireComplete` event.
+     * Called by the hook after each callback is complete.
+     * Tracks if the event is completed & fires 'onHookFireComplete' when needed.
+     *
+     * Callbacks should not call this function.
+     *
+     * @return Event
      */
-    public function markDone(): static
+    public function next(): static
     {
         if (!$this->isDone()) {
-            // Mark the event done and calculate it's timing
-            $this->isDone = true;
-            $this->timeElapsed = hrtime(true) - $this->hrStart;
+            // We just completed a callback, increment the last callback number.
+            ++$this->lastCallback;
 
-            // Ensure the `onHookFireComplete` when this event is completed
-            if ($this->associatedHook !== 'onHookFireComplete') {
-                HookController::fire('onHookFireComplete', [
-                    'name' => $this->associatedHook,
-                    'firedAt' => $this->firedAt,
-                    'timeElapsed' => $this->timeElapsed,
-                    'parameterReadCount' => $this->paramReadCount,
-                    'parameterUpdateCount' => $this->paramUpdateCount,
-                ]);
+            // Check if that was the last callback & we are done
+            if ($this->isDone()) {
+                // Set the timing
+                $this->timeElapsed = hrtime(true) - $this->hrStart;
+
+                // Fire `onHookFireComplete`
+                if ($this->associatedHook !== 'onHookFireComplete') {
+                    HookController::fire('onHookFireComplete', [
+                        'name' => $this->associatedHook,
+                        'firedAt' => $this->firedAt,
+                        'timeElapsed' => $this->timeElapsed,
+                        'parameterReadCount' => $this->paramReadCount,
+                        'parameterUpdateCount' => $this->paramUpdateCount,
+                    ]);
+                }
             }
+        } else {
+            // We shouldn't run into this situation, but it's non-fatal so only trigger a warning.
+            trigger_error("The 'next' event was called too many times for the '$this->associatedHook' event. Event timing may be inaccurate and 'onHookFireComplete' would have been fired too soon.", E_USER_WARNING);
         }
 
         return $this;
@@ -103,6 +116,8 @@ class Event
      * Updates the parameters
      *
      * @param mixed[] $parameters
+     *
+     * @return Event
      */
     public function setParameters(array $parameters): static
     {

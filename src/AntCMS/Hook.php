@@ -40,7 +40,7 @@ class Hook
         $this->timesFired++;
 
         // Create the new event object with the originally provided parameters
-        $event = new Event($this->name, $params);
+        $event = new Event($this->name, $params, $this->registeredCallbacks);
 
         // Then fire each of the callbacks and update the event instance from each one.
         foreach ($this->callbacks as $callback) {
@@ -48,10 +48,12 @@ class Hook
             if ($newEvent instanceof Event) {
                 $event = $newEvent;
             }
+
+            // Mark that callback as done
+            $event->next();
         }
 
-        // Mark the event as done & then return it
-        return $event->markDone();
+        return $event;
     }
 
     /**
