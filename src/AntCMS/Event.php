@@ -47,7 +47,7 @@ class Event
      *
      * @return Event
      */
-    public function next(): static
+    public function next(): Event
     {
         if (!$this->isDone()) {
             // We just completed a callback, increment the last callback number.
@@ -119,7 +119,7 @@ class Event
      *
      * @return Event
      */
-    public function setParameters(array $parameters): static
+    public function setParameters(array $parameters): Event
     {
         $this->parameters = $parameters;
         $this->paramUpdateCount++;
