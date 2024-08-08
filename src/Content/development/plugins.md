@@ -31,8 +31,8 @@ All plugins reside under the `Plugins` folder.
  - You may register a callback before the hook itself has been registered.
  - Registering a hook for a second time will simply update the description.
  - Hook callbacks will be passed an "Event" object, containing the event parameters and assocaited info.
- - Callbacks **must** return the Event object.
- - Callbacks may modify hook parameters, however it's up to the code that fires an event to read the updated parameters. 
+ - Callbacks may modify the event and return the updated object which will then be used for any further callbacks.
+ - If a callback modifies hook parameters,it's up to the code that fired the event to read from the updated parameters.
 
 ---
 

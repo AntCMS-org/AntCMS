@@ -44,7 +44,10 @@ class Hook
 
         // Then fire each of the callbacks and update the event instance from each one.
         foreach ($this->callbacks as $callback) {
-            $event = call_user_func($callback, $event);
+            $newEvent = call_user_func($callback, $event);
+            if ($newEvent instanceof Event) {
+                $event = $newEvent;
+            }
         }
 
         // Mark the event as done & then return it
