@@ -35,12 +35,25 @@ class Hook
      *
      * @param mixed[] $params An array of values to pass to the callbacks registered for this hook
      */
-    public function fire(array $params): void
+    public function fire(array $params): Event
     {
         $this->timesFired++;
+
+        // Create the new event object with the originally provided parameters
+        $event = new Event($this->name, $params, $this->registeredCallbacks);
+
+        // Then fire each of the callbacks and update the event instance from each one.
         foreach ($this->callbacks as $callback) {
-            call_user_func($callback, $params);
+            $newEvent = call_user_func($callback, $event);
+            if ($newEvent instanceof Event) {
+                $event = $newEvent;
+            }
+
+            // Mark that callback as done
+            $event->next();
         }
+
+        return $event;
     }
 
     /**
