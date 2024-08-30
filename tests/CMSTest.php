@@ -1,6 +1,6 @@
 <?php
 
-use AntCMS\{AntCMS};
+use AntCMS\AntCMS;
 use PHPUnit\Framework\TestCase;
 
 class CMSTest extends TestCase
