@@ -6,7 +6,6 @@ use AntCMS\AbstractPlugin;
 use AntCMS\Config;
 use AntCMS\PluginController;
 use AntCMS\Tools;
-
 use Flight;
 
 class Controller extends AbstractPlugin

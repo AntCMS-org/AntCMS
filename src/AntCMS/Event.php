@@ -14,13 +14,14 @@ class Event
     private int $paramUpdateCount = 0;
     private int $paramReadCount = 0;
     private int $lastCallback = 0;
+    private bool $defaultPrevented = false;
 
     /**
      * @param string $associatedHook The hook that this event is associated with. Hook must exist.
      *
      * @param mixed[] $parameters
      */
-    public function __construct(string $associatedHook, private array $parameters, private readonly int $totalCallbacks)
+    public function __construct(string $associatedHook, private array $parameters, private readonly int $totalCallbacks, private readonly bool $preventable)
     {
         if (!HookController::isRegistered($associatedHook)) {
             throw new \Exception("Hook $associatedHook is not registered!");
@@ -127,7 +128,7 @@ class Event
     }
 
     /**
-     * Returns the number of times the event parameters were read from
+     * Returns the number of times the event parameters were read from.
      */
     public function getReadCount(): int
     {
@@ -140,5 +141,38 @@ class Event
     public function getUpdateCount(): int
     {
         return $this->paramUpdateCount;
+    }
+
+    /**
+     * Indicates if the default behavior for an event is preventable.
+     */
+    public function isDefaultPreventable(): bool
+    {
+        return $this->preventable;
+    }
+
+    /**
+     * Indicates if the default behavior for an event is prevented.
+     */
+    public function isDefaultPrevented(): bool
+    {
+        return $this->defaultPrevented;
+    }
+
+    /**
+     * Sets a flag for the default behavior of this event to be prevented.
+     * Not all events can be prevented. Triggers a non-fatal error if the event's default behavior is not preventable.
+     *
+     * @return Event
+     */
+    public function preventDefault(): Event
+    {
+        if (!$this->isDefaultPreventable()) {
+            trigger_error("The default behavior for the `$this->associatedHook` hook cannot be prevented.");
+        } else {
+            $this->defaultPrevented = true;
+        }
+
+        return $this;
     }
 }

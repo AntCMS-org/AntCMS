@@ -17,8 +17,11 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'bootstrap.php';
 
 $AntCMS = new AntCMS();
 
-// Add a response body callback to display debug info
-Flight::response()->addResponseBodyCallback(fn ($body): string => str_replace('<!--AntCMS-Debug-->', Tools::buildDebugInfo(), $body));
+// Use hooks to perform any final changes to the output buffer before compressing and sending it
+Flight::response()->addResponseBodyCallback(function (string $body): string {
+    $event = HookController::fire('onBeforeOutputFinalized', ['output' => $body]);
+    return $event->getParameters()['output'];
+});
 
 // Setup CompressionBuffer & enable it in Flight
 CompressionBuffer::setUp(true, false, [Flight::response(), 'header']);

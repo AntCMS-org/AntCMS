@@ -3,6 +3,7 @@
 namespace AntCMS\Plugins\System;
 
 use AntCMS\AbstractPlugin;
+use AntCMS\AntCMS;
 use AntCMS\HookController;
 
 class Controller extends AbstractPlugin
@@ -18,6 +19,8 @@ class Controller extends AbstractPlugin
         'onHookFireComplete' => 'This event is fired when others have completed. The data provided will include the hook name, timing data, and parameter read / update statistics.',
         'onBeforeMarkdownParsed' => 'This event is fired before markdown is converted, allowing for pre-processing before the markdown is run through the parser',
         'onAfterMarkdownParsed' => 'This is fired after markdown is converted, allowing you to modify generated markdown content',
+        'onAfterPluginsInit' => 'This event is fired after all plugins have been initialized.',
+        'onBeforeOutputFinalized' => 'This event is fired right before the generated response is finalized (compressed) and sent to the browser. No later chances to modify the output buffer exist.',
     ];
 
     public function __construct()
@@ -27,6 +30,16 @@ class Controller extends AbstractPlugin
             HookController::registerHook($name, $description);
         }
 
+        HookController::registerCallback('onBeforeOutputFinalized', $this->appendDebugInfo(...));
+
         $this->addDisallow('/api/*');
+    }
+
+    private function appendDebugInfo(\AntCMS\Event $event): \AntCMS\Event
+    {
+        $params = $event->getParameters();
+        $params['output'] = str_replace('<!--AntCMS-Debug-->', \AntCMS\Tools::buildDebugInfo(), $params['output'] ?? '');
+        $event->setParameters($params);
+        return $event;
     }
 }

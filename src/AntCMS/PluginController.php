@@ -50,6 +50,8 @@ class PluginController
                 Twig::addLoaderPath($templateDir);
             }
         }
+
+        HookController::fire('onAfterPluginsInit');
     }
 
     /**
