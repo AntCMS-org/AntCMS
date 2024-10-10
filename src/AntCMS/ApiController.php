@@ -35,7 +35,7 @@ class ApiController
     {
         // Some needed variable setup
         $url = rtrim(Flight::request()->url, '/');
-        if($_GET !== []) {
+        if ($_GET !== []) {
             $query = '?' . http_build_query($_GET);
             $url = str_replace($query, '', $url);
         }
