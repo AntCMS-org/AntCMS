@@ -55,7 +55,7 @@ class Cache
      * @param string $key The unique identifier for the cached value.
      * @param callable|CallbackInterface $callable A function that returns the value to be cached.
      * @param ?float $beta (Optional) Controls the cache update strategy. See Symfony documentation for details.
-     * @param ?array &$metadata (Optional) Stores metadata about the cached item. 
+     * @param ?mixed[] &$metadata (Optional) Stores metadata about the cached item. 
      * @return mixed The cached value or the result of the callable if it's not found.
      */
     public static function get(string $key, callable|CallbackInterface $callable, ?float $beta = null, ?array &$metadata = []): mixed
