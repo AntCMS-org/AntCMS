@@ -20,7 +20,7 @@ class HookController
         return array_key_exists($name, self::$hooks);
     }
 
-    public static function registerHook(string $name, string $description = ''): bool
+    public static function registerHook(string $name, string $description = '', bool $isDefaultPreventable = false): bool
     {
         if (self::isRegistered($name)) {
             if ($description !== '') {
@@ -29,7 +29,7 @@ class HookController
             return true;
         }
 
-        self::$hooks[$name] = new Hook($name, $description);
+        self::$hooks[$name] = new Hook($name, $description, $isDefaultPreventable);
         return true;
     }
 
@@ -42,9 +42,9 @@ class HookController
     }
 
     /**
-     * @param mixed[] $params
+     * @param mixed[] $params (Optional)
      */
-    public static function fire(string $name, array $params): Event
+    public static function fire(string $name, array $params = []): Event
     {
         if (self::isRegistered($name)) {
             return self::$hooks[$name]->fire($params);
