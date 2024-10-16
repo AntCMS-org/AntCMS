@@ -97,7 +97,11 @@ class AntCMS
     }
 
     /**
-     * @return array<mixed>
+     * This method searches for and extracts the AntCMS header section from the provided page content.
+     * It then uses regular expressions to extract the title, author, description, keywords, and template from the header.
+     *
+     * @param string $pageContent The page content to search for headers
+     * @return array<mixed> The extracted page headers
      */
     public static function getPageHeaders(string $pageContent): array
     {
@@ -108,7 +112,7 @@ class AntCMS
             'keywords' => '',
         ];
 
-        // First get the AntCMS header and store it in the matches varible
+        // First get the AntCMS header and store it in the matches variable
         preg_match('/\A--AntCMS--.*?--AntCMS--/sm', $pageContent, $matches);
 
         if (isset($matches[0])) {
