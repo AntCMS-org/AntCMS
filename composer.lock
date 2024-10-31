@@ -540,16 +540,16 @@
         },
         {
             "name": "flightphp/core",
-            "version": "v3.12.0",
+            "version": "v3.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/flightphp/core.git",
-                "reference": "63fbf9b0316969e8aa6c318f8479d1ed0578f9b4"
+                "reference": "1307e8a39d89fadba69d0c2dad53b6e0da83fd96"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/flightphp/core/zipball/63fbf9b0316969e8aa6c318f8479d1ed0578f9b4",
-                "reference": "63fbf9b0316969e8aa6c318f8479d1ed0578f9b4",
+                "url": "https://api.github.com/repos/flightphp/core/zipball/1307e8a39d89fadba69d0c2dad53b6e0da83fd96",
+                "reference": "1307e8a39d89fadba69d0c2dad53b6e0da83fd96",
                 "shasum": ""
             },
             "require": {
@@ -561,7 +561,7 @@
             },
             "require-dev": {
                 "ext-pdo_sqlite": "*",
-                "flightphp/runway": "^0.2.0",
+                "flightphp/runway": "^0.2.3 || ^1.0",
                 "league/container": "^4.2",
                 "level-2/dice": "^4.0",
                 "phpstan/extension-installer": "^1.3",
@@ -608,9 +608,9 @@
             "homepage": "http://flightphp.com",
             "support": {
                 "issues": "https://github.com/flightphp/core/issues",
-                "source": "https://github.com/flightphp/core/tree/v3.12.0"
+                "source": "https://github.com/flightphp/core/tree/v3.13.0"
             },
-            "time": "2024-08-22T17:05:34+00:00"
+            "time": "2024-10-30T19:52:23+00:00"
         },
         {
             "name": "hostbybelle/compressionbuffer",
