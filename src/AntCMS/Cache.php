@@ -18,9 +18,9 @@ class Cache
 
     /**
      * Configures the cache system by selecting and prioritizing specific cache adapters.
-     * 
+     *
      * The `$allowed` array specifies which cache types to enable. Available options are 'apcu', 'php_file', and 'filesystem'.
-     *  
+     *
      * @param string[] $allowed An array of allowed cache adapter names.
      */
     public static function setup(array $allowed = []): void
@@ -49,13 +49,13 @@ class Cache
 
     /**
      * Retrieves a value from the cache.
-     * 
+     *
      * If the value is not found in the cache, it executes the provided callable and stores the result for future retrieval.
-     * 
+     *
      * @param string $key The unique identifier for the cached value.
      * @param callable|CallbackInterface $callable A function that returns the value to be cached.
      * @param ?float $beta (Optional) Controls the cache update strategy. See Symfony documentation for details.
-     * @param ?mixed[] &$metadata (Optional) Stores metadata about the cached item. 
+     * @param ?mixed[] &$metadata (Optional) Stores metadata about the cached item.
      * @return mixed The cached value or the result of the callable if it's not found.
      */
     public static function get(string $key, callable|CallbackInterface $callable, ?float $beta = null, ?array &$metadata = []): mixed
@@ -65,7 +65,7 @@ class Cache
 
     /**
      * Prunes the cache. This removes stale entries that are no longer needed.
-     * 
+     *
      * @return bool True if any items were pruned, false otherwise.
      */
     public static function prune(): bool

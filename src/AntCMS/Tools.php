@@ -2,6 +2,7 @@
 
 namespace AntCMS;
 
+use Flight;
 use HostByBelle\CompressionBuffer;
 use Symfony\Contracts\Cache\ItemInterface;
 
@@ -291,6 +292,7 @@ class Tools
                 $result .= self::createDebugLogLine('This page was compressed with', $method);
             }
 
+            $result .= self::createDebugLogLine('Page output size', Flight::response()->getContentLength());
             $result .= self::createDebugLogLine('Asset compression', COMPRESS_TEXT_ASSETS);
             $result .= self::createDebugLogLine('Image compression', COMPRESS_IMAGES);
             $result .= self::createDebugLogLine('PHP version', PHP_VERSION);

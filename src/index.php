@@ -19,7 +19,7 @@ $AntCMS = new AntCMS();
 
 // Use hooks to perform any final changes to the output buffer before compressing and sending it
 Flight::response()->addResponseBodyCallback(function (string $body): string {
-    $event = HookController::fire('onBeforeOutputFinalized', ['output' => $body]);
+    $event = HookController::fire('onBeforeOutputFlushed', ['output' => $body]);
     return $event->getParameters()['output'];
 });
 
@@ -30,7 +30,7 @@ if (COMPRESS_OUTPUT) {
 }
 
 Flight::response()->addResponseBodyCallback(function ($body) {
-    HookController::fire('performanceMetricsBuilt', tools::getPerformanceMetrics());
+    HookController::fire('onAfterPerformanceMetricsBuilt', tools::getPerformanceMetrics());
     return $body;
 });
 

@@ -91,7 +91,7 @@ class ApiController
         }
 
         $hookData = ['plugin' => ucfirst($plugin), 'method' => $method];
-        HookController::fire('beforeApiCalled', $hookData);
+        HookController::fire('onBeforeApiCalled', $hookData);
 
         // Sanity checks passed, now actually process the request
         try {
@@ -108,7 +108,7 @@ class ApiController
         }
 
         $hookData['response'] = $response;
-        HookController::fire('afterApiCalled', $hookData);
+        HookController::fire('onAfterApiCalled', $hookData);
 
         $this->sendResponse($response);
     }
