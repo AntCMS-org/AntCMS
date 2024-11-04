@@ -20,8 +20,9 @@ class Hook
      *
      * @param string $name The name of the hook
      * @param string $description A description of this hook
+     * @param bool $isDefaultPreventable Marks if the default behavior for a hook can be prevented.
      */
-    public function __construct(string $name, public string $description)
+    public function __construct(string $name, public string $description, private readonly bool $isDefaultPreventable = false)
     {
         if (preg_match('/^\w+$/', $name) === 0 || preg_match('/^\w+$/', $name) === false) {
             throw new \Exception("The hook name '$name' is invalid. Only a-z A-Z, 0-9, and _ are allowed to be in the hook name.");
@@ -40,7 +41,7 @@ class Hook
         $this->timesFired++;
 
         // Create the new event object with the originally provided parameters
-        $event = new Event($this->name, $params, $this->registeredCallbacks);
+        $event = new Event($this->name, $params, $this->registeredCallbacks, $this->isDefaultPreventable);
 
         // Then fire each of the callbacks and update the event instance from each one.
         foreach ($this->callbacks as $callback) {

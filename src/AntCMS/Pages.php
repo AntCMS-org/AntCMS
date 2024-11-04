@@ -109,10 +109,10 @@ class Pages
             if (isset($directoryMeta['pageOrder'][$a]) && isset($directoryMeta['pageOrder'][$b])) {
                 return $directoryMeta['pageOrder'][$a] > $directoryMeta['pageOrder'][$b] ? 1 : -1;
             }
-            if(isset($directoryMeta['pageOrder'][$a]) && !isset($directoryMeta['pageOrder'][$b])) {
+            if (isset($directoryMeta['pageOrder'][$a]) && !isset($directoryMeta['pageOrder'][$b])) {
                 return -1;
             }
-            if(!isset($directoryMeta['pageOrder'][$a]) && isset($directoryMeta['pageOrder'][$b])) {
+            if (!isset($directoryMeta['pageOrder'][$a]) && isset($directoryMeta['pageOrder'][$b])) {
                 return 1;
             }
             // Ensure index items come first

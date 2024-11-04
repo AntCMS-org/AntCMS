@@ -45,7 +45,7 @@ class AntYaml
     }
 
     /**
-     * Parses a string containing YAML data and returns the content as an array. 
+     * Parses a string containing YAML data and returns the content as an array.
      * @return mixed[]
      */
     public static function parseYaml(string $yaml): array
