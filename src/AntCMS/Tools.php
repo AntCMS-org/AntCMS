@@ -258,7 +258,7 @@ class Tools
         ];
     }
 
-    private static function createDebugLogLine(string $wording, bool|string $value): string
+    private static function createDebugLogLine(string $wording, bool|string|int $value): string
     {
         if (is_bool($value)) {
             $value = $value ? "enabled" : "disabled";
