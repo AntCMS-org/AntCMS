@@ -7,7 +7,7 @@
   },
   "devDependencies": {
     "bootstrap": "^5.3.3",
-    "esbuild": "0.24.0",
+    "esbuild": "0.24.2",
     "lightningcss-cli": "^1.28.2",
     "npm-run-all": "^4.1.5",
     "prismjs": "^1.29.0",
