@@ -540,16 +540,16 @@
         },
         {
             "name": "flightphp/core",
-            "version": "v3.13.1",
+            "version": "v3.15.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/flightphp/core.git",
-                "reference": "da6540bbdd3b64a28de0606da7b530d0013f281c"
+                "reference": "4508d887c4b783ed91a4b5b9bf0ba8dcef270350"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/flightphp/core/zipball/da6540bbdd3b64a28de0606da7b530d0013f281c",
-                "reference": "da6540bbdd3b64a28de0606da7b530d0013f281c",
+                "url": "https://api.github.com/repos/flightphp/core/zipball/4508d887c4b783ed91a4b5b9bf0ba8dcef270350",
+                "reference": "4508d887c4b783ed91a4b5b9bf0ba8dcef270350",
                 "shasum": ""
             },
             "require": {
@@ -608,9 +608,9 @@
             "homepage": "http://flightphp.com",
             "support": {
                 "issues": "https://github.com/flightphp/core/issues",
-                "source": "https://github.com/flightphp/core/tree/v3.13.1"
+                "source": "https://github.com/flightphp/core/tree/v3.15.1"
             },
-            "time": "2025-01-14T05:58:50+00:00"
+            "time": "2025-03-09T05:51:18+00:00"
         },
         {
             "name": "hostbybelle/compressionbuffer",
