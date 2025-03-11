@@ -29,7 +29,7 @@ class ApiController
      *  - The raw request body
      *  - If the request body was of valid JSON, an array of the decoded JSON
      *
-     * @return array<string, mixed[]>
+     * @return array<string, mixed>
      */
     private function getApiCallData(string $plugin, string $method): array
     {
