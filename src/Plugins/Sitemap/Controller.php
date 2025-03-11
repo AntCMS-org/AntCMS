@@ -52,7 +52,7 @@ class Controller extends AbstractPlugin
 
     /**
      * @param array<string, mixed> $list
-     * @param string[] $urls
+     * @param mixed[] $urls
      */
     private function addPages(array $list, array &$urls): void
     {
