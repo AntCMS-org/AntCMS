@@ -24,7 +24,7 @@ jobs:
       - uses: php-actions/composer@v6
         with:
           dev: no
-          php_version: "8.1"
+          php_version: "8.2"
           args: "--optimize-autoloader"
 
       - run: |
