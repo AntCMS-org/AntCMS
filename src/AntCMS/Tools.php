@@ -4,6 +4,7 @@ namespace AntCMS;
 
 use Flight;
 use HostByBelle\CompressionBuffer;
+use Symfony\Component\Filesystem\Path;
 use Symfony\Contracts\Cache\ItemInterface;
 
 class Tools
@@ -38,19 +39,6 @@ class Tools
         return $files;
     }
 
-    public static function repairFilePath(string $path): string
-    {
-        $newPath = realpath($path);
-        if ($newPath === false) {
-            $newPath = str_replace('//', '/', $path);
-            $newPath = str_replace('\\\\', '/', $newPath);
-            $newPath = str_replace('\\', '/', $newPath);
-            $newPath = str_replace('/', DIRECTORY_SEPARATOR, $newPath);
-        }
-
-        return $newPath;
-    }
-
     /**
      * Repairs a URL by replacing backslashes with forward slashes and removing duplicate slashes.
      *
@@ -67,7 +55,7 @@ class Tools
 
     public static function convertFunctionaltoFullpath(string $path): string
     {
-        $pagePath = Tools::repairFilePath(PATH_CONTENT . '/' . $path);
+        $pagePath = path::normalize(PATH_CONTENT . '/' . $path);
 
         if (is_dir($pagePath)) {
             $pagePath .= '/index.md';
@@ -77,7 +65,7 @@ class Tools
             $pagePath .= '.md';
         }
 
-        return Tools::repairFilePath($pagePath);
+        return path::normalize($pagePath);
     }
 
     /**

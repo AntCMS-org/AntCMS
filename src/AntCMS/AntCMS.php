@@ -3,9 +3,17 @@
 namespace AntCMS;
 
 use Flight;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Filesystem\Path;
 
 class AntCMS
 {
+    private readonly Filesystem $filesystem;
+    public function __construct()
+    {
+        $this->filesystem = new Filesystem();
+    }
+
     /**
      * Renders a page based on the provided page name.
      *
@@ -72,9 +80,9 @@ class AntCMS
         $page = strtolower($page);
         $pagePath = Tools::convertFunctionaltoFullpath($page);
 
-        if (file_exists($pagePath)) {
+        if ($this->filesystem->exists($pagePath)) {
             try {
-                $pageContent = file_get_contents($pagePath);
+                $pageContent = $this->filesystem->readFile($pagePath);
                 $pageHeaders = AntCMS::getPageHeaders($pageContent);
                 // Remove the AntCMS section from the content
                 $pageContent = preg_replace('/\A--AntCMS--.*?--AntCMS--/sm', '', $pageContent);
@@ -144,7 +152,7 @@ class AntCMS
     {
         $path ??= PATH_ROOT . Flight::request()->url;
 
-        if (!file_exists($path)) {
+        if (!$this->filesystem->exists($path)) {
             $this->renderException('404');
         } else {
             // Needed info for cache handling
@@ -188,7 +196,7 @@ class AntCMS
             $theme = 'Default';
         }
 
-        $configPath = Tools::repairFilePath(PATH_THEMES . '/' . $theme . '/' . 'Config.yaml');
+        $configPath = path::normalize(PATH_THEMES . '/' . $theme . '/' . 'Config.yaml');
         if (file_exists($configPath)) {
             return AntYaml::parseFile($configPath);
         }

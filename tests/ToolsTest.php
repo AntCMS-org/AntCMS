@@ -6,17 +6,6 @@ use PHPUnit\Framework\TestCase;
 class ToolsTest extends TestCase
 {
     private string $testAsset = PATH_THEMES . DIRECTORY_SEPARATOR . 'Default' . DIRECTORY_SEPARATOR . 'Assets' . DIRECTORY_SEPARATOR . 'TinyZoom.js';
-    public function testPathRepair(): void
-    {
-        $badPaths = ["path/to/file", "path\\to\\file", "/path/to/file", "C:\\path\\to\\file", "~/path/to/file"];
-        $expectedPaths = ["path" . DIRECTORY_SEPARATOR . "to" . DIRECTORY_SEPARATOR . "file", "path" . DIRECTORY_SEPARATOR . "to" . DIRECTORY_SEPARATOR . "file", DIRECTORY_SEPARATOR . "path" . DIRECTORY_SEPARATOR . "to" . DIRECTORY_SEPARATOR . "file", "C:" . DIRECTORY_SEPARATOR . "path" . DIRECTORY_SEPARATOR . "to" . DIRECTORY_SEPARATOR . "file", "~" . DIRECTORY_SEPARATOR . "path" . DIRECTORY_SEPARATOR . "to" . DIRECTORY_SEPARATOR . "file"];
-
-
-        foreach ($badPaths as $index => $badPath) {
-            $goodPath = Tools::repairFilePath($badPath);
-            $this->assertEquals($expectedPaths[$index], $goodPath, "Expected '$expectedPaths[$index]' but got '{$goodPath}' for input '{$badPath}'");
-        }
-    }
 
     public function testUrlRepair(): void
     {

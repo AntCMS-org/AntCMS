@@ -2,6 +2,7 @@
 
 namespace AntCMS;
 
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
 
@@ -41,7 +42,10 @@ class AntYaml
 
         // Then we can actually convert it to YAML and dump it
         $yaml = Yaml::dump($data);
-        return (bool) file_put_contents($path, $yaml);
+
+        $filesystem = new Filesystem();
+        $filesystem->dumpFile($path, $yaml);
+        return true;
     }
 
     /**
