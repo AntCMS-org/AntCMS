@@ -318,7 +318,7 @@ class Tools
         return $result . "</dl>";
     }
 
-    public static function getUri()
+    public static function getUri(): string
     {
         $url = Flight::request()->url;
         $pos = strpos($url, '?');

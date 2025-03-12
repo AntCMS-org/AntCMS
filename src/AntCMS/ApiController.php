@@ -34,7 +34,7 @@ class ApiController
     private function getApiCallData(string $plugin, string $method): array
     {
         // Some needed variable setup
-        $url = rtrim((string) Tools::getUri(), '/');
+        $url = rtrim(Tools::getUri(), '/');
         $startingString = "/$plugin/$method/";
 
         // Split the request URL, find the parameters for the current API call, and then parse them

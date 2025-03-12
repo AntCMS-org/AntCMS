@@ -3,7 +3,6 @@
 namespace AntCMS;
 
 use Flight;
-use PDO;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Path;
 
@@ -156,9 +155,9 @@ class AntCMS
             $themeAssets = Path::normalize(PATH_CURRENT_THEME . '/Assets/');
             $path = $themeAssets . substr($path, 8);
         }
-        
+
         if (!Path::isLocal($path)) {
-            $this->renderException(403, 403, 'forbidden');
+            $this->renderException('Forbidden', 403, 'forbidden');
         }
 
         $path = Path::makeAbsolute($path, PATH_ROOT);
