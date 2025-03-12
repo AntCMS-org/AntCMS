@@ -207,21 +207,24 @@ class Tools
         return Cache::createCacheKeyFile($path, 'asset');
     }
 
+    public static function getExpectedEncoding(string $path): string
+    {
+        if (COMPRESS_OUTPUT && self::isCompressableTextAsset($path)) {
+            return CompressionBuffer::getFirstMethodChoice();
+        }
+        return 'identity';
+    }
+
     /**
      * Automatically selects an ideal compression method for various types of assets.
      * Impliments caching to prevent repeat processing of assets.
-     *
-     * @return string[] [contents, content encoding]
      */
-    public static function doAssetCompression(string $path): array
+    public static function doAssetCompression(string $path): string
     {
         $cacheKey = self::getAssetCacheKey($path);
-        $encoding = 'identity';
 
         if (COMPRESS_TEXT_ASSETS && self::isCompressableTextAsset($path)) {
             CompressionBuffer::enable(); // We will use CompressionBuffer to handle text content
-            $encoding = CompressionBuffer::getFirstMethodChoice();
-
             $contents = Cache::get($cacheKey, function (ItemInterface $item) use ($path): string {
                 $item->expiresAfter(604800);
                 $contents = file_get_contents($path);
@@ -241,10 +244,10 @@ class Tools
 
         // Handle cases were we didn't do compression or an error occured
         if (!isset($contents) || !is_string($contents)) {
-            return [file_get_contents($path), 'identity'];
+            return file_get_contents($path);
         }
 
-        return [$contents, $encoding];
+        return $contents;
     }
 
     /**

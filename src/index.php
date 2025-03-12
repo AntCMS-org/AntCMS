@@ -34,12 +34,6 @@ Flight::response()->addResponseBodyCallback(function ($body) {
     return $body;
 });
 
-// HTTPS redirects
-if (!Flight::request()->secure && !Enviroment::isCli() && Config::get('forceHttps')) {
-    Flight::redirect('https://' . Flight::request()->host . Flight::request()->url);
-    exit;
-}
-
 // Asset delivery
 Flight::route('GET /themes/*/assets/*', $AntCMS->serveContent(...));
 Flight::route('GET /favicon.ico', function () use ($AntCMS): void {
@@ -58,6 +52,12 @@ Flight::group('/api/v0', function (): void {
 
 // Register routes for plugins
 PluginController::init();
+
+// HTTPS redirects
+if (!Flight::request()->secure && !Enviroment::isCli() && Config::get('forceHttps')) {
+    Flight::redirect('https://' . Flight::request()->host . Flight::request()->url);
+    exit;
+}
 
 Flight::route('GET /*', function () use ($AntCMS): void {
     if ((Flight::request()->url === '' || Flight::request()->url == '/') && !file_exists(PATH_USERS)) {
