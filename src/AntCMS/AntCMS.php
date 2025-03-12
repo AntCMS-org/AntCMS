@@ -3,6 +3,7 @@
 namespace AntCMS;
 
 use Flight;
+use PDO;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Path;
 
@@ -22,7 +23,7 @@ class AntCMS
      */
     public function renderPage(?string $page = null): string
     {
-        $page ??= Flight::request()->url;
+        $page ??= Tools::getUri();
         $content = $this->getPage($page);
 
         if ($content === []) {
@@ -150,7 +151,17 @@ class AntCMS
 
     public function serveContent(?string $path = null): void
     {
-        $path ??= PATH_ROOT . Flight::request()->url;
+        $path ??= '.' . Tools::getUri();
+        if (str_starts_with($path, './assets/')) {
+            $themeAssets = Path::normalize(PATH_CURRENT_THEME . '/Assets/');
+            $path = $themeAssets . substr($path, 8);
+        }
+        
+        if (!Path::isLocal($path)) {
+            $this->renderException(403, 403, 'forbidden');
+        }
+
+        $path = Path::makeAbsolute($path, PATH_ROOT);
 
         if (!$this->filesystem->exists($path)) {
             $this->renderException('404');
@@ -190,15 +201,20 @@ class AntCMS
      */
     public static function getThemeConfig(string|null $theme = null): array
     {
-        $theme ??= CURRENT_THEME;
+        if ($theme === null) {
+            $configPath = path::normalize(PATH_CURRENT_THEME . 'Config.yaml');
+            if (file_exists($configPath)) {
+                return AntYaml::parseFile($configPath);
+            }
+        } else {
+            if (!is_dir(path::normalize(PATH_THEMES . '/' . $theme))) {
+                $theme = 'Default';
+            }
 
-        if (!is_dir(PATH_THEMES . '/' . $theme)) {
-            $theme = 'Default';
-        }
-
-        $configPath = path::normalize(PATH_THEMES . '/' . $theme . '/' . 'Config.yaml');
-        if (file_exists($configPath)) {
-            return AntYaml::parseFile($configPath);
+            $configPath = path::normalize(PATH_THEMES . '/' . $theme . '/' . 'Config.yaml');
+            if (file_exists($configPath)) {
+                return AntYaml::parseFile($configPath);
+            }
         }
 
         return [];

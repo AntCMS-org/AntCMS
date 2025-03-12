@@ -36,6 +36,7 @@ Flight::response()->addResponseBodyCallback(function ($body) {
 
 // Asset delivery
 Flight::route('GET /themes/*/assets/*', $AntCMS->serveContent(...));
+Flight::route('GET /assets/*', $AntCMS->serveContent(...));
 Flight::route('GET /favicon.ico', function () use ($AntCMS): void {
     $AntCMS->serveContent(PATH_CURRENT_THEME . DIRECTORY_SEPARATOR . 'Assets' . DIRECTORY_SEPARATOR . 'favicon.ico');
 });
@@ -60,7 +61,7 @@ if (!Flight::request()->secure && !Enviroment::isCli() && Config::get('forceHttp
 }
 
 Flight::route('GET /*', function () use ($AntCMS): void {
-    if ((Flight::request()->url === '' || Flight::request()->url == '/') && !file_exists(PATH_USERS)) {
+    if ((Tools::getUri() === '' || Tools::getUri() == '/') && !file_exists(PATH_USERS)) {
         // TODO for once plugin functionality is rebuilt
         //AntCMS::redirect('/profile/firsttime');
     }

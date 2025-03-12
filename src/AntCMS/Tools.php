@@ -185,13 +185,38 @@ class Tools
         return $result;
     }
 
+    /**
+     * Checks the request query / headers to decide on what quality level to use when compressing images.
+     */
+    private static function pickImageQuality(): int
+    {
+        $quality = Flight::request()->query['imageQuality'] ?? IMAGE_QUALITY;
+        return (int) match ($quality) {
+            'veryhigh' => 95,
+            'high' => 80,
+            'medium' => 65,
+            'low' => 25,
+            'verylow' => 0,
+            default => IMAGE_QUALITY,
+        };
+    }
 
     public static function getAssetCacheKey(string $path): string
     {
         $encoding = CompressionBuffer::getFirstMethodChoice();
+
+        // Give text assets a key specific to the utilized encoding
         if (COMPRESS_TEXT_ASSETS && self::isCompressableTextAsset($path)) {
             return Cache::createCacheKeyFile($path, "assetCompression-$encoding");
         }
+
+        // Allow for each individual quality level to be cacheable for images
+        if (COMPRESS_IMAGES && self::isCompressableImage($path)) {
+            $quality = self::pickImageQuality();
+            return Cache::createCacheKeyFile($path, "image-q$quality");
+        }
+
+        // Generic
         return Cache::createCacheKeyFile($path, 'asset');
     }
 
@@ -223,7 +248,8 @@ class Tools
         if (COMPRESS_IMAGES && self::isCompressableImage($path)) {
             $contents = Cache::get($cacheKey, function (ItemInterface $item) use ($path): string {
                 $item->expiresAfter(604800);
-                return self::compressImage($path);
+                $quality = self::pickImageQuality();
+                return self::compressImage($path, $quality);
             });
         }
 
@@ -290,5 +316,17 @@ class Tools
         }
 
         return $result . "</dl>";
+    }
+
+    public static function getUri()
+    {
+        $url = Flight::request()->url;
+        $pos = strpos($url, '?');
+
+        if ($pos !== false) {
+            return substr($url, 0, $pos);
+        }
+
+        return $url;
     }
 }
