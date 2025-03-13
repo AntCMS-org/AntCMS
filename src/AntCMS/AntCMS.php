@@ -51,7 +51,6 @@ class AntCMS
     /**
      * Render an exception page with the provided exception code.
      *
-     * @param string $exceptionCode The exception code to be displayed on the error page
      * @param int $httpCode The HTTP response code to return, 404 by default.
      * @param string $message An optional parameter to define a custom string to be displayed along side the exception.
      * @return never
@@ -97,6 +96,7 @@ class AntCMS
                 503 => 'Service Unavailable',
                 504 => 'Gateway Time-out',
                 505 => 'HTTP Version not supported',
+                default => 'Unknown HTTP code'
             };
         }
 

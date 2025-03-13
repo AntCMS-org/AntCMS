@@ -35,7 +35,7 @@ Horizontal rules:
 Links: [title](https://www.example.com)
 
 Pictures:
-![alt text](https://picsum.photos/seed/picsum/128/128)
+![alt text](https://picsum.photos/256)
 
 ## Extended Syntax
 
@@ -88,7 +88,7 @@ Horizontal rules:
 Links: [title](https://www.example.com)
 
 Pictures:
-![alt text](https://picsum.photos/seed/picsum/128/128)
+![alt text](https://picsum.photos/256)
 
 ## Extended Syntax
 
