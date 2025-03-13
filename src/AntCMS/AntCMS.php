@@ -203,7 +203,7 @@ class AntCMS
     public static function getThemeConfig(string|null $theme = null): array
     {
         if ($theme === null) {
-            $configPath = path::normalize(PATH_CURRENT_THEME . 'Config.yaml');
+            $configPath = path::normalize(PATH_CURRENT_THEME . '/Config.yaml');
             if (file_exists($configPath)) {
                 return AntYaml::parseFile($configPath);
             }
@@ -212,7 +212,7 @@ class AntCMS
                 $theme = 'Default';
             }
 
-            $configPath = path::normalize(PATH_THEMES . '/' . $theme . '/' . 'Config.yaml');
+            $configPath = path::normalize(PATH_THEMES . "/$theme/Config.yaml");
             if (file_exists($configPath)) {
                 return AntYaml::parseFile($configPath);
             }

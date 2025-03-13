@@ -61,7 +61,7 @@ if (!Flight::request()->secure && !Enviroment::isCli() && Config::get('forceHttp
 }
 
 Flight::route('GET /*', function () use ($AntCMS): void {
-    if ((Tools::getUri() === '' || Tools::getUri() == '/') && !file_exists(PATH_USERS)) {
+    if ((Tools::getUri() === '' || Tools::getUri() === '/') && !file_exists(PATH_USERS)) {
         // TODO for once plugin functionality is rebuilt
         //AntCMS::redirect('/profile/firsttime');
     }
