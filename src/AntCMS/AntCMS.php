@@ -179,12 +179,14 @@ class AntCMS
 
             // Send an ETag for client-side caching except on Caddy where it inexplicably breaks everything
             if (!str_contains($_SERVER['SERVER_SOFTWARE'] ?? '', 'Caddy')) {
-                // Flight's etag implimentation is broken as it clears our headers
-                $existingEtag = Flight::request()->getHeader('If-None-Match');
-                if ($key === $existingEtag) {
-                    Flight::response()->clearBody();
-                    Flight::halt(304);
-                }
+                Flight::response()->header('Etag', $key);
+            }
+
+            // Flight's etag implimentation is broken as it clears our headers
+            $existingEtag = Flight::request()->getHeader('If-None-Match');
+            if ($key === $existingEtag) {
+                Flight::response()->clearBody();
+                Flight::halt(304);
             }
 
             if ($lastMod) {

@@ -13,12 +13,15 @@ return RectorConfig::configure()
     ->withSkipPath(__DIR__ . '/src/Vendor')
     ->withSkipPath(__DIR__ . '/src/Cache')
     ->withSets([
+        SetList::CODE_QUALITY,
         SetList::DEAD_CODE,
-        SetList::TYPE_DECLARATION,
         SetList::EARLY_RETURN,
         SetList::INSTANCEOF,
         SetList::NAMING,
+        SetList::PHP_POLYFILLS,
+        SetList::PRIVATIZATION,
         SetList::STRICT_BOOLEANS,
-        SetList::CODE_QUALITY,
+        SetList::TYPE_DECLARATION,
     ])
-    ->withPhpSets();
+    ->withPhpSets()
+;
