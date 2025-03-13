@@ -26,7 +26,7 @@ class AntCMS
         $content = $this->getPage($page);
 
         if ($content === []) {
-            $this->renderException("404");
+            $this->renderException(404);
         }
 
         HookController::fire('onAfterContentHit', ['contentUri' => $page]);
@@ -53,16 +53,56 @@ class AntCMS
      *
      * @param string $exceptionCode The exception code to be displayed on the error page
      * @param int $httpCode The HTTP response code to return, 404 by default.
-     * @param string $exceptionString An optional parameter to define a custom string to be displayed along side the exception.
+     * @param string $message An optional parameter to define a custom string to be displayed along side the exception.
      * @return never
      */
-    public function renderException(string $exceptionCode, int $httpCode = 404, string $exceptionString = 'That request caused an exception to be thrown.'): void
+    public function renderException(int $httpCode = 404, ?string $message = null): void
     {
-        $exceptionString .= " (Code {$exceptionCode})";
+        if ($message === null) {
+            $message = "HTTP Code $httpCode: " . match ($httpCode) {
+                100 => 'Continue',
+                101 => 'Switching Protocols',
+                200 => 'OK',
+                201 => 'Created',
+                202 => 'Accepted',
+                203 => 'Non-Authoritative Information',
+                204 => 'No Content',
+                205 => 'Reset Content',
+                206 => 'Partial Content',
+                300 => 'Multiple Choices',
+                301 => 'Moved Permanently',
+                302 => 'Moved Temporarily',
+                303 => 'See Other',
+                304 => 'Not Modified',
+                305 => 'Use Proxy',
+                400 => 'Bad Request',
+                401 => 'Unauthorized',
+                402 => 'Payment Required',
+                403 => 'Forbidden',
+                404 => 'Not Found',
+                405 => 'Method Not Allowed',
+                406 => 'Not Acceptable',
+                407 => 'Proxy Authentication Required',
+                408 => 'Request Time-out',
+                409 => 'Conflict',
+                410 => 'Gone',
+                411 => 'Length Required',
+                412 => 'Precondition Failed',
+                413 => 'Request Entity Too Large',
+                414 => 'Request-URI Too Large',
+                415 => 'Unsupported Media Type',
+                500 => 'Internal Server Error',
+                501 => 'Not Implemented',
+                502 => 'Bad Gateway',
+                503 => 'Service Unavailable',
+                504 => 'Gateway Time-out',
+                505 => 'HTTP Version not supported',
+            };
+        }
 
         $params = [
             'AntCMSTitle' => 'An Error Ocurred',
-            'message' => $exceptionString,
+            'message' => $message,
             'pages' => Pages::getPages(),
         ];
 
@@ -157,13 +197,13 @@ class AntCMS
         }
 
         if (!Path::isLocal($path)) {
-            $this->renderException('Forbidden', 403, 'forbidden');
+            $this->renderException(403);
         }
 
         $path = Path::makeAbsolute($path, PATH_ROOT);
 
         if (!$this->filesystem->exists($path)) {
-            $this->renderException('404');
+            $this->renderException(404);
         } else {
             // Needed info for cache handling
             $key = Tools::getAssetCacheKey($path);
