@@ -14,7 +14,7 @@ Due to it's simplistic nature, getting started with AntCMS is very easy compared
 
 **Note:** AntCMS is still under development and is considered alpha software due to not yet being complete, however it is already very fast and should be stable once setup.
 
-1. Ensure you have PHP 8.0 or greater with the `curl`, `dom`, and `mbstring` extensions loaded.
+1. Ensure you have PHP 8.2 or greater with the `curl`, `dom`, and `mbstring` extensions loaded.
 2. Download the [latest release](https://github.com/AntCMS-org/AntCMS/releases) of AntCMS and extract it to your server.
 3. If needed, install the [correct configuration](https://github.com/AntCMS-org/AntCMS/blob/main/configs) for your web server.
 4. Access your domain. At this point, AntCMS will automatically create it's configuration file.

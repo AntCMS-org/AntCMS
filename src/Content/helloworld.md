@@ -1,7 +1,7 @@
 --AntCMS--
 Title: Hello, World!
 Author: The AntCMS Team
-Description: Hi there!.
+Description: Hi there!
 NavItem: false
 --AntCMS--
 

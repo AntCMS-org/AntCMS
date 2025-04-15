@@ -30,4 +30,5 @@ For your convience, a pre-built [caddyfile](https://github.com/AntCMS-org/AntCMS
 
 ## Development servers
 
- - PHP Local Development Server (without asset delivery)
+ - PHP Local Development Server (without asset delivery).
+ - AntCMS includes a configuration for DDEV which can be used to quickly start a development instance of AntCMS.
