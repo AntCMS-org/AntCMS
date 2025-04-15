@@ -8,7 +8,7 @@ namespace AntCMS;
  */
 class Hook
 {
-    public string $name;
+    public readonly string $name;
     public int $timesFired = 0;
     public int $registeredCallbacks = 0;
 
@@ -22,7 +22,7 @@ class Hook
      * @param string $description A description of this hook
      * @param bool $isDefaultPreventable Marks if the default behavior for a hook can be prevented.
      */
-    public function __construct(string $name, public string $description, private readonly bool $isDefaultPreventable = false)
+    public function __construct(string $name, public string $description, public readonly bool $isDefaultPreventable = false)
     {
         if (preg_match('/^\w+$/', $name) === 0 || preg_match('/^\w+$/', $name) === false) {
             throw new \Exception("The hook name '$name' is invalid. Only a-z A-Z, 0-9, and _ are allowed to be in the hook name.");
