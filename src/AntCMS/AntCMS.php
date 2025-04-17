@@ -213,7 +213,9 @@ class AntCMS
 
             // Send the needed headers for the content encoding
             Flight::response()->header('Content-Type', $asset_mime_type);
-            Flight::response()->header('Content-Encoding', $encoding);
+            if ($encoding !== 'identity') {
+                Flight::response()->header('Content-Encoding', $encoding);
+            }
             Flight::response()->header('Vary', 'Accept-Encoding');
             Flight::response()->header('Cache-Control', 'public, max-age=0 must-revalidate');
 

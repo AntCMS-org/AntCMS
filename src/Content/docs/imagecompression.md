@@ -14,8 +14,7 @@ Images are compressed a single time with the compressed version being retained i
 
 ## Supported Image types
 
- - jpg
- - JPG
+ - JPEG / JPG
  - PNG
  - WEBP
 

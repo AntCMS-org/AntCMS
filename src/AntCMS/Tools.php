@@ -222,7 +222,7 @@ class Tools
 
     public static function getExpectedEncoding(string $path): string
     {
-        if (COMPRESS_OUTPUT && self::isCompressableTextAsset($path)) {
+        if (COMPRESS_TEXT_ASSETS && self::isCompressableTextAsset($path)) {
             return CompressionBuffer::getFirstMethodChoice();
         }
         return 'identity';
@@ -236,13 +236,11 @@ class Tools
     {
         $cacheKey = self::getAssetCacheKey($path);
 
+        // Ensure CompressionBuffer won't accidentally cause issues for us
+        CompressionBuffer::disable();
+
         if (COMPRESS_TEXT_ASSETS && self::isCompressableTextAsset($path)) {
             CompressionBuffer::enable(); // We will use CompressionBuffer to handle text content
-            $contents = Cache::get($cacheKey, function (ItemInterface $item) use ($path): string {
-                $item->expiresAfter(604800);
-                $contents = file_get_contents($path);
-                return CompressionBuffer::handler($contents);
-            });
         }
 
         if (COMPRESS_IMAGES && self::isCompressableImage($path)) {
@@ -252,9 +250,6 @@ class Tools
                 return self::compressImage($path, $quality);
             });
         }
-
-        // Ensure CompressionBuffer won't accidentally cause issues for us
-        CompressionBuffer::disable();
 
         // Handle cases were we didn't do compression or an error occured
         if (!isset($contents) || !is_string($contents)) {
