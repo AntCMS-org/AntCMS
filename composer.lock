@@ -540,16 +540,16 @@
         },
         {
             "name": "flightphp/core",
-            "version": "v3.15.2",
+            "version": "v3.15.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/flightphp/core.git",
-                "reference": "0abf1b9b169a6d3f1010ab9b1acc0d8fb139be3d"
+                "reference": "5df28007533e825b8691d089e1df7509b9d131cf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/flightphp/core/zipball/0abf1b9b169a6d3f1010ab9b1acc0d8fb139be3d",
-                "reference": "0abf1b9b169a6d3f1010ab9b1acc0d8fb139be3d",
+                "url": "https://api.github.com/repos/flightphp/core/zipball/5df28007533e825b8691d089e1df7509b9d131cf",
+                "reference": "5df28007533e825b8691d089e1df7509b9d131cf",
                 "shasum": ""
             },
             "require": {
@@ -569,6 +569,7 @@
                 "phpstan/phpstan": "^2.1",
                 "phpunit/phpunit": "^9.6",
                 "rregeer/phpunit-coverage-check": "^0.3.1",
+                "spatie/phpunit-watcher": "^1.23 || ^1.24",
                 "squizlabs/php_codesniffer": "^3.11"
             },
             "suggest": {
@@ -609,9 +610,9 @@
             "homepage": "http://flightphp.com",
             "support": {
                 "issues": "https://github.com/flightphp/core/issues",
-                "source": "https://github.com/flightphp/core/tree/v3.15.2"
+                "source": "https://github.com/flightphp/core/tree/v3.15.3"
             },
-            "time": "2025-03-15T05:22:55+00:00"
+            "time": "2025-06-17T13:54:46+00:00"
         },
         {
             "name": "hostbybelle/compressionbuffer",
@@ -6125,12 +6126,12 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
         "php": ">=8.2"
     },
-    "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "platform-dev": [],
+    "plugin-api-version": "2.3.0"
 }
