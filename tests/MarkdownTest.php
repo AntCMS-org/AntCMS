@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Copyright 2025 AntCMS
+ */
+
 use AntCMS\Config;
 use AntCMS\Markdown;
 use PHPUnit\Framework\TestCase;

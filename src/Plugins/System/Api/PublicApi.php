@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Copyright 2025 AntCMS
+ */
+
 namespace AntCMS\Plugins\System\Api;
 
 use AntCMS\ApiResponse as Response;

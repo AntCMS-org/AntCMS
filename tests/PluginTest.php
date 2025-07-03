@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Copyright 2025 AntCMS
+ */
+
 use AntCMS\PluginController;
 use PHPUnit\Framework\TestCase;
 

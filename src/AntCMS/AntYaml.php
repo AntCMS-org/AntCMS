@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Copyright 2025 AntCMS
+ */
+
 namespace AntCMS;
 
 use Symfony\Component\Filesystem\Filesystem;

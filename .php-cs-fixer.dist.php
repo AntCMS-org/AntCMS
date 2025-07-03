@@ -16,6 +16,10 @@ return (new PhpCsFixer\Config())
         'no_unused_imports' => true,
         'no_unneeded_import_alias' => true,
         'single_import_per_statement' => true,
+        'header_comment' => [
+            'header' => 'Copyright 2025 AntCMS',
+            'comment_type' => 'PHPDoc',
+        ],
     ])
     ->setFinder($finder)
 ;
