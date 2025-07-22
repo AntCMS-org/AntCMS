@@ -7,7 +7,7 @@
 use AntCMS\AntCMS;
 use AntCMS\ApiController;
 use AntCMS\Config;
-use AntCMS\Enviroment;
+use AntCMS\Environment;
 use AntCMS\HookController;
 use AntCMS\PluginController;
 use AntCMS\Tools;
@@ -59,7 +59,7 @@ Flight::group('/api/v0', function (): void {
 PluginController::init();
 
 // HTTPS redirects
-if (!Flight::request()->secure && !Enviroment::isCli() && Config::get('forceHttps')) {
+if (!Flight::request()->secure && !Environment::isCli() && Config::get('forceHttps')) {
     Flight::redirect('https://' . Flight::request()->host . Flight::request()->url);
     exit;
 }

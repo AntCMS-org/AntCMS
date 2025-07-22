@@ -24,7 +24,7 @@ At the moment, this is not yet a tested & validated configuration.
 AntCMS has been tested and validated to work when paired with Caddy.
 The default Caddy behavior for PHP applications is compatible, however relying on this will leave you without functionality like asset and image compression.
 
-For your convience, a pre-built [caddyfile](https://github.com/AntCMS-org/AntCMS/blob/main/configs/caddyfile) is available which will ensure all routing behaves as originally intended.
+For your convenience, a pre-built [caddyfile](https://github.com/AntCMS-org/AntCMS/blob/main/configs/caddyfile) is available which will ensure all routing behaves as originally intended.
 
 **Note:** ETags are broken in AntCMS when paired with Caddy and are automatically disabled. Due to this, using Caddy will result in reduced caching capabilities for assets.
 

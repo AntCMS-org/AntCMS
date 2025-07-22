@@ -15,7 +15,7 @@ class PluginController
     private static array $sitemapUrls = [];
 
     /** @var array<string, string[]> */
-    private static array $robotsTxtAdditons = [
+    private static array $robotsTxtAdditions = [
         'allow' => [],
         'disallow' => [],
     ];
@@ -79,7 +79,7 @@ class PluginController
      */
     public static function getRobotsTxtEntries(): array
     {
-        return self::$robotsTxtAdditons;
+        return self::$robotsTxtAdditions;
     }
 
     public static function registerSitemapUrl(string $url, ?int $lastmod = null): void
@@ -92,11 +92,11 @@ class PluginController
 
     public static function addAllowToRobotsTxt(string $url): void
     {
-        self::$robotsTxtAdditons['allow'][] = $url;
+        self::$robotsTxtAdditions['allow'][] = $url;
     }
 
     public static function addDisallowToRobotsTxt(string $url): void
     {
-        self::$robotsTxtAdditons['disallow'][] = $url;
+        self::$robotsTxtAdditions['disallow'][] = $url;
     }
 }

@@ -20,7 +20,7 @@ AntCMS is a flat-file CMS that's built to have very low system resource usage wh
  - Automatic usage of ETags when serving assets to allow client-side caching.
  - Support for custom themes.
  - Per-theme additional styles applied to markdown content.
- - Plugin suppport.
+ - Plugin support.
  - Uses Markdown to write content and YAML for the infrequently needed configuration setup.
 
 ## System Requirements
