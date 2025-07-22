@@ -53,6 +53,6 @@ class HookController
         if (self::isRegistered($name)) {
             return self::$hooks[$name]->fire($params);
         }
-        throw new \Exception("Hook '$name' is not registed and cannot be fired");
+        throw new \Exception("Hook '$name' is not registered and cannot be fired");
     }
 }

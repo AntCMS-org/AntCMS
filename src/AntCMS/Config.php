@@ -37,7 +37,7 @@ class Config
                 'imageQuality' => 85,
                 'allowedCacheMethods' => ['acpu', 'php_files', 'filesystem'],
             ],
-            'forceHttps' => !Enviroment::isPHPDevServer(),
+            'forceHttps' => !Environment::isPHPDevServer(),
             'activeTheme' => 'Default',
             'debugLevel' => 1, // 0-2 at the moment
             'baseUrl' => $_SERVER['HTTP_HOST'] . dirname((string) $_SERVER['PHP_SELF']),

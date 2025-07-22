@@ -10,3 +10,4 @@ import "prismjs/components/prism-yaml";
 import "prismjs/components/prism-php";
 import "prismjs/components/prism-markup";
 import "prismjs/components/prism-markdown";
+import "prismjs/components/prism-bash";

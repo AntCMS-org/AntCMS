@@ -105,7 +105,7 @@ class AntCMS
         }
 
         $params = [
-            'AntCMSTitle' => 'An Error Ocurred',
+            'AntCMSTitle' => 'An Error Occurred',
             'message' => $message,
             'pages' => Pages::getPages(),
         ];
@@ -228,7 +228,7 @@ class AntCMS
                 Flight::response()->header('Etag', $key);
             }
 
-            // Flight's etag implimentation is broken as it clears our headers
+            // Flight's etag implementation is broken as it clears our headers
             $existingEtag = Flight::request()->getHeader('If-None-Match');
             if ($key === $existingEtag) {
                 Flight::response()->clearBody();
