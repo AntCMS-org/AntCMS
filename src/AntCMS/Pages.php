@@ -6,6 +6,8 @@
 
 namespace AntCMS;
 
+use Symfony\Component\Filesystem\Path;
+
 class Pages
 {
     private static string $currentPage = "";
@@ -38,7 +40,7 @@ class Pages
      */
     private static function getDirectoryMeta(string $path): array
     {
-        $metaPath = $path . DIRECTORY_SEPARATOR . 'meta.yaml';
+        $metaPath = Path::join($path, 'meta.yaml');
         $result = [
             'title' => ucfirst(basename($path)),
             'pageOrder' => [],

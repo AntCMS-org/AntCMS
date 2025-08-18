@@ -6,6 +6,8 @@
 
 namespace AntCMS;
 
+use Symfony\Component\Filesystem\Path;
+
 class PluginController
 {
     /** @var string[] */
@@ -49,7 +51,7 @@ class PluginController
             new $className();
 
             // Register templates for the plugin
-            $templateDir = PATH_PLUGINS . DIRECTORY_SEPARATOR . $pluginName . DIRECTORY_SEPARATOR . 'Templates';
+            $templateDir = Path::join(PATH_PLUGINS,$pluginName, 'Templates' );
             if (is_dir($templateDir)) {
                 Twig::addLoaderPath($templateDir);
             }

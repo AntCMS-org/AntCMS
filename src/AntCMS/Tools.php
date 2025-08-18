@@ -27,23 +27,6 @@ class Tools
     ];
 
     /**
-     * @return array<string>
-     */
-    public static function getFileList(string $dir, ?string $extension = null, ?bool $returnPath = false): array
-    {
-        $dir = new \RecursiveDirectoryIterator($dir);
-        $iterator = new \RecursiveIteratorIterator($dir);
-        $files = [];
-        foreach ($iterator as $file) {
-            if (pathinfo((string) $file, PATHINFO_EXTENSION) == $extension || $extension == null) {
-                $files[] = ($returnPath === true) ? $file->getPathname() : $file->getFilename();
-            }
-        }
-
-        return $files;
-    }
-
-    /**
      * Repairs a URL by replacing backslashes with forward slashes and removing duplicate slashes.
      *
      * @param string $url The URL to repair. Note: this function will not work correctly if the URL provided has its own protocol (like https://).
@@ -59,7 +42,7 @@ class Tools
 
     public static function convertFunctionaltoFullpath(string $path): string
     {
-        $pagePath = path::normalize(PATH_CONTENT . '/' . $path);
+        $pagePath = path::join(PATH_CONTENT, $path);
 
         if (is_dir($pagePath)) {
             $pagePath .= '/index.md';
