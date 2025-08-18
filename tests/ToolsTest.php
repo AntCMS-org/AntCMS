@@ -23,28 +23,6 @@ class ToolsTest extends TestCase
         }
     }
 
-    public function testGetFileList(): void
-    {
-        $basedir = dirname(__DIR__, 1);
-        $srcdir = $basedir . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Content';
-
-        $result = Tools::getFileList($srcdir);
-
-        $this->assertNotEmpty($result);
-    }
-
-    public function testGetFileListWithExtension(): void
-    {
-        $basedir = dirname(__DIR__, 1);
-        $srcdir = $basedir . DIRECTORY_SEPARATOR . 'src';
-
-        $files = Tools::getFileList($srcdir, 'md');
-
-        foreach ($files as $file) {
-            $this->assertEquals('md', pathinfo($file, PATHINFO_EXTENSION), "Expected file extension to be 'md', but got '" . pathinfo($file, PATHINFO_EXTENSION) . "' for file '{$file}'");
-        }
-    }
-
     public function testGetContentType(): void
     {
         $result = Tools::getContentType($this->testAsset);

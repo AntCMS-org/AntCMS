@@ -6,6 +6,7 @@
 
 namespace AntCMS;
 
+use Symfony\Component\Filesystem\Path;
 use Twig\Environment;
 use Twig\Loader\ArrayLoader;
 use Twig\Loader\ChainLoader;
@@ -26,8 +27,8 @@ class Twig
             $twigEnvironment = new Environment(
                 new ChainLoader([
                     new FilesystemLoader([
-                        PATH_THEMES . DIRECTORY_SEPARATOR . self::$theme . DIRECTORY_SEPARATOR . 'Templates',
-                        PATH_THEMES . DIRECTORY_SEPARATOR . 'Default' . DIRECTORY_SEPARATOR . 'Templates',
+                        Path::join(PATH_THEMES,   self::$theme, 'Templates'),
+                        Path::join(PATH_THEMES, 'Default', 'Templates'),
                     ]),
                     new ArrayLoader(),
                 ]),
