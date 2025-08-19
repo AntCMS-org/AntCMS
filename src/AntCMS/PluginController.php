@@ -28,7 +28,7 @@ class PluginController
      */
     public static function init(): void
     {
-        $finder = Finder::create()->in(PATH_PLUGINS)->directories();
+        $finder = Finder::create()->in(PATH_PLUGINS)->directories()->depth("<1");
 
         foreach ($finder as $dir) {
             $pluginName = $dir->getFilename();

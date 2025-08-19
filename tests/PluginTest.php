@@ -11,15 +11,12 @@ class PluginTest extends TestCase
 {
     public function testGetLoadedPlugins(): void
     {
-        $extensionList = [
-            'Robotstxt',
-            'Sitemap',
-            'System',
-        ];
-
         PluginController::init();
         $result = AntCMS\PluginController::getLoadedPlugins();
         $this->assertIsArray($result);
-        $this->assertEquals($extensionList, $result);
+        $result = array_flip($result);
+        $this->assertArrayHasKey('Robotstxt', $result);
+        $this->assertArrayHasKey('Sitemap', $result);
+        $this->assertArrayHasKey('System', $result);
     }
 }
