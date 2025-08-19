@@ -122,7 +122,7 @@ class AntCMS
     public function getPage(string $page): array
     {
         $page = strtolower($page);
-        $pagePath = Tools::convertFunctionaltoFullpath($page);
+        $pagePath = Tools::convertFunctionalToFullPath($page);
 
         if ($this->filesystem->exists($pagePath)) {
             try {

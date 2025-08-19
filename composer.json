@@ -21,6 +21,7 @@
         "simonvomeyser/commonmark-ext-lazy-image": "^2.0",
         "symfony/cache": "^7.2",
         "symfony/filesystem": "^7.2",
+        "symfony/finder": "^7.3",
         "symfony/polyfill-php83": "^1.32",
         "symfony/polyfill-php84": "^1.32",
         "symfony/yaml": "^7.2",
