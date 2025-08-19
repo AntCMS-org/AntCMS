@@ -7,6 +7,7 @@
 namespace AntCMS;
 
 use Symfony\Component\Filesystem\Path;
+use Symfony\Component\Finder\Finder;
 
 class PluginController
 {
@@ -27,13 +28,10 @@ class PluginController
      */
     public static function init(): void
     {
-        $list = scandir(PATH_PLUGINS);
-        if (count($list) >= 2 && $list[0] === '.' && $list[1] === '..') {
-            unset($list[0]);
-            unset($list[1]);
-        }
+        $finder = Finder::create()->in(PATH_PLUGINS)->directories();
 
-        foreach ($list as $pluginName) {
+        foreach ($finder as $dir) {
+            $pluginName = $dir->getFilename();
             $className = "\AntCMS\\Plugins\\$pluginName\\Controller";
             if (!class_exists($className)) {
                 error_log("Plugin class $className does not exist, plugin cannot be loaded.");
@@ -51,7 +49,7 @@ class PluginController
             new $className();
 
             // Register templates for the plugin
-            $templateDir = Path::join(PATH_PLUGINS,$pluginName, 'Templates' );
+            $templateDir = Path::join(PATH_PLUGINS, $pluginName, 'Templates');
             if (is_dir($templateDir)) {
                 Twig::addLoaderPath($templateDir);
             }

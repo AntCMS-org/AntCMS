@@ -27,7 +27,7 @@ class Twig
             $twigEnvironment = new Environment(
                 new ChainLoader([
                     new FilesystemLoader([
-                        Path::join(PATH_THEMES,   self::$theme, 'Templates'),
+                        Path::join(PATH_THEMES, self::$theme, 'Templates'),
                         Path::join(PATH_THEMES, 'Default', 'Templates'),
                     ]),
                     new ArrayLoader(),

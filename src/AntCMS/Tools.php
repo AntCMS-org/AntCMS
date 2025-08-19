@@ -40,15 +40,13 @@ class Tools
         return str_replace('//', '/', $newURL);
     }
 
-    public static function convertFunctionaltoFullpath(string $path): string
+    public static function convertFunctionalToFullPath(string $path): string
     {
         $pagePath = path::join(PATH_CONTENT, $path);
 
         if (is_dir($pagePath)) {
-            $pagePath .= '/index.md';
-        }
-
-        if (!str_ends_with($pagePath, ".md")) {
+            $pagePath = Path::join($pagePath, '/index.md');
+        } elseif (!str_ends_with($pagePath, ".md")) {
             $pagePath .= '.md';
         }
 
