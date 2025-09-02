@@ -36,6 +36,7 @@ class Twig
                     'cache' => (Config::get('performance.cacheMode') !== 'none') ? PATH_CACHE : false,
                     'debug' => DEBUG_LEVEL >= 2,
                     'use_yield' => false,
+                    'auto_reload' => true,
                 ]
             );
             $twigEnvironment->addExtension(new TwigFilters());

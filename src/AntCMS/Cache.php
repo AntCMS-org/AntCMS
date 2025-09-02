@@ -33,7 +33,7 @@ class Cache
 
         // Register cache adapters in order of fastest to slowest
         if (in_array('apcu', $allowed) && ApcuAdapter::isSupported()) {
-            $adapters[] = new ApcuAdapter('AntCMS_' . hash('xxh3', PATH_ROOT), self::$shortLifespan);
+            $adapters[] = new ApcuAdapter('AntCMS_' . hash('crc32', PATH_ROOT), self::$shortLifespan);
         }
 
         if (in_array('php_file', $allowed) && PhpFilesAdapter::isSupported()) {

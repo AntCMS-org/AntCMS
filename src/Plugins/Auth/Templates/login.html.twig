@@ -1,0 +1,27 @@
+{% extends "default.html.twig" %}
+{% block body %}
+  <div class="container mt-5">
+    <div class="card">
+      <div class="card-header">
+        <h2 class="text-center">Login</h2>
+      </div>
+      <div class="card-body">
+        <form method="post" action="{{ 'api/v0/public/auth/login'|absUrl }}" class="form api-form" data-redirect="{{ ''|absUrl }}">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" class="form-control" id="username" name="username" required placeholder="Enter your username" autocomplete="off">
+            <div class="invalid-feedback">Please enter a valid username.</div>
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" name="password" required placeholder="Enter your password" autocomplete="off">
+            <div class="invalid-feedback">Please enter a password.</div>
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary w-100">Login</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

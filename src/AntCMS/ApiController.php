@@ -67,17 +67,15 @@ class ApiController
     /**
      * Handles actually creating an instance of the correct API class, calling the method, and returning the response
      */
-    private function call(string $type, string $plugin, string $method): void
+    private function call(string $type, string $plugin, string $method, ?array $data = null): ApiResponse
     {
-        $data = $this->getApiCallData($plugin, $method);
+        $data ??= $this->getApiCallData($plugin, $method);
 
         $apiFqcn = "\AntCMS\\Plugins\\" . ucfirst($plugin) . "\\Api\\" . ucfirst($type) . 'Api';
 
         // Send an error if the entrypoint doesn't exist
         if (!class_exists($apiFqcn)) {
-            $response = new ApiResponse('', true, 404, "API entrypoint '$type/$plugin' does not exist");
-            $this->sendResponse($response);
-            return;
+            return new ApiResponse('', true, 404, "API entrypoint '$type/$plugin' does not exist");
         }
 
         // Now instance the API for that plugin
@@ -85,9 +83,7 @@ class ApiController
 
         // Send an error if the endpoint doesn't exist
         if (!method_exists($api, $method)) {
-            $response = new ApiResponse('', true, 404, "API endpoint '$type/$plugin/$method' does not exist");
-            $this->sendResponse($response);
-            return;
+            return new ApiResponse('', true, 404, "API endpoint '$type/$plugin/$method' does not exist");
         }
 
         $hookData = ['plugin' => ucfirst($plugin), 'method' => $method];
@@ -109,13 +105,18 @@ class ApiController
 
         $hookData['response'] = $response;
         HookController::fire('onAfterApiCalled', $hookData);
+        return $response;
+    }
 
-        $this->sendResponse($response);
+    public function scriptablePublicController(string $plugin, string $method, array $data): mixed
+    {
+        $apiResponse = $this->call('public', $plugin, $method, $data);
+        return $apiResponse->getResult();
     }
 
     public function publicController(string $plugin, string $method): void
     {
-        $this->call('public', $plugin, $method);
+        $this->sendResponse($this->call('public', $plugin, $method));
     }
 
     public function privateController(string $plugin, string $method): void
