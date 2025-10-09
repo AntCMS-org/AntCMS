@@ -33,7 +33,7 @@ class Cache
 
         // Register cache adapters in order of fastest to slowest
         if (in_array('apcu', $allowed) && ApcuAdapter::isSupported()) {
-            $adapters[] = new ApcuAdapter('AntCMS_' . hash('xxh3', PATH_ROOT), self::$shortLifespan);
+            $adapters[] = new ApcuAdapter('AntCMS_' . hash('crc32', PATH_ROOT), self::$shortLifespan);
         }
 
         if (in_array('php_file', $allowed) && PhpFilesAdapter::isSupported()) {
@@ -87,7 +87,7 @@ class Cache
      */
     public static function createCacheKey(string $content, string $salt = 'cache'): string
     {
-        return hash('xxh3', $content . $salt);
+        return hash('crc32', $content . $salt);
     }
 
     /**
@@ -100,7 +100,7 @@ class Cache
      */
     public static function createCacheKeyFile(string $filePath, string $salt = 'cache'): string
     {
-        $differentiator = filemtime($filePath) ?: hash_file('xxh3', $filePath);
-        return hash('xxh3', $filePath . ".$differentiator.$salt");
+        $differentiator = filemtime($filePath) ?: hash_file('crc32', $filePath);
+        return hash('crc32', $filePath . ".{$differentiator}.{$salt}");
     }
 }

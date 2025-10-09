@@ -29,7 +29,7 @@ class Hook
     public function __construct(string $name, public string $description, public readonly bool $isDefaultPreventable = false)
     {
         if (preg_match('/^\w+$/', $name) === 0 || preg_match('/^\w+$/', $name) === false) {
-            throw new \Exception("The hook name '$name' is invalid. Only a-z A-Z, 0-9, and _ are allowed to be in the hook name.");
+            throw new \Exception("The hook name '{$name}' is invalid. Only a-z A-Z, 0-9, and _ are allowed to be in the hook name.");
         }
 
         $this->name = $name;

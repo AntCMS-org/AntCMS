@@ -48,5 +48,5 @@ define('IMAGE_QUALITY', $config['performance']['imageQuality'] ?? 85);
 // Setup our cache adapter
 Cache::setup($config['performance']['allowedCacheMethods'] ?? ['acpu', 'php_files', 'filesystem']);
 
-// Setup our twig enviroment
+// Setup our twig environment
 Twig::registerTwig(null, $config['activeTheme']);

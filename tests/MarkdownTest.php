@@ -22,7 +22,7 @@ class MarkdownTest extends TestCase
         $totalTime = 0;
         $currentConfig = Config::get();
 
-        //Ensure cache is enabled
+        // Ensure cache is enabled
         $currentConfig['cacheMode'] = 'auto';
         Config::saveConfig($currentConfig);
 

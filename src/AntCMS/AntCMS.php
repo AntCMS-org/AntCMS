@@ -62,7 +62,7 @@ class AntCMS
     public function renderException(int $httpCode = 404, ?string $message = null): void
     {
         if ($message === null) {
-            $message = "HTTP Code $httpCode: " . match ($httpCode) {
+            $message = "HTTP Code {$httpCode}: " . match ($httpCode) {
                 100 => 'Continue',
                 101 => 'Switching Protocols',
                 200 => 'OK',
@@ -100,12 +100,12 @@ class AntCMS
                 503 => 'Service Unavailable',
                 504 => 'Gateway Time-out',
                 505 => 'HTTP Version not supported',
-                default => 'Unknown HTTP code'
+                default => 'Unknown HTTP code',
             };
         }
 
         $params = [
-            'AntCMSTitle' => 'An Error Ocurred',
+            'AntCMSTitle' => 'An Error Occurred',
             'message' => $message,
             'pages' => Pages::getPages(),
         ];
@@ -122,7 +122,7 @@ class AntCMS
     public function getPage(string $page): array
     {
         $page = strtolower($page);
-        $pagePath = Tools::convertFunctionaltoFullpath($page);
+        $pagePath = Tools::convertFunctionalToFullPath($page);
 
         if ($this->filesystem->exists($pagePath)) {
             try {
@@ -228,7 +228,7 @@ class AntCMS
                 Flight::response()->header('Etag', $key);
             }
 
-            // Flight's etag implimentation is broken as it clears our headers
+            // Flight's etag implementation is broken as it clears our headers
             $existingEtag = Flight::request()->getHeader('If-None-Match');
             if ($key === $existingEtag) {
                 Flight::response()->clearBody();
@@ -246,7 +246,7 @@ class AntCMS
     /**
      * @return mixed[]
      */
-    public static function getThemeConfig(string|null $theme = null): array
+    public static function getThemeConfig(?string $theme = null): array
     {
         if ($theme === null) {
             $configPath = path::normalize(PATH_CURRENT_THEME . '/Config.yaml');
@@ -258,7 +258,7 @@ class AntCMS
                 $theme = 'Default';
             }
 
-            $configPath = path::normalize(PATH_THEMES . "/$theme/Config.yaml");
+            $configPath = path::normalize(PATH_THEMES . "/{$theme}/Config.yaml");
             if (file_exists($configPath)) {
                 return AntYaml::parseFile($configPath);
             }

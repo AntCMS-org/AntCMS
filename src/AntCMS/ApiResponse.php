@@ -6,10 +6,15 @@
 
 namespace AntCMS;
 
-class ApiResponse
+use JsonSerializable;
+
+class ApiResponse implements JsonSerializable
 {
-    public function __construct(private readonly mixed $result, private readonly bool $error = false, private readonly int $code = 200, private readonly string $message = '')
+    public function __construct(private readonly mixed $result, private readonly bool $error = false, private readonly int $code = 200, private readonly string $message = '') {}
+
+    public function jsonSerialize(): mixed
     {
+        return $this->result;
     }
 
     /**
@@ -45,5 +50,10 @@ class ApiResponse
     public function getMessage(): string
     {
         return $this->message;
+    }
+
+    public function getResult(): mixed
+    {
+        return $this->result;
     }
 }

@@ -6,7 +6,7 @@
 
 namespace AntCMS;
 
-class Enviroment
+class Environment
 {
     public static function isCli(): bool
     {

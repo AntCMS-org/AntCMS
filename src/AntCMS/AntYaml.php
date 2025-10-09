@@ -21,12 +21,20 @@ class AntYaml
 
     /**
      * Parses a YAML file and returns the content as an array.
+     *
+     * @param string $path A path to the yaml file to parse
+     * @param bool $fresh set to true to refresh the YAML cash for the file, ensuring fresh data
      * @throws ParseException
      * @return mixed[]
      */
-    public static function parseFile(string $path): array
+    public static function parseFile(string $path, bool $fresh = false): array
     {
-        $cacheKey = hash('xxh3', $path);
+        $cacheKey = hash('crc32', $path);
+
+        if ($fresh) {
+            self::$yamlCache[$cacheKey] = Yaml::parseFile($path);
+        }
+
         self::$yamlCache[$cacheKey] ??= Yaml::parseFile($path);
         return self::$yamlCache[$cacheKey];
     }
@@ -41,7 +49,7 @@ class AntYaml
     public static function saveFile(string $path, array $data): bool
     {
         // First update / set the cached data for this file
-        $cacheKey = hash('xxh3', $path);
+        $cacheKey = hash('crc32', $path);
         self::$yamlCache[$cacheKey] = $data;
 
         // Then we can actually convert it to YAML and dump it

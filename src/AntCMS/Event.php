@@ -28,7 +28,7 @@ class Event
     public function __construct(string $associatedHook, private array $parameters, private readonly int $totalCallbacks, private readonly bool $preventable)
     {
         if (!HookController::isRegistered($associatedHook)) {
-            throw new \Exception("Hook $associatedHook is not registered!");
+            throw new \Exception("Hook {$associatedHook} is not registered!");
         }
 
         $this->associatedHook = $associatedHook;
@@ -76,7 +76,7 @@ class Event
             }
         } else {
             // We shouldn't run into this situation, but it's non-fatal so only trigger a warning.
-            trigger_error("The 'next' event was called too many times for the '$this->associatedHook' event. Event timing may be inaccurate and 'onHookFireComplete' would have been fired too soon.", E_USER_WARNING);
+            trigger_error("The 'next' event was called too many times for the '{$this->associatedHook}' event. Event timing may be inaccurate and 'onHookFireComplete' would have been fired too soon.", E_USER_WARNING);
         }
 
         return $this;
@@ -172,7 +172,7 @@ class Event
     public function preventDefault(): Event
     {
         if (!$this->isDefaultPreventable()) {
-            trigger_error("The default behavior for the `$this->associatedHook` hook cannot be prevented.");
+            trigger_error("The default behavior for the `{$this->associatedHook}` hook cannot be prevented.");
         } else {
             $this->defaultPrevented = true;
         }

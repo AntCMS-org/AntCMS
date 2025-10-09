@@ -6,6 +6,9 @@
 
 namespace AntCMS;
 
+use Symfony\Component\Filesystem\Path;
+use Symfony\Component\Finder\Finder;
+
 class PluginController
 {
     /** @var string[] */
@@ -15,7 +18,7 @@ class PluginController
     private static array $sitemapUrls = [];
 
     /** @var array<string, string[]> */
-    private static array $robotsTxtAdditons = [
+    private static array $robotsTxtAdditions = [
         'allow' => [],
         'disallow' => [],
     ];
@@ -25,16 +28,13 @@ class PluginController
      */
     public static function init(): void
     {
-        $list = scandir(PATH_PLUGINS);
-        if (count($list) >= 2 && $list[0] === '.' && $list[1] === '..') {
-            unset($list[0]);
-            unset($list[1]);
-        }
+        $finder = Finder::create()->in(PATH_PLUGINS)->directories()->depth("<1");
 
-        foreach ($list as $pluginName) {
-            $className = "\AntCMS\\Plugins\\$pluginName\\Controller";
+        foreach ($finder as $dir) {
+            $pluginName = $dir->getFilename();
+            $className = "\AntCMS\\Plugins\\{$pluginName}\\Controller";
             if (!class_exists($className)) {
-                error_log("Plugin class $className does not exist, plugin cannot be loaded.");
+                error_log("Plugin class {$className} does not exist, plugin cannot be loaded.");
                 continue;
             }
 
@@ -49,7 +49,7 @@ class PluginController
             new $className();
 
             // Register templates for the plugin
-            $templateDir = PATH_PLUGINS . DIRECTORY_SEPARATOR . $pluginName . DIRECTORY_SEPARATOR . 'Templates';
+            $templateDir = Path::join(PATH_PLUGINS, $pluginName, 'Templates');
             if (is_dir($templateDir)) {
                 Twig::addLoaderPath($templateDir);
             }
@@ -79,7 +79,7 @@ class PluginController
      */
     public static function getRobotsTxtEntries(): array
     {
-        return self::$robotsTxtAdditons;
+        return self::$robotsTxtAdditions;
     }
 
     public static function registerSitemapUrl(string $url, ?int $lastmod = null): void
@@ -92,11 +92,11 @@ class PluginController
 
     public static function addAllowToRobotsTxt(string $url): void
     {
-        self::$robotsTxtAdditons['allow'][] = $url;
+        self::$robotsTxtAdditions['allow'][] = $url;
     }
 
     public static function addDisallowToRobotsTxt(string $url): void
     {
-        self::$robotsTxtAdditons['disallow'][] = $url;
+        self::$robotsTxtAdditions['disallow'][] = $url;
     }
 }

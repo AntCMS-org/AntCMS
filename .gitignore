@@ -10,3 +10,4 @@ src/php_error.log
 /src/Themes/Default/Assets/build
 /tmp
 /src/Plugins/Example
+src/Config/Users.yaml
