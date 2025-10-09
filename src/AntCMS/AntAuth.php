@@ -13,13 +13,13 @@ use Symfony\Component\Yaml\Exception\ParseException;
 /**
  * A rudimentary authentication management class.
  * Will eventually be replaced when we have a more advanced key-store
- * 
+ *
  * @package AntCMS
  */
 class AntAuth
 {
     private array $users = [];
-    private Filesystem $filesystem;
+    private readonly Filesystem $filesystem;
 
     public function __construct()
     {
@@ -33,19 +33,15 @@ class AntAuth
         }
     }
 
-    function __destruct()
+    public function __destruct()
     {
         AntYaml::saveFile(PATH_USERS, $this->users);
     }
 
     /**
      * Adds / updates a user
-     * 
-     * @param string $username 
-     * @param string $password 
-     * @return void 
      */
-    public function setUser(string $username, string $password)
+    public function setUser(string $username, string $password): void
     {
         if ($this->filesystem->exists(PATH_USERS)) {
             $this->users = AntYaml::parseFile(PATH_USERS, true);
@@ -56,13 +52,12 @@ class AntAuth
 
     /**
      * Deletes a user
-     * 
-     * @param mixed $username 
-     * @return void 
-     * @throws IOException 
-     * @throws ParseException 
+     *
+     * @param mixed $username
+     * @throws IOException
+     * @throws ParseException
      */
-    public function deleteUser($username)
+    public function deleteUser($username): void
     {
         if ($this->filesystem->exists(PATH_USERS)) {
             $this->users = AntYaml::parseFile(PATH_USERS, true);

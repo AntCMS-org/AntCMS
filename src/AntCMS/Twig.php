@@ -37,7 +37,7 @@ class Twig
                     'debug' => DEBUG_LEVEL >= 2,
                     'use_yield' => false,
                     'auto_reload' => true,
-                ]
+                ],
             );
             $twigEnvironment->addExtension(new TwigFilters());
             $twigEnvironment->addGlobal('AntCMSSiteTitle', Config::get('siteInfo')['title']);

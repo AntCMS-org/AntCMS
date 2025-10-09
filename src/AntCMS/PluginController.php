@@ -32,9 +32,9 @@ class PluginController
 
         foreach ($finder as $dir) {
             $pluginName = $dir->getFilename();
-            $className = "\AntCMS\\Plugins\\$pluginName\\Controller";
+            $className = "\AntCMS\\Plugins\\{$pluginName}\\Controller";
             if (!class_exists($className)) {
-                error_log("Plugin class $className does not exist, plugin cannot be loaded.");
+                error_log("Plugin class {$className} does not exist, plugin cannot be loaded.");
                 continue;
             }
 

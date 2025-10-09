@@ -52,7 +52,7 @@ class Pages
                 $directoryMetaData = AntYaml::parseFile($metaPath);
                 $result = array_merge($result, $directoryMetaData);
             } catch (\Exception $e) {
-                error_log("Error while loading the meta data for the $path directory:");
+                error_log("Error while loading the meta data for the {$path} directory:");
                 error_log("YAML error: " . $e->getMessage());
             }
         }

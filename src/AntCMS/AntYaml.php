@@ -21,7 +21,7 @@ class AntYaml
 
     /**
      * Parses a YAML file and returns the content as an array.
-     * 
+     *
      * @param string $path A path to the yaml file to parse
      * @param bool $fresh set to true to refresh the YAML cash for the file, ensuring fresh data
      * @throws ParseException

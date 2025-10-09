@@ -10,9 +10,7 @@ use JsonSerializable;
 
 class ApiResponse implements JsonSerializable
 {
-    public function __construct(private readonly mixed $result, private readonly bool $error = false, private readonly int $code = 200, private readonly string $message = '')
-    {
-    }
+    public function __construct(private readonly mixed $result, private readonly bool $error = false, private readonly int $code = 200, private readonly string $message = '') {}
 
     public function jsonSerialize(): mixed
     {

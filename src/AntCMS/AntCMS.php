@@ -62,7 +62,7 @@ class AntCMS
     public function renderException(int $httpCode = 404, ?string $message = null): void
     {
         if ($message === null) {
-            $message = "HTTP Code $httpCode: " . match ($httpCode) {
+            $message = "HTTP Code {$httpCode}: " . match ($httpCode) {
                 100 => 'Continue',
                 101 => 'Switching Protocols',
                 200 => 'OK',
@@ -100,7 +100,7 @@ class AntCMS
                 503 => 'Service Unavailable',
                 504 => 'Gateway Time-out',
                 505 => 'HTTP Version not supported',
-                default => 'Unknown HTTP code'
+                default => 'Unknown HTTP code',
             };
         }
 
@@ -246,7 +246,7 @@ class AntCMS
     /**
      * @return mixed[]
      */
-    public static function getThemeConfig(string|null $theme = null): array
+    public static function getThemeConfig(?string $theme = null): array
     {
         if ($theme === null) {
             $configPath = path::normalize(PATH_CURRENT_THEME . '/Config.yaml');
@@ -258,7 +258,7 @@ class AntCMS
                 $theme = 'Default';
             }
 
-            $configPath = path::normalize(PATH_THEMES . "/$theme/Config.yaml");
+            $configPath = path::normalize(PATH_THEMES . "/{$theme}/Config.yaml");
             if (file_exists($configPath)) {
                 return AntYaml::parseFile($configPath);
             }
