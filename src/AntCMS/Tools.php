@@ -192,13 +192,13 @@ class Tools
 
         // Give text assets a key specific to the utilized encoding
         if (COMPRESS_TEXT_ASSETS && self::isCompressableTextAsset($path)) {
-            return Cache::createCacheKeyFile($path, "assetCompression-$encoding");
+            return Cache::createCacheKeyFile($path, "assetCompression-{$encoding}");
         }
 
         // Allow for each individual quality level to be cacheable for images
         if (COMPRESS_IMAGES && self::isCompressableImage($path)) {
             $quality = self::pickImageQuality();
-            return Cache::createCacheKeyFile($path, "image-q$quality");
+            return Cache::createCacheKeyFile($path, "image-q{$quality}");
         }
 
         // Generic
@@ -260,7 +260,7 @@ class Tools
         if (is_bool($value)) {
             $value = $value ? "enabled" : "disabled";
         }
-        return "<dd>$wording: <strong>$value</strong></dd>";
+        return "<dd>{$wording}: <strong>{$value}</strong></dd>";
     }
 
     public static function buildDebugInfo(): string

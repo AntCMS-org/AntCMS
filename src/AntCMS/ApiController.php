@@ -18,7 +18,7 @@ class ApiController
         $code = $apiResponse->getCode();
         if ($apiResponse->isError()) {
             $message = $apiResponse->getMessage();
-            error_log("($code) $message");
+            error_log("({$code}) {$message}");
         }
 
         Flight::json($apiResponse->getBody(), $code);
@@ -39,7 +39,7 @@ class ApiController
     {
         // Some needed variable setup
         $url = rtrim(Tools::getUri(), '/');
-        $startingString = "/$plugin/$method/";
+        $startingString = "/{$plugin}/{$method}/";
 
         // Split the request URL, find the parameters for the current API call, and then parse them
         $pos = strpos($url, $startingString);
@@ -75,7 +75,7 @@ class ApiController
 
         // Send an error if the entrypoint doesn't exist
         if (!class_exists($apiFqcn)) {
-            $response = new ApiResponse('', true, 404, "API entrypoint '$type/$plugin' does not exist");
+            $response = new ApiResponse('', true, 404, "API entrypoint '{$type}/{$plugin}' does not exist");
             $this->sendResponse($response);
             return;
         }
@@ -85,7 +85,7 @@ class ApiController
 
         // Send an error if the endpoint doesn't exist
         if (!method_exists($api, $method)) {
-            $response = new ApiResponse('', true, 404, "API endpoint '$type/$plugin/$method' does not exist");
+            $response = new ApiResponse('', true, 404, "API endpoint '{$type}/{$plugin}/{$method}' does not exist");
             $this->sendResponse($response);
             return;
         }
@@ -104,7 +104,7 @@ class ApiController
             $response = new ApiResponse('', true, 500, "An internal error occured");
 
             // Log the actual message for aid in debugging
-            error_log("Fatal error: $message ($location)");
+            error_log("Fatal error: {$message} ({$location})");
         }
 
         $hookData['response'] = $response;

@@ -45,7 +45,7 @@ Flight::route('GET /favicon.ico', function () use ($AntCMS): void {
     $AntCMS->serveContent(PATH_CURRENT_THEME . DIRECTORY_SEPARATOR . 'Assets' . DIRECTORY_SEPARATOR . 'favicon.ico');
 });
 
-/// ACME challenges for certificate renewals
+// ACME challenges for certificate renewals
 Flight::route('GET .well-known/acme-challenge/*', $AntCMS->serveContent(...));
 
 // API Controller
@@ -67,7 +67,7 @@ if (!Flight::request()->secure && !Environment::isCli() && Config::get('forceHtt
 Flight::route('GET /*', function () use ($AntCMS): void {
     if ((Tools::getUri() === '' || Tools::getUri() === '/') && !file_exists(PATH_USERS)) {
         // TODO for once plugin functionality is rebuilt
-        //AntCMS::redirect('/profile/firsttime');
+        // AntCMS::redirect('/profile/firsttime');
     }
     echo $AntCMS->renderPage();
 });

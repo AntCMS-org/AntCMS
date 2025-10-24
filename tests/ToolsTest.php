@@ -19,7 +19,7 @@ class ToolsTest extends TestCase
 
         foreach ($badUrls as $index => $badurl) {
             $goodUrl = Tools::repairURL($badurl);
-            $this->assertEquals($expectedUrls[$index], $goodUrl, "Expected '$expectedUrls[$index]' but got '{$goodUrl}' for input '{$badurl}'");
+            $this->assertEquals($expectedUrls[$index], $goodUrl, "Expected '{$expectedUrls[$index]}' but got '{$goodUrl}' for input '{$badurl}'");
         }
     }
 

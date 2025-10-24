@@ -36,7 +36,7 @@ class Twig
                     'cache' => (Config::get('performance.cacheMode') !== 'none') ? PATH_CACHE : false,
                     'debug' => DEBUG_LEVEL >= 2,
                     'use_yield' => false,
-                ]
+                ],
             );
             $twigEnvironment->addExtension(new TwigFilters());
             $twigEnvironment->addGlobal('AntCMSSiteTitle', Config::get('siteInfo')['title']);
