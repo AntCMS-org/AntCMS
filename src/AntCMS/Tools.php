@@ -27,23 +27,6 @@ class Tools
     ];
 
     /**
-     * @return array<string>
-     */
-    public static function getFileList(string $dir, ?string $extension = null, ?bool $returnPath = false): array
-    {
-        $dir = new \RecursiveDirectoryIterator($dir);
-        $iterator = new \RecursiveIteratorIterator($dir);
-        $files = [];
-        foreach ($iterator as $file) {
-            if (pathinfo((string) $file, PATHINFO_EXTENSION) == $extension || $extension == null) {
-                $files[] = ($returnPath === true) ? $file->getPathname() : $file->getFilename();
-            }
-        }
-
-        return $files;
-    }
-
-    /**
      * Repairs a URL by replacing backslashes with forward slashes and removing duplicate slashes.
      *
      * @param string $url The URL to repair. Note: this function will not work correctly if the URL provided has its own protocol (like https://).
@@ -57,15 +40,13 @@ class Tools
         return str_replace('//', '/', $newURL);
     }
 
-    public static function convertFunctionaltoFullpath(string $path): string
+    public static function convertFunctionalToFullPath(string $path): string
     {
-        $pagePath = path::normalize(PATH_CONTENT . '/' . $path);
+        $pagePath = path::join(PATH_CONTENT, $path);
 
         if (is_dir($pagePath)) {
-            $pagePath .= '/index.md';
-        }
-
-        if (!str_ends_with($pagePath, ".md")) {
+            $pagePath = Path::join($pagePath, '/index.md');
+        } elseif (!str_ends_with($pagePath, ".md")) {
             $pagePath .= '.md';
         }
 
@@ -211,13 +192,13 @@ class Tools
 
         // Give text assets a key specific to the utilized encoding
         if (COMPRESS_TEXT_ASSETS && self::isCompressableTextAsset($path)) {
-            return Cache::createCacheKeyFile($path, "assetCompression-$encoding");
+            return Cache::createCacheKeyFile($path, "assetCompression-{$encoding}");
         }
 
         // Allow for each individual quality level to be cacheable for images
         if (COMPRESS_IMAGES && self::isCompressableImage($path)) {
             $quality = self::pickImageQuality();
-            return Cache::createCacheKeyFile($path, "image-q$quality");
+            return Cache::createCacheKeyFile($path, "image-q{$quality}");
         }
 
         // Generic
@@ -279,7 +260,7 @@ class Tools
         if (is_bool($value)) {
             $value = $value ? "enabled" : "disabled";
         }
-        return "<dd>$wording: <strong>$value</strong></dd>";
+        return "<dd>{$wording}: <strong>{$value}</strong></dd>";
     }
 
     public static function buildDebugInfo(): string

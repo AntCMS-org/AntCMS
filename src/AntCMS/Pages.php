@@ -6,6 +6,9 @@
 
 namespace AntCMS;
 
+use Symfony\Component\Filesystem\Path;
+use Symfony\Component\Finder\Finder;
+
 class Pages
 {
     private static string $currentPage = "";
@@ -38,7 +41,7 @@ class Pages
      */
     private static function getDirectoryMeta(string $path): array
     {
-        $metaPath = $path . DIRECTORY_SEPARATOR . 'meta.yaml';
+        $metaPath = Path::join($path, 'meta.yaml');
         $result = [
             'title' => ucfirst(basename($path)),
             'pageOrder' => [],
@@ -49,7 +52,7 @@ class Pages
                 $directoryMetaData = AntYaml::parseFile($metaPath);
                 $result = array_merge($result, $directoryMetaData);
             } catch (\Exception $e) {
-                error_log("Error while loading the meta data for the $path directory:");
+                error_log("Error while loading the meta data for the {$path} directory:");
                 error_log("YAML error: " . $e->getMessage());
             }
         }
@@ -63,23 +66,22 @@ class Pages
     private static function buildList(string $path = PATH_CONTENT): array
     {
         $result = [];
-        $list = array_flip(scandir($path) ?: []);
-        unset($list['.'], $list['..']);
+        $finder = new Finder();
         $directoryMeta = self::getDirectoryMeta($path);
+        $finder->in($path)->depth("< 1");
 
-        // Loop through each item and builds the list of pages. Directories will recursively call this function again.
-        foreach (array_keys($list) as $key) {
-            $currentPath = $path . DIRECTORY_SEPARATOR . $key;
-            if (is_dir($currentPath)) {
-                $subDirectoryMeta = self::getDirectoryMeta($currentPath);
-                $directoryListing = self::buildList($currentPath);
+        foreach ($finder as $file) {
+            $absoluteFilePath = $file->getRealPath();
+            if (is_dir($absoluteFilePath)) {
+                $subDirectoryMeta = self::getDirectoryMeta($absoluteFilePath);
+                $directoryListing = self::buildList($absoluteFilePath);
 
                 // Remove non markdown files
                 foreach ($directoryListing as $subKey => $item) {
                     if (is_array($item)) {
                         continue;
                     }
-                    if (is_dir($currentPath . DIRECTORY_SEPARATOR . $item)) {
+                    if (is_dir($absoluteFilePath . DIRECTORY_SEPARATOR . $item)) {
                         continue;
                     }
                     if (str_ends_with((string) $item, '.md')) {
@@ -97,13 +99,13 @@ class Pages
                 $result[$subDirectoryMeta['title']] = $directoryListing;
             } else {
                 // Skip non markdown files
-                if (!str_ends_with($currentPath, '.md')) {
+                if (!str_ends_with($file->getFilename(), '.md')) {
                     continue;
                 }
 
-                $key = substr($key, 0, -3);
+                $key = substr($file->getFilename(), 0, -3);
 
-                $result[$key] = self::generatePageInfo($currentPath);
+                $result[$key] = self::generatePageInfo($absoluteFilePath);
             }
         }
 

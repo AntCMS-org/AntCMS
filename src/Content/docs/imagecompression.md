@@ -1,7 +1,7 @@
 --AntCMS--
 Title: Image Compression
 Author: The AntCMS Team
-Description: Learn about automated image compression functionaliy in AntCMS.
+Description: Learn about automated image compression functionally in AntCMS.
 --AntCMS--
 
 
