@@ -32,20 +32,6 @@ Next, you'll want to start the DDEV container for AntCMS.
 ddev start
 ```
 
-Now you have a DDEV container setup for AntCMS, but you still need to install the developer dependencies.
-```shell
-ddev composer install
-ddev npm i
-```
-
-After the dependencies are installed, you'll want to build the front-end assets:
-
-```shell
-ddev npm run build
-```
-
----
-
 ### And that's it!
 
 Assuming you ran into no errors, you should now find your AntCMS developer instance available at [https://antcms.ddev.site](https://antcms.ddev.site).
