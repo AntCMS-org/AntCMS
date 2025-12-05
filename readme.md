@@ -1,6 +1,6 @@
 ![PHPStan Level](https://img.shields.io/badge/PHPStan-level%206-brightgreen)
 [![CI](https://github.com/AntCMS-org/AntCMS/actions/workflows/ci.yml/badge.svg)](https://github.com/AntCMS-org/AntCMS/actions/workflows/ci.yml)
-![Supported PHP Versions](https://img.shields.io/badge/PHP%20Versions-8.2%7C8.3%7C8.4-brightgreen)
+![Supported PHP Versions](https://img.shields.io/badge/PHP%20Versions-8.2%7C8.3%7C8.4%7C8.5-brightgreen)
 ![GitHub Release](https://img.shields.io/github/v/release/AntCMS-org/AntCMS)
 
 # AntCMS
@@ -11,7 +11,7 @@ Although it is still considered preview software and is missing quite a bit of p
 
 ## Missing Functionality
 
-AntCMS is being largely rebuilt for better, faser, easier functionality the following functionality currently does not exist compared to previous versions:
+AntCMS is being largely rebuilt for better, faster, easier functionality the following functionality currently does not exist compared to previous versions:
 
  - The administrator plugin (UI for system management).
  - User management.
@@ -27,7 +27,7 @@ AntCMS is being largely rebuilt for better, faser, easier functionality the foll
  - Automatic usage of ETags when serving assets to allow client-side caching.
  - Support for custom themes.
  - Per-theme additional styles applied to markdown content.
- - Plugin suppport.
+ - Plugin support.
  - Uses Markdown to write content and YAML for the infrequently needed configuration setup.
 
 ## System Requirements
