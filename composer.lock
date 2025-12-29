@@ -532,16 +532,16 @@
         },
         {
             "name": "flightphp/core",
-            "version": "v3.17.2",
+            "version": "v3.17.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/flightphp/core.git",
-                "reference": "095a46663f7090c549f5c3459f0dada893b3b5d9"
+                "reference": "183390718182b4ac958bf0642115432efb199228"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/flightphp/core/zipball/095a46663f7090c549f5c3459f0dada893b3b5d9",
-                "reference": "095a46663f7090c549f5c3459f0dada893b3b5d9",
+                "url": "https://api.github.com/repos/flightphp/core/zipball/183390718182b4ac958bf0642115432efb199228",
+                "reference": "183390718182b4ac958bf0642115432efb199228",
                 "shasum": ""
             },
             "require": {
@@ -554,14 +554,13 @@
             "require-dev": {
                 "ext-pdo_sqlite": "*",
                 "flightphp/container": "^1.0",
-                "flightphp/runway": "^0.2.3 || ^1.0",
+                "flightphp/runway": "^1.2",
                 "league/container": "^4.2",
                 "level-2/dice": "^4.0",
                 "phpstan/extension-installer": "^1.4",
                 "phpstan/phpstan": "^2.1",
                 "phpunit/phpunit": "^9.6",
                 "rregeer/phpunit-coverage-check": "^0.3.1",
-                "spatie/phpunit-watcher": "^1.23 || ^1.24",
                 "squizlabs/php_codesniffer": "^3.11"
             },
             "suggest": {
@@ -602,9 +601,9 @@
             "homepage": "http://flightphp.com",
             "support": {
                 "issues": "https://github.com/flightphp/core/issues",
-                "source": "https://github.com/flightphp/core/tree/v3.17.2"
+                "source": "https://github.com/flightphp/core/tree/v3.17.4"
             },
-            "time": "2025-10-03T21:05:48+00:00"
+            "time": "2025-12-27T15:59:57+00:00"
         },
         {
             "name": "hostbybelle/compressionbuffer",
