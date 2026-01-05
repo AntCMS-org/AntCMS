@@ -196,8 +196,7 @@ class AntCMS
     {
         $path ??= '.' . Tools::getUri();
         if (str_starts_with($path, './assets/')) {
-            $themeAssets = Path::normalize(PATH_CURRENT_THEME . '/Assets/');
-            $path = $themeAssets . substr($path, 8);
+            $path = Path::join(PATH_CURRENT_THEME, 'Assets', substr($path, 8));
         }
 
         if (!Path::isLocal($path)) {
@@ -249,7 +248,7 @@ class AntCMS
     public static function getThemeConfig(?string $theme = null): array
     {
         if ($theme === null) {
-            $configPath = path::normalize(PATH_CURRENT_THEME . '/Config.yaml');
+            $configPath = path::join(PATH_CURRENT_THEME, 'Config.yaml');
             if (file_exists($configPath)) {
                 return AntYaml::parseFile($configPath);
             }
@@ -258,7 +257,7 @@ class AntCMS
                 $theme = 'Default';
             }
 
-            $configPath = path::normalize(PATH_THEMES . "/{$theme}/Config.yaml");
+            $configPath = path::join(PATH_THEMES, $theme, "Config.yaml");
             if (file_exists($configPath)) {
                 return AntYaml::parseFile($configPath);
             }

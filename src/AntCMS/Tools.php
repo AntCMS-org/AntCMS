@@ -95,12 +95,12 @@ class Tools
         return $type;
     }
 
-    private static function isCompressableTextAsset(string $path): bool
+    private static function isCompressibleTextAsset(string $path): bool
     {
         return in_array(pathinfo($path, PATHINFO_EXTENSION), self::$textAssets) || str_starts_with(self::getContentType($path), 'text/');
     }
 
-    private static function isCompressableImage(string $path): bool
+    private static function isCompressibleImage(string $path): bool
     {
         // We require GD to perform image compression / detect the image type
         if (!extension_loaded('gd')) {
@@ -129,11 +129,13 @@ class Tools
         // Get the image type
         $imageInfo = getimagesize($path);
         $original = file_get_contents($path);
-        $startingSize = strlen($original);
 
+        // If we failed to get the image type, return the original
         if ($imageInfo === false) {
             return $original;
         }
+
+        $startingSize = strlen($original);
 
         // Create image based on type
         $image = match ($imageInfo['mime']) {
@@ -191,12 +193,12 @@ class Tools
         $encoding = CompressionBuffer::getFirstMethodChoice();
 
         // Give text assets a key specific to the utilized encoding
-        if (COMPRESS_TEXT_ASSETS && self::isCompressableTextAsset($path)) {
+        if (COMPRESS_TEXT_ASSETS && self::isCompressibleTextAsset($path)) {
             return Cache::createCacheKeyFile($path, "assetCompression-{$encoding}");
         }
 
         // Allow for each individual quality level to be cacheable for images
-        if (COMPRESS_IMAGES && self::isCompressableImage($path)) {
+        if (COMPRESS_IMAGES && self::isCompressibleImage($path)) {
             $quality = self::pickImageQuality();
             return Cache::createCacheKeyFile($path, "image-q{$quality}");
         }
@@ -207,7 +209,7 @@ class Tools
 
     public static function getExpectedEncoding(string $path): string
     {
-        if (COMPRESS_TEXT_ASSETS && self::isCompressableTextAsset($path)) {
+        if (COMPRESS_TEXT_ASSETS && self::isCompressibleTextAsset($path)) {
             return CompressionBuffer::getFirstMethodChoice();
         }
         return 'identity';
@@ -215,7 +217,7 @@ class Tools
 
     /**
      * Automatically selects an ideal compression method for various types of assets.
-     * Impliments caching to prevent repeat processing of assets.
+     * Implements caching to prevent repeat processing of assets.
      */
     public static function doAssetCompression(string $path): string
     {
@@ -224,11 +226,11 @@ class Tools
         // Ensure CompressionBuffer won't accidentally cause issues for us
         CompressionBuffer::disable();
 
-        if (COMPRESS_TEXT_ASSETS && self::isCompressableTextAsset($path)) {
+        if (COMPRESS_TEXT_ASSETS && self::isCompressibleTextAsset($path)) {
             CompressionBuffer::enable(); // We will use CompressionBuffer to handle text content
         }
 
-        if (COMPRESS_IMAGES && self::isCompressableImage($path)) {
+        if (COMPRESS_IMAGES && self::isCompressibleImage($path)) {
             $contents = Cache::get($cacheKey, function (ItemInterface $item) use ($path): string {
                 $item->expiresAfter(604800);
                 $quality = self::pickImageQuality();
@@ -236,7 +238,7 @@ class Tools
             });
         }
 
-        // Handle cases were we didn't do compression or an error occured
+        // Handle cases were we didn't do compression or an error occurred
         if (!isset($contents) || !is_string($contents)) {
             return file_get_contents($path);
         }

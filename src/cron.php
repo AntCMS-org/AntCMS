@@ -4,6 +4,14 @@
  * Copyright 2025 AntCMS
  */
 
+use AntCMS\Cache;
+use AntCMS\HookController;
+use AntCMS\PluginController;
+
 require __DIR__ . '/bootstrap.php';
 
-AntCMS\Cache::prune();
+PluginController::init();
+
+HookController::fire("onBeforeCronRun");
+Cache::prune();
+HookController::fire("onAfterCronRun");
