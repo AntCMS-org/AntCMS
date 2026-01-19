@@ -10,7 +10,7 @@ use AntCMS\Twig;
 
 define('START', hrtime(true));
 
-error_reporting(E_ALL);
+error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
 ini_set('display_errors', '0');
 ini_set('error_log', __DIR__ . DIRECTORY_SEPARATOR . 'php_error.log');
 ini_set("log_errors", "1");
