@@ -15,6 +15,8 @@ use HostByBelle\CompressionBuffer;
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'bootstrap.php';
 
+Flight::set('flight.handle_errors', false);
+
 $AntCMS = new AntCMS();
 
 // Use hooks to perform any final changes to the output buffer before compressing and sending it

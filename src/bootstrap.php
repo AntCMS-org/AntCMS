@@ -10,10 +10,22 @@ use AntCMS\Twig;
 
 define('START', hrtime(true));
 
-error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
+$logFile = __DIR__ . DIRECTORY_SEPARATOR . 'php_error.log';
+ini_set('log_errors', 1);
+ini_set('error_log', $logFile);
 ini_set('display_errors', '0');
-ini_set('error_log', __DIR__ . DIRECTORY_SEPARATOR . 'php_error.log');
-ini_set("log_errors", "1");
+
+set_error_handler(function ($errno, $errstr): void {
+    error_log(sprintf('Error: [%d] %s', $errno, $errstr));
+});
+
+set_exception_handler(function (Throwable $throwable): void {
+    $code = $throwable->getCode() ?? '???';
+    $message = $throwable->getMessage() ?? 'Error message missing.';
+    $file = $throwable->getFile();
+    $line = $throwable->getLine();
+    error_log(sprintf('Error: [%s] [%s] at [%s][%s]', $code, $message, $file, $line));
+});
 
 // Registering constants
 const PATH_ROOT = __DIR__;

@@ -8,6 +8,7 @@ namespace AntCMS;
 
 use ElGigi\CommonMarkEmoji\EmojiExtension;
 use League\CommonMark\Environment\Environment;
+use League\CommonMark\Extension\Attributes\AttributesExtension;
 use League\CommonMark\Extension\Autolink\AutolinkExtension;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 use League\CommonMark\Extension\DefaultAttributes\DefaultAttributesExtension;
@@ -30,7 +31,7 @@ class Markdown
 
             // Fire the `onBeforeMarkdownParsed` event and use the potentially modified markdown content for parsing
             $event = HookController::fire('onBeforeMarkdownParsed', ['markdown' => $md]);
-            $markdown = $event-> getParameters()['markdown'] ?? $md;
+            $markdown = $event->getParameters()['markdown'] ?? $md;
 
             $config = Config::get();
             $defaultAttributes = [];
@@ -48,19 +49,23 @@ class Markdown
                     'fallback' => 'link',
                 ],
                 'default_attributes' => $defaultAttributes,
+                'attributes' => [
+                    'allow' => ['class'],
+                ],
             ];
 
             $environment = new Environment($mdConfig);
 
-            $environment->addExtension(new CommonMarkCoreExtension());
+            $environment->addExtension(new EmojiExtension());
+            $environment->addExtension(new AttributesExtension());
             $environment->addExtension(new AutolinkExtension());
+            $environment->addExtension(new CommonMarkCoreExtension());
+            $environment->addExtension(new DefaultAttributesExtension());
+            $environment->addExtension(new EmbedExtension());
             $environment->addExtension(new StrikethroughExtension());
             $environment->addExtension(new TableExtension());
             $environment->addExtension(new TaskListExtension());
-            $environment->addExtension(new EmojiExtension());
-            $environment->addExtension(new EmbedExtension());
             $environment->addExtension(new LazyImageExtension());
-            $environment->addExtension(new DefaultAttributesExtension());
 
             $markdownConverter = new MarkdownConverter($environment);
 
