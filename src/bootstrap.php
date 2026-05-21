@@ -15,13 +15,17 @@ ini_set('log_errors', 1);
 ini_set('error_log', $logFile);
 ini_set('display_errors', '0');
 
-set_error_handler(function ($errno, $errstr): void {
+set_error_handler(function ($errno, $errstr, $errfile, $errline): bool {
+    if ((error_reporting() & $errno) === 0) {
+        return false;
+    }
     error_log(sprintf('Error: [%d] %s', $errno, $errstr));
+    return true;
 });
 
 set_exception_handler(function (Throwable $throwable): void {
-    $code = $throwable->getCode() ?? '???';
-    $message = $throwable->getMessage() ?? 'Error message missing.';
+    $code = $throwable->getCode();
+    $message = $throwable->getMessage();
     $file = $throwable->getFile();
     $line = $throwable->getLine();
     error_log(sprintf('Error: [%s] [%s] at [%s][%s]', $code, $message, $file, $line));
