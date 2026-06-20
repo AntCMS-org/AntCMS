@@ -76,7 +76,7 @@ class Pages
                 $subDirectoryMeta = self::getDirectoryMeta($absoluteFilePath);
                 $directoryListing = self::buildList($absoluteFilePath);
 
-                // Remove non markdown files
+                // Remove non Markdown files
                 foreach ($directoryListing as $subKey => $item) {
                     if (is_array($item)) {
                         continue;
@@ -98,7 +98,7 @@ class Pages
                 // Finally append it to the end result
                 $result[$subDirectoryMeta['title']] = $directoryListing;
             } else {
-                // Skip non markdown files
+                // Skip non Markdown files
                 if (!str_ends_with($file->getFilename(), '.md')) {
                     continue;
                 }
@@ -109,18 +109,12 @@ class Pages
             }
         }
 
-        // Finally sort it 1-9 and then a-z
-        uksort($result, function ($a, $b) use ($directoryMeta): int|float {
+        // Finally sort it 1–9 and then a-z
+        uksort($result, function ($a, $b) use ($directoryMeta): int {
             // Respect the user provided order
-            if (isset($directoryMeta['pageOrder'][$a]) && isset($directoryMeta['pageOrder'][$b])) {
-                return $directoryMeta['pageOrder'][$a] > $directoryMeta['pageOrder'][$b] ? 1 : -1;
-            }
-            if (isset($directoryMeta['pageOrder'][$a]) && !isset($directoryMeta['pageOrder'][$b])) {
-                return -1;
-            }
-            if (!isset($directoryMeta['pageOrder'][$a]) && isset($directoryMeta['pageOrder'][$b])) {
-                return 1;
-            }
+            if (isset($directoryMeta['pageOrder'][$a])) $a = $directoryMeta['pageOrder'][$a];
+            if (isset($directoryMeta['pageOrder'][$b])) $b = $directoryMeta['pageOrder'][$b];
+
             // Ensure index items come first
             if ($a === 'index') {
                 return -1;
@@ -129,7 +123,7 @@ class Pages
                 return 1;
             }
             if (is_numeric($a) && is_numeric($b)) {
-                return $a - $b;
+                return $a <=> $b;
             }
             if (is_numeric($a)) {
                 return -1;
