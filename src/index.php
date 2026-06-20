@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2025 AntCMS
+ * Copyright 2026 AntCMS
  */
 
 use AntCMS\AntCMS;

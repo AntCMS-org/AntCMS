@@ -29,7 +29,7 @@ return (new PhpCsFixer\Config())
         'space_after_semicolon' => ['remove_in_empty_for_expressions' => true],
         'explicit_string_variable' => true,
         'header_comment' => [
-            'header' => 'Copyright 2025 AntCMS',
+            'header' => 'Copyright 2026 AntCMS',
             'comment_type' => 'PHPDoc',
         ],
     ])

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * Copyright 2025 AntCMS
+ * Copyright 2026 AntCMS
  */
 
 require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'bootstrap.php';

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * Copyright 2025 AntCMS
+ * Copyright 2026 AntCMS
  */
 
 use AntCMS\Twig;
