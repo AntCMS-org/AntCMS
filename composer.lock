@@ -531,16 +531,16 @@
         },
         {
             "name": "flightphp/core",
-            "version": "v3.18.2",
+            "version": "v3.18.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/flightphp/core.git",
-                "reference": "49b750c329de0d6797a616342d4d2c3ec201d4f5"
+                "reference": "6b47c10192a644dbe53932d25eb2d734ae1d3de3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/flightphp/core/zipball/49b750c329de0d6797a616342d4d2c3ec201d4f5",
-                "reference": "49b750c329de0d6797a616342d4d2c3ec201d4f5",
+                "url": "https://api.github.com/repos/flightphp/core/zipball/6b47c10192a644dbe53932d25eb2d734ae1d3de3",
+                "reference": "6b47c10192a644dbe53932d25eb2d734ae1d3de3",
                 "shasum": ""
             },
             "require": {
@@ -551,6 +551,8 @@
                 "mikecao/flight": "2.0.2"
             },
             "require-dev": {
+                "ext-fileinfo": "*",
+                "ext-mbstring": "*",
                 "ext-pdo_sqlite": "*",
                 "flightphp/container": "^1.3",
                 "flightphp/runway": "^1.2",
@@ -587,7 +589,7 @@
                 {
                     "name": "Franyer Sánchez",
                     "email": "franyeradriansanchez@gmail.com",
-                    "homepage": "https://faslatam.42web.io",
+                    "homepage": "https://github.com/fadrian06",
                     "role": "Maintainer"
                 },
                 {
@@ -597,12 +599,12 @@
                 }
             ],
             "description": "Flight is a fast, simple, extensible framework for PHP. Flight enables you to quickly and easily build RESTful web applications. This is the maintained fork of mikecao/flight",
-            "homepage": "http://flightphp.com",
+            "homepage": "https://docs.flightphp.com",
             "support": {
                 "issues": "https://github.com/flightphp/core/issues",
-                "source": "https://github.com/flightphp/core/tree/v3.18.2"
+                "source": "https://github.com/flightphp/core/tree/v3.18.3"
             },
-            "time": "2026-06-16T14:03:31+00:00"
+            "time": "2026-06-23T12:50:02+00:00"
         },
         {
             "name": "hostbybelle/compressionbuffer",
