@@ -13,6 +13,7 @@ use Twig\TwigFilter;
 
 class TwigFilters extends AbstractExtension
 {
+    #[\Override]
     public function getFilters(): array
     {
         return [

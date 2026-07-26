@@ -112,8 +112,12 @@ class Pages
         // Finally sort it 1–9 and then a-z
         uksort($result, function ($a, $b) use ($directoryMeta): int {
             // Respect the user provided order
-            if (isset($directoryMeta['pageOrder'][$a])) $a = $directoryMeta['pageOrder'][$a];
-            if (isset($directoryMeta['pageOrder'][$b])) $b = $directoryMeta['pageOrder'][$b];
+            if (isset($directoryMeta['pageOrder'][$a])) {
+                $a = $directoryMeta['pageOrder'][$a];
+            }
+            if (isset($directoryMeta['pageOrder'][$b])) {
+                $b = $directoryMeta['pageOrder'][$b];
+            }
 
             // Ensure index items come first
             if ($a === 'index') {

@@ -49,8 +49,6 @@ class Event
      * Tracks if the event is completed & fires 'onHookFireComplete' when needed.
      *
      * Callbacks should not call this function.
-     *
-     * @return Event
      */
     public function next(): Event
     {
@@ -121,8 +119,6 @@ class Event
      * Updates the parameters
      *
      * @param mixed[] $parameters
-     *
-     * @return Event
      */
     public function setParameters(array $parameters): Event
     {
@@ -166,8 +162,6 @@ class Event
     /**
      * Sets a flag for the default behavior of this event to be prevented.
      * Not all events can be prevented. Triggers a non-fatal error if the event's default behavior is not preventable.
-     *
-     * @return Event
      */
     public function preventDefault(): Event
     {
