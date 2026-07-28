@@ -78,6 +78,11 @@
         "run-cs": [
             "@rector",
             "@php-cs-fixer"
+        ],
+        "phpstan": "php src vendor/bin/phpstan",
+        "test" : [
+            "php src/cli.php clearCache",
+            "@phpstan"
         ]
     }
 }

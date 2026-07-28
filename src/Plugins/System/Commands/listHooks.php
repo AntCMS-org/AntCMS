@@ -23,10 +23,11 @@ class listHooks extends Ahc\Cli\Input\Command
         foreach (HookController::getHookList() as $hook) {
             echo $color->info($hook->name) . "\n";
             echo " - " . $color->comment($hook->description) . "\n";
-            if ($hook->registeredCallbacks < 10) {
-                echo " - Listeners: " . $color->ok($hook->registeredCallbacks) . "\n" . "\n";
+            $registeredCallbacks = $hook->registeredCallbacks;
+            if ($registeredCallbacks < 10) {
+                echo " - Listeners: " . $color->ok("{$registeredCallbacks}") . "\n" . "\n";
             } else {
-                echo " - Listeners: " . $color->warn($hook->registeredCallbacks) . "\n" . "\n";
+                echo " - Listeners: " . $color->warn("{$registeredCallbacks}") . "\n" . "\n";
             }
         }
     }
