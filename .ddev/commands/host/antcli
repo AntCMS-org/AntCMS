@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+## Description: Summons AntCMS's CLI application. Has simple autocomplete support for built-in commands but ones from plugins will not appear.
+## Usage: antcli <command>
+## Example: ddev antcli listHooks
+## AutocompleteTerms: ["clearCache", "listHooks", "runCron", "initExample"]
+
+php src/cli.php "$@"

@@ -16,7 +16,7 @@ if (!Environment::isCli()) {
 }
 
 // Init App with name and version
-$app = new Ahc\Cli\Application('AntCMS CLI', 'v0.0.1');
+$app = new Ahc\Cli\Application('AntCMS CLI', '1.0');
 
 // Using finder, find and register all installed commands
 $finder = new Finder();

@@ -11,16 +11,27 @@ class initExample extends Ahc\Cli\Input\Command
 {
     public function __construct()
     {
-        parent::__construct('initExample', 'Downloads example content from GitHub and loads it into AntCMS. !! DELETES EXISTING CONTENT !!');
+        parent::__construct('initExample', 'Downloads example content from GitHub and loads it into AntCMS.');
     }
 
     public function execute(): void
     {
+        $interactor = new Ahc\Cli\IO\Interactor();
         $filesystem = new Filesystem();
+        $color = new Ahc\Cli\Output\Color();
+
+        $confirm = $interactor->confirm('This will delete everything under the content directory and replace it with the example content found under the AntCMS GitHub Organization. Proceed?', 'n'); // Default: n (no)
+
+        if (!$confirm) {
+            echo $color->warn("User cancelled command.\n");
+            return;
+        }
+
+        echo $color->comment("Beginning download.\n");
 
         // Download the repo and write it to a temp file
         $zipUrl = "https://github.com/AntCMS-org/Example-Content/archive/refs/heads/main.zip";
-        $tempZip = $filesystem->tempnam(PATH_CACHE, 'githubsync_', '.zip');
+        $tempZip = $filesystem->tempnam(PATH_CACHE, 'exampleContent_', '.zip');
 
         $zipData = file_get_contents($zipUrl);
         if ($zipData === false) {
@@ -35,8 +46,10 @@ class initExample extends Ahc\Cli\Input\Command
             throw new \RuntimeException('Failed to open ZIP file');
         }
 
+        echo $color->comment("Extracting archive.\n");
+
         // If we can open it, extract it and delete the temporary zip file
-        $tmpExtract = Path::join(PATH_CACHE, 'githubsync_extract_', uniqid());
+        $tmpExtract = Path::join(PATH_CACHE, 'exampleContent_', uniqid());
         $filesystem->mkdir($tmpExtract, 0o775);
         $zipArchive->extractTo($tmpExtract);
         $zipArchive->close();
@@ -49,13 +62,18 @@ class initExample extends Ahc\Cli\Input\Command
             throw new \RuntimeException('Unexpected ZIP structure');
         }
 
+        echo $color->warn("Warning: In 5 seconds the content folder will be emptied!\n");
+        sleep(5);
         // Finally if all checks passed, we can empty the destination folder
         $filesystem->remove(PATH_CONTENT);
         $filesystem->mkdir(PATH_CONTENT, 0o755);
 
+        echo $color->comment("Moving example content to final destination and performing clean-up.\n");
         // Move contents to targetDir and perform cleanup
         $filesystem->rename($rootDir, PATH_CONTENT, true);
         $filesystem->remove($tmpExtract);
         $filesystem->remove(PATH_CONTENT . DIRECTORY_SEPARATOR . "README.md");
+
+        echo $color->ok("Done!\n");
     }
 }

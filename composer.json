@@ -79,7 +79,7 @@
             "@rector",
             "@php-cs-fixer"
         ],
-        "phpstan": "php src vendor/bin/phpstan",
+        "phpstan": "php src/Vendor/bin/phpstan",
         "test" : [
             "php src/cli.php clearCache",
             "@phpstan"
