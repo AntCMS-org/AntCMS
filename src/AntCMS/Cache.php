@@ -64,7 +64,13 @@ class Cache
      */
     public static function get(string $key, callable|CallbackInterface $callable, ?float $beta = null, ?array &$metadata = []): mixed
     {
-        return self::$adapter->get($key, $callable, $beta, $metadata);
+        $result = self::$adapter->get($key, $callable, $beta, $metadata);
+        if (HookController::isRegistered('onAfterCacheHit')) {
+            $event = HookController::fire('onAfterCacheHit', ['key' => $key, 'result' => $result]);
+            $result = $event->getParameters()['result'] ?? $result;
+        }
+
+        return $result;
     }
 
     /**

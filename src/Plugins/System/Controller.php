@@ -27,6 +27,7 @@ class Controller extends AbstractPlugin
         'onBeforeOutputFlushed' => 'This event is fired right before the generated response is finalized (compressed) and sent to the browser. No later chances to modify the output buffer exist.',
         'onBeforeCronRun' => 'This cron event is fired before the cron tasks are performed.',
         'onAfterCronRun' => 'This cron event is fired after the cron tasks are completed.',
+        'onAfterCacheHit' => 'Fired after something is fetched from cache, allows modifying result.',
     ];
 
     public function __construct()
