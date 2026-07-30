@@ -93,7 +93,7 @@ class Cache
      */
     public static function createCacheKey(string $content, string $salt = 'cache'): string
     {
-        return hash('crc32', $content . $salt);
+        return hash('crc32', $content) . $salt;
     }
 
     /**
@@ -107,6 +107,6 @@ class Cache
     public static function createCacheKeyFile(string $filePath, string $salt = 'cache'): string
     {
         $differentiator = filemtime($filePath) ?: hash_file('crc32', $filePath);
-        return hash('crc32', $filePath . ".{$differentiator}.{$salt}");
+        return hash('crc32', $filePath . ".{$differentiator}") . $salt;
     }
 }
