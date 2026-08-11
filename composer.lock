@@ -604,16 +604,16 @@
         },
         {
             "name": "flightphp/core",
-            "version": "v3.18.3",
+            "version": "v3.19.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/flightphp/core.git",
-                "reference": "6b47c10192a644dbe53932d25eb2d734ae1d3de3"
+                "reference": "ee032744986b7d432e2ba4fd2b6e9b8fcfc175d0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/flightphp/core/zipball/6b47c10192a644dbe53932d25eb2d734ae1d3de3",
-                "reference": "6b47c10192a644dbe53932d25eb2d734ae1d3de3",
+                "url": "https://api.github.com/repos/flightphp/core/zipball/ee032744986b7d432e2ba4fd2b6e9b8fcfc175d0",
+                "reference": "ee032744986b7d432e2ba4fd2b6e9b8fcfc175d0",
                 "shasum": ""
             },
             "require": {
@@ -632,20 +632,25 @@
                 "league/container": "^4.2",
                 "level-2/dice": "^4.0",
                 "phpstan/extension-installer": "^1.4",
-                "phpstan/phpstan": "^2.1",
+                "phpstan/phpstan": "^2.2",
                 "phpunit/phpunit": "^9.6",
                 "rregeer/phpunit-coverage-check": "^0.3.1",
+                "spatie/phpunit-watcher": "^1.23",
                 "squizlabs/php_codesniffer": "^4.0"
             },
             "suggest": {
-                "latte/latte": "Latte template engine",
+                "latte/latte": "Latte template engine (optional alternative to Twig)",
                 "phpstan/phpstan": "PHP Static Analyzer",
-                "tracy/tracy": "Tracy debugger"
+                "tracy/tracy": "Tracy debugger",
+                "twig/twig": "Twig template engine (recommended for apps, e.g. flightphp/skeleton)"
             },
             "type": "library",
             "autoload": {
-                "files": [
-                    "flight/autoload.php"
+                "psr-4": {
+                    "flight\\": "flight"
+                },
+                "classmap": [
+                    "flight/Flight.php"
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -675,9 +680,9 @@
             "homepage": "https://docs.flightphp.com",
             "support": {
                 "issues": "https://github.com/flightphp/core/issues",
-                "source": "https://github.com/flightphp/core/tree/v3.18.3"
+                "source": "https://github.com/flightphp/core/tree/v3.19.0"
             },
-            "time": "2026-06-23T12:50:02+00:00"
+            "time": "2026-08-07T13:44:18+00:00"
         },
         {
             "name": "hostbybelle/compressionbuffer",
