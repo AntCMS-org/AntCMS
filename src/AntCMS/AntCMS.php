@@ -199,11 +199,16 @@ class AntCMS
             $path = Path::join(PATH_CURRENT_THEME, 'Assets', substr($path, 8));
         }
 
+        $path = realpath($path);
+
         if (!Path::isLocal($path)) {
             $this->renderException(403);
         }
 
-        $path = Path::makeAbsolute($path, PATH_ROOT);
+        // Assets are allowed to be served from either the default theme assets or from the currently enabled theme
+        if (!str_starts_with($path, PATH_CURRENT_THEME . '/Assets/') && !str_starts_with($path, PATH_THEMES . '/Default/Assets/')) {
+            $this->renderException(403);
+        }
 
         if (!$this->filesystem->exists($path)) {
             $this->renderException(404);
@@ -222,7 +227,7 @@ class AntCMS
             Flight::response()->header('Vary', 'Accept-Encoding');
             Flight::response()->header('Cache-Control', 'public, max-age=0 must-revalidate');
 
-            // Send an ETag for client-side caching except on Caddy where it inexplicably breaks everything
+            // TODO: Asset compression broke Caddy previously, but we've made bugfixes here. Does it Work now?
             if (!str_contains($_SERVER['SERVER_SOFTWARE'] ?? '', 'Caddy')) {
                 Flight::response()->header('Etag', $key);
             }
