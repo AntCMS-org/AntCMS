@@ -201,7 +201,12 @@ class AntCMS
 
         $path = realpath($path);
 
-        if (!Path::isLocal($path) || !str_starts_with($path, PATH_CURRENT_THEME . '/Assets')) {
+        if (!Path::isLocal($path)) {
+            $this->renderException(403);
+        }
+
+        // Assets are allowed to be served from either the default theme assets or from the currently enabled theme
+        if (!str_starts_with($path, PATH_CURRENT_THEME . '/Assets/') && !str_starts_with($path, PATH_THEMES . '/Default/Assets/')) {
             $this->renderException(403);
         }
 
