@@ -39,7 +39,7 @@ jobs:
           prerelease: true
           allowUpdates: true
           artifactErrorsFailBuild: true
-          generateReleaseNotes: true
+          generateReleaseNotes: false
           name: "Preview Build"
           tag: "latest-preview"
           body: "A rolling preview release of AntCMS that is updated with each commit."
