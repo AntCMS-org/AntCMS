@@ -27,7 +27,7 @@ class HookTest extends TestCase
         return $event;
     }
 
-    public function testHookNameAlllowed(): void
+    public function testHookNameAllowed(): void
     {
         $result = HookController::registerHook('thisIs_Valid1234');
         $this->assertIsBool($result);

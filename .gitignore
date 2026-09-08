@@ -11,3 +11,4 @@ src/php_error.log
 /tmp
 /src/Plugins/Example
 .phpunit.result.cache
+/src/Content

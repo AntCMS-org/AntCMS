@@ -11,12 +11,12 @@ class ConfigTest extends TestCase
 {
     public function testSaveConfigFailed(): void
     {
-        $Badconfig = [
+        $badConfig = [
             'cacheMode' => 'none',
         ];
 
         try {
-            $result = Config::saveConfig($Badconfig);
+            $result = Config::saveConfig($badConfig);
         } catch (Exception $exception) {
             $result = $exception;
         }

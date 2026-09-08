@@ -19,9 +19,9 @@ class ToolsTest extends TestCase
         $expectedUrls = ["example.com/path", "example.com/path/", "example.com/path", "example.com/path/to/file", "example.com/path/to/file", "example.com/path/to/file?download=yes"];
 
 
-        foreach ($badUrls as $index => $badurl) {
-            $goodUrl = Tools::repairURL($badurl);
-            $this->assertEquals($expectedUrls[$index], $goodUrl, "Expected '{$expectedUrls[$index]}' but got '{$goodUrl}' for input '{$badurl}'");
+        foreach ($badUrls as $index => $badUrl) {
+            $goodUrl = Tools::repairURL($badUrl);
+            $this->assertEquals($expectedUrls[$index], $goodUrl, "Expected '{$expectedUrls[$index]}' but got '{$goodUrl}' for input '{$badUrl}'");
         }
     }
 
