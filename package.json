@@ -15,5 +15,10 @@
   },
   "browserslist": [
     "> 1%, last 6 versions, Firefox ESR, not dead"
-  ]
+  ],
+  "allowScripts": {
+    "lightningcss-cli@1.33.0": true,
+    "esbuild@0.28.2": true,
+    "@parcel/watcher@2.6.0": true
+  }
 }
