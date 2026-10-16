@@ -6,9 +6,9 @@ declare(strict_types=1);
  * Copyright 2026 AntCMS
  */
 
-namespace AntCMS;
+namespace AntCMS\Api;
 
-class ApiResponse
+class Response
 {
     public function __construct(private readonly mixed $result, private readonly bool $error = false, private readonly int $code = 200, private readonly string $message = '') {}
 

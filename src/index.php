@@ -5,7 +5,7 @@
  */
 
 use AntCMS\AntCMS;
-use AntCMS\ApiController;
+use AntCMS\Api\Controller;
 use AntCMS\Config;
 use AntCMS\Environment;
 use AntCMS\HookController;
@@ -48,7 +48,7 @@ Flight::route('GET .well-known/acme-challenge/*', $AntCMS->serveContent(...));
 
 // API Controller
 Flight::group('/api/v0', function (): void {
-    $controller = new ApiController();
+    $controller = new Controller();
     Flight::route('/public/@plugin/@method/*', $controller->publicController(...));
     Flight::route('/protected/@plugin/@method/*', $controller->privateController(...));
 });
@@ -63,10 +63,6 @@ if (!Flight::request()->secure && !Environment::isCli() && Config::get('forceHtt
 }
 
 Flight::route('GET /*', function () use ($AntCMS): void {
-    if ((Tools::getUri() === '' || Tools::getUri() === '/') && !file_exists(PATH_USERS)) {
-        // TODO for once plugin functionality is rebuilt
-        // AntCMS::redirect('/profile/firsttime');
-    }
     echo $AntCMS->renderPage();
 });
 

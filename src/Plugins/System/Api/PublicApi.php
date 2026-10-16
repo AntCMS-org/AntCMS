@@ -1,19 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Copyright 2026 AntCMS
  */
 
 namespace AntCMS\Plugins\System\Api;
 
-use AntCMS\ApiResponse as Response;
+use AntCMS\Api\RequestParams;
+use AntCMS\Api\Response;
 
 class PublicApi
 {
-    /**
-     * @param array<string, mixed> $data
-     */
-    public function status(array $data): Response
+    public function status(RequestParams $requestParams): Response
     {
         return new Response('okay');
     }
