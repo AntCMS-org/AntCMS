@@ -183,16 +183,16 @@
         },
         {
             "name": "composer/ca-bundle",
-            "version": "1.6.0",
+            "version": "1.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/ca-bundle.git",
-                "reference": "2c99cf2e92516985dea4914812b93d9daf01cdd6"
+                "reference": "0c64479fae6952ba4cf021a72c0ac530394c91d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/2c99cf2e92516985dea4914812b93d9daf01cdd6",
-                "reference": "2c99cf2e92516985dea4914812b93d9daf01cdd6",
+                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/0c64479fae6952ba4cf021a72c0ac530394c91d4",
+                "reference": "0c64479fae6952ba4cf021a72c0ac530394c91d4",
                 "shasum": ""
             },
             "require": {
@@ -239,7 +239,7 @@
             "support": {
                 "irc": "irc://irc.freenode.org/composer",
                 "issues": "https://github.com/composer/ca-bundle/issues",
-                "source": "https://github.com/composer/ca-bundle/tree/1.6.0"
+                "source": "https://github.com/composer/ca-bundle/tree/1.6.1"
             },
             "funding": [
                 {
@@ -251,7 +251,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-10-20T20:14:05+00:00"
+            "time": "2026-10-29T14:10:42+00:00"
         },
         {
             "name": "composer/class-map-generator",
@@ -513,16 +513,16 @@
         },
         {
             "name": "embed/embed",
-            "version": "v4.5.0",
+            "version": "v4.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-embed/Embed.git",
-                "reference": "0015e5e75198ddcbad2295ab19547e9df3b04bff"
+                "reference": "493a0328dafb6ea1cad67fef8513a3dcb1035649"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-embed/Embed/zipball/0015e5e75198ddcbad2295ab19547e9df3b04bff",
-                "reference": "0015e5e75198ddcbad2295ab19547e9df3b04bff",
+                "url": "https://api.github.com/repos/php-embed/Embed/zipball/493a0328dafb6ea1cad67fef8513a3dcb1035649",
+                "reference": "493a0328dafb6ea1cad67fef8513a3dcb1035649",
                 "shasum": ""
             },
             "require": {
@@ -585,7 +585,7 @@
             "support": {
                 "email": "oom@oscarotero.com",
                 "issues": "https://github.com/oscarotero/Embed/issues",
-                "source": "https://github.com/php-embed/Embed/tree/v4.5.0"
+                "source": "https://github.com/php-embed/Embed/tree/v4.5.1"
             },
             "funding": [
                 {
@@ -601,7 +601,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2026-10-19T23:29:48+00:00"
+            "time": "2026-10-26T19:09:01+00:00"
         },
         {
             "name": "flightphp/core",
