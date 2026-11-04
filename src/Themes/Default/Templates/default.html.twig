@@ -35,7 +35,7 @@
       <div class="md:col-1"></div>
       <div class="md:col-10">
         <!-- Navigation -->
-        <nav class="navbar lg:navbar-expand mb-4 bg-4 rounded-4">
+        <nav role="navigation" class="navbar lg:navbar-expand mb-4 bg-4 rounded-4">
           <div class="container-fluid">
             <a class="navbar-brand" href="{{ ""|absUrl }}">{{ AntCMSSiteTitle }}</a>
             <div class="d-flex align-items-center gap-2">
@@ -68,12 +68,14 @@
           </div>
         </nav>
 
-        <!-- Content -->
-        {% if AntCMSAuthor is defined and themeConfig.showAuthor %}
-        <p>This content was written by {{ AntCMSAuthor }}</p>
-        {% endif %}
-        {% block body %}
-        {% endblock %}
+        <div role="main">
+          <!-- Content -->
+          {% if AntCMSAuthor is defined and themeConfig.showAuthor %}
+          <p>This content was written by {{ AntCMSAuthor }}</p>
+          {% endif %}
+          {% block body %}
+          {% endblock %}
+        </div>
       </div>
       <div class="md:col-1"></div>
     </div>
@@ -86,4 +88,5 @@
     </div>
   </footer>
 </body>
+
 </html>
