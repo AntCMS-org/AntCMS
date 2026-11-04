@@ -59,7 +59,7 @@ class Tools
      */
     public static function valuesNotNull(array $required, array $actual): bool
     {
-        return array_all($required, fn($key): bool => array_key_exists($key, $actual) && !is_null($actual[$key]));
+        return array_all($required, fn(string $key): bool => array_key_exists($key, $actual) && !is_null($actual[$key]));
     }
 
     public static function getContentType(string $path): string
