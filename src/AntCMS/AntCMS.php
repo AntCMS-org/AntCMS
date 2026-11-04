@@ -122,7 +122,7 @@ class AntCMS
         $page = strtolower($page);
         $pagePath = Tools::convertFunctionalToFullPath($page);
 
-        if ($this->filesystem->exists($pagePath)) {
+        if (Validation::isValidContentPath($pagePath) && $this->filesystem->exists($pagePath)) {
             try {
                 $pageContent = $this->filesystem->readFile($pagePath);
                 $pageHeaders = AntCMS::getPageHeaders($pageContent);
@@ -197,14 +197,7 @@ class AntCMS
             $path = Path::join(PATH_CURRENT_THEME, 'Assets', substr($path, 8));
         }
 
-        $path = realpath($path);
-
-        if (!Path::isLocal($path)) {
-            $this->renderException(403);
-        }
-
-        // Assets are allowed to be served from either the default theme assets or from the currently enabled theme
-        if (!str_starts_with($path, PATH_CURRENT_THEME . '/Assets/') && !str_starts_with($path, PATH_THEMES . '/Default/Assets/')) {
+        if (!Path::isLocal($path) || !Validation::isAssetPathPublic($path)) {
             $this->renderException(403);
         }
 
