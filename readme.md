@@ -1,6 +1,6 @@
 ![PHPStan Level](https://img.shields.io/badge/PHPStan-level%206-brightgreen)
 [![CI](https://github.com/AntCMS-org/AntCMS/actions/workflows/ci.yml/badge.svg)](https://github.com/AntCMS-org/AntCMS/actions/workflows/ci.yml)
-![Supported PHP Versions](https://img.shields.io/badge/PHP%20Versions-8.2%7C8.3%7C8.4%7C8.5-brightgreen)
+![Supported PHP Versions](https://img.shields.io/badge/PHP%20Versions-8.4%7C8.5%7C8.6-brightgreen)
 ![GitHub Release](https://img.shields.io/github/v/release/AntCMS-org/AntCMS)
 
 # AntCMS
@@ -32,7 +32,7 @@ AntCMS is being largely rebuilt for better, faster, easier functionality the fol
 
 ## System Requirements
 
- - PHP 8.2 or greater
+ - PHP 8.4 or greater
  - PHP Extensions: `curl`, `dom`, `mbstring`
 
 ## Extensions for Improved Performance
