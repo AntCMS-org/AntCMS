@@ -1,47 +1,85 @@
-![PHPStan Level](https://img.shields.io/badge/PHPStan-level%206-brightgreen)
-[![CI](https://github.com/AntCMS-org/AntCMS/actions/workflows/ci.yml/badge.svg)](https://github.com/AntCMS-org/AntCMS/actions/workflows/ci.yml)
+<div align="center">
+
+# 🐜 AntCMS
+
+[![GitHub Downloads](https://img.shields.io/github/downloads/AntCMS-Org/AntCMS/total)](https://github.com/AntCMS-org/AntCMS/releases)
+[![CI Status](https://img.shields.io/github/actions/workflow/status/AntCMS-Org/AntCMS/ci.yml)](https://github.com/AntCMS-org/AntCMS/actions/workflows/ci.yml)
+[![License](https://img.shields.io/github/license/AntCMS-Org/AntCMS)](https://github.com/AntCMS-org/AntCMS/blob/main/LICENCE.md)
+[![Stars](https://img.shields.io/github/stars/AntCMS-Org/AntCMS)](https://github.com/AntCMS-org/AntCMS/stargazers)
 ![Supported PHP Versions](https://img.shields.io/badge/PHP%20Versions-8.4%7C8.5%7C8.6-brightgreen)
-![GitHub Release](https://img.shields.io/github/v/release/AntCMS-org/AntCMS)
 
-# AntCMS
+**A super lightweight, flat-file CMS built for the modern web.**
 
-AntCMS is a flat-file CMS that's built to have very low system resource usage while providing website speeds rivaling a static website.
+[Website](https://antcms.org/) · [Documentation](https://antcms.org/docs/gettingstarted) · [Report an Issue](https://github.com/AntCMS-org/AntCMS/issues)
 
-Although it is still considered preview software and is missing quite a bit of planned functionality, AntCMS in it's current state is both a functional and very fast CMS that can be used to deploy a website.
+</div>
 
-## Missing Functionality
+---
 
-AntCMS is being largely rebuilt for better, faster, easier functionality the following functionality currently does not exist compared to previous versions:
+## ✨ Highlights
 
- - The administrator plugin (UI for system management).
- - User management.
+- ⚡ **Blazing Fast** — Website speeds rivaling a static site, zero manual tuning required
+- 🪶 **Featherweight** — Extremely low resource usage, runs on modest hardware
+- 🛠️ **Zero Config** — Built-in compression (gzip, brotli, zstd), asset optimization, and SEO handling
+- 🎨 **Markdown + YAML** — Simple content workflow with front-matter headers
+- 🧩 **Plugin & Theme System** — Extensible architecture with a growing ecosystem
+- 🔧 **Developer Friendly** — PHPStan, PHPUnit, Rector, and modern tooling built in
 
-## Features
+> Full feature list on the [website](https://antcms.org/).
 
- - Built in support for gzip, brotli, and zstd compression.
- - Automatic compression for text-based assets (JS, HTML, CSS, ect).
- - Automatic image compression for JPEG, JPG, PNG, and WEBP image formats.
- - Insanely fast with zero tuning.
- - Minimal load on system resources.
- - Easy SEO with automatic handling of the robots.txt and sitemap files.
- - Automatic usage of ETags when serving assets to allow client-side caching.
- - Support for custom themes.
- - Per-theme additional styles applied to markdown content.
- - Plugin support.
- - Uses Markdown to write content and YAML for the infrequently needed configuration setup.
+## 💻 Requirements
 
-## System Requirements
+| | Requirement |
+|---|---|
+| **Required** | PHP 8.4+ with `curl`, `dom`, `mbstring` |
+| **Recommended** | `zstd`, `brotli`, `opcache`, `APCu` |
+| **Database** | None — flat-file architecture |
 
- - PHP 8.4 or greater
- - PHP Extensions: `curl`, `dom`, `mbstring`
+See the [documentation](https://antcms.org/docs/gettingstarted) for full setup details.
 
-## Extensions for Improved Performance
+## 🚀 Quick Start
 
-For improved performance, the following PHP extensions are suggested:
+```bash
+git clone https://github.com/AntCMS-org/AntCMS.git
+cd AntCMS
+composer install && npm ci && npm run build
+```
 
- - `zstd` for zstd compression.
- - `brotli` for brotli compression.
- - `zlib` for gzip / deflate compression.
- - `gd` for automatic image compression.
- - `opcache` as it optimizes all PHP applications & in AntCMS allows for a faster caching implementation to be used.
- - `ctype`
+For development with DDEV or production deployment, see the [Development Quick Start](https://antcms.org/development/dev).
+
+## 📦 Tech Stack
+
+- **Backend:** PHP 8.4+, [FlightPHP](https://flightphp.com/), Twig templating
+- **Content:** Markdown via [league/commonmark](https://commonmark.thephpleague.com/)
+- **Assets:** esbuild (JS), Sass + Lightning CSS (CSS)
+- **Testing:** PHPUnit, PHPStan (level 6), Rector, PHP-CS-Fixer
+
+## ⚠️ Project Status
+
+AntCMS is **preview software** and is being actively rebuilt. The following functionality is currently missing:
+
+- ❌ Administrator plugin (UI for system management)
+- ❌ User management
+
+## 🤝 Contributing
+
+Contributions are welcome! Open an [issue](https://github.com/AntCMS-org/AntCMS/issues) or submit a [pull request](https://github.com/AntCMS-org/AntCMS/pulls).
+
+See [AGENTS.md](AGENTS.md) for development setup and workflow details.
+
+## 📄 License
+
+Licensed under the [Apache License 2.0](LICENCE.md).
+
+---
+
+<div align="center">
+
+**Built with ❤️ by the AntCMS community**
+
+[![Website](https://img.shields.io/badge/Website-antcms.org-blue)](https://antcms.org/)
+[![Documentation](https://img.shields.io/badge/Documentation-Docs-green)](https://antcms.org/docs/gettingstarted)
+[![Plugins & Themes](https://img.shields.io/badge/Plugins--%26-Themes-Explore-orange)](https://antcms.org/plugins)
+[![Changelog](https://img.shields.io/badge/Changelog-View%20Logs-lightgrey)](https://antcms.org/changelog)
+
+</div>
