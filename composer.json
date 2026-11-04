@@ -9,7 +9,7 @@
         "issues": "https://github.com/AntCMS-org/AntCMS/issues"
     },
     "require": {
-        "php": ">=8.2",
+        "php": ">=8.4",
         "adhocore/cli": "^v1.0.0",
         "antcms/antloader": "^2.0.0",
         "elgigi/commonmark-emoji": "^2.0",

@@ -32,7 +32,7 @@ AntCMS is being largely rebuilt for better, faster, easier functionality the fol
 
 ## System Requirements
 
- - PHP 8.2 or greater
+ - PHP 8.4 or greater
  - PHP Extensions: `curl`, `dom`, `mbstring`
 
 ## Extensions for Improved Performance

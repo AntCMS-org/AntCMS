@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Flat-file CMS in PHP (FlightPHP routing, Twig templates, league/commonmark markdown). PHP >= 8.2; CI runs PHPUnit on PHP 8.2–8.5, PHPStan level 6 on 8.2.
+Flat-file CMS in PHP (FlightPHP routing, Twig templates, league/commonmark markdown). PHP >= 8.4; CI runs PHPUnit on PHP 8.4–8.5, PHPStan level 6 on 8.4.
 
 ## Setup
 
