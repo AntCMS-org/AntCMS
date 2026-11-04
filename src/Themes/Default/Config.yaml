@@ -1,6 +1,5 @@
 config:
   showAuthor: false
-  enableNestedNav: false
 
 defaultAttributes:
   \League\CommonMark\Extension\Table\Table:

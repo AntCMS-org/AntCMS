@@ -1,7 +1,7 @@
 {% import "macros.html.twig" as macros %}
 
 <!doctype html>
-<html lang="en" data-bs-theme="dark">
+<html lang="en">
 
 <head>
   <meta charset="utf-8">
@@ -10,31 +10,61 @@
   <meta name="author" content="{{ AntCMSAuthor }}">
   <meta name="keywords" content="{{ AntCMSKeywords }}">
   <meta name="generator" content="AntCMS">
-  
+
+  <script>
+    (function () {
+      try {
+        var stored = window.localStorage.getItem('antcms-theme');
+        var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-bs-theme', theme);
+        document.documentElement.style.colorScheme = theme;
+      } catch (e) {
+      }
+    })();
+  </script>
+
   <link href="{{ "assets/build/antcms.css"|absUrl }}" rel="stylesheet">
-  <script src="{{ "assets/build/antcms.js"|absUrl }}"></script>
+  <script src="{{ "assets/build/antcms.js"|absUrl }}" defer></script>
 
   <title>{{ AntCMSTitle }}</title>
 </head>
 
-<body>
+<body class="bg-2">
   <div class="container" style="flex:1;">
     <div class="row">
-      <div class="col-md-1"></div>
-      <div class="col-md-10">
+      <div class="md:col-1"></div>
+      <div class="md:col-10">
         <!-- Navigation -->
-        <nav class="navbar navbar-expand-lg mb-4">
+        <nav class="navbar lg:navbar-expand mb-4 bg-4 rounded-4">
           <div class="container-fluid">
             <a class="navbar-brand" href="{{ ""|absUrl }}">{{ AntCMSSiteTitle }}</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-              aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-              <ul class="navbar-nav ms-auto">
-                {{ macros.generateNav(pages) }}
-              </ul>
+            <div class="d-flex align-items-center gap-2">
+              <button class="btn-icon theme-toggle" id="theme-toggle" type="button" aria-label="Toggle color scheme"
+                aria-pressed="true">
+                <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+                </svg>
+                <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+              </button>
+              <button class="btn-icon navbar-toggler" type="button" data-bs-toggle="drawer" data-bs-target="#navbarDrawer"
+                aria-controls="navbarDrawer" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon" aria-hidden="true"></span>
+              </button>
             </div>
+            <dialog class="drawer drawer-end" tabindex="-1" id="navbarDrawer" aria-labelledby="navbarDrawerLabel">
+              <div class="drawer-header">
+                <h5 class="drawer-title" id="navbarDrawerLabel">Menu</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="drawer" aria-label="Close"></button>
+              </div>
+              <div class="drawer-body">
+                <ul class="nav navbar-nav ms-auto">
+                  {{ macros.generateNav(pages) }}
+                </ul>
+              </div>
+            </dialog>
           </div>
         </nav>
 
@@ -45,28 +75,15 @@
         {% block body %}
         {% endblock %}
       </div>
-      <div class="col-md-1"></div>
+      <div class="md:col-1"></div>
     </div>
   </div>
 
-  <footer class="text-lg-start">
+  <footer class="lg:text-start">
     <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
       <p>Powered by <a href="https://antcms.org">AntCMS</a></p>
       <!--AntCMS-Debug-->
     </div>
   </footer>
-
-  {% if themeConfig.enableNestedNav %}
-  <script>
-      // Allowing nested dropdowns to function correctly`
-      let dropdowns = document.querySelectorAll('.dropdown-toggle')
-      dropdowns.forEach((dd)=>{
-        dd.addEventListener('click', function (e) {
-          var el = this.nextElementSibling
-          el.style.display = el.style.display==='block'?'none':'block'
-        })
-      })
-    </script>
-  {% endif %}
 </body>
 </html>

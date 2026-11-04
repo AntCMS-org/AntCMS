@@ -2,22 +2,39 @@
     {% for key, item in list %}
         {% if item.url %}
             {% if item.navItem %}
-                <li class="{% if nested %}dropdown-item{% else %}nav-item{% endif %}">
+                {% if nested %}
                     <a
-                        {% if item.active %} class="nav-link active" aria-current="page" {% else %} class="nav-link" {% endif %}
+                        class="menu-item{% if item.active %} active{% endif %}"
+                        {% if item.active %}aria-current="page"{% endif %}
                         href="{{ item.url }}"
-                    >{{ item.title }}</a
-                </li>
+                    >{{ item.title }}</a>
+                {% else %}
+                    <li class="nav-item">
+                        <a
+                            {% if item.active %} class="nav-link active" aria-current="page" {% else %} class="nav-link" {% endif %}
+                            href="{{ item.url }}"
+                        >{{ item.title }}</a>
+                    </li>
+                {% endif %}
             {% endif %}
         {% else %}
-            <li class="nav-item {% if nested %}ms-3{% endif %} dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="{{ key }}-Dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    {{ key }}
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="{{ key }}-Dropdown">
-                    {{ _self.generateNav(item, true) }}
-                </ul>
-            </li>
+            {% if nested %}
+                <div class="submenu">
+                    <button class="menu-item" type="button">{{ key }}</button>
+                    <div class="menu">
+                        {{ _self.generateNav(item, true) }}
+                    </div>
+                </div>
+            {% else %}
+                <li class="nav-item">
+                    <button class="nav-link" type="button" data-bs-toggle="menu" aria-expanded="false">
+                        {{ key }}
+                    </button>
+                    <div class="menu">
+                        {{ _self.generateNav(item, true) }}
+                    </div>
+                </li>
+            {% endif %}
         {% endif %}
     {% endfor %}
 {% endmacro %}

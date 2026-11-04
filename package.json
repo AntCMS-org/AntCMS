@@ -6,10 +6,11 @@
     "minify-css": "lightningcss --minify --browserslist ./tmp/antcms.css -o ./src/Themes/Default/Assets/build/antcms.css"
   },
   "devDependencies": {
-    "bootstrap": "^5.3.8",
+    "@floating-ui/dom": "^1.8.0",
+    "bootstrap": "^6.0.0-alpha.1",
     "esbuild": "^0.28.0",
     "lightningcss-cli": "^1.31.1",
-    "npm-run-all": "^4.1.5",
+    "npm-run-all2": "^9.0.4",
     "prismjs": "^1.29.0",
     "sass": "^1.107.1"
   },
