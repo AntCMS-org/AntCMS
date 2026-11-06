@@ -1,18 +1,27 @@
+// @ts-check
+
 class TinyZoom {
+    /** @param {string} selector */
     constructor(selector) {
-        document.querySelectorAll(selector).forEach(image => {
-            image.style.cursor = 'pointer';
-            image.addEventListener('click', () => this.makeFullscreen(image));
+        const images = /** @type {NodeListOf<HTMLImageElement>} */ (document.querySelectorAll(selector));
+        images.forEach(image => {
+            // Ensure we don't accidentally hook into an image that is intended to act as a link
+            const link = image.closest('a[href]');
+            if (!link) {
+                image.style.cursor = 'pointer';
+                image.addEventListener('click', () => this.makeFullscreen(image));
+            }
         });
     }
 
+    /** @param {HTMLImageElement} image */
     makeFullscreen(image) {
         const fullscreen = document.createElement('div');
         fullscreen.classList.add("fullscreen-image");
         document.body.appendChild(fullscreen);
 
         const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
+        const ctx = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d'));
 
         let scaleFactor = 1;
         canvas.width = image.width;
@@ -22,6 +31,7 @@ class TinyZoom {
 
         fullscreen.appendChild(canvas);
 
+        /** @param {number} scale */
         function zoom(scale) {
             scaleFactor *= scale;
             canvas.style.transform = `scale(${scaleFactor})`;
@@ -33,8 +43,8 @@ class TinyZoom {
         const initialscaleWidth = (viewportWidth * 0.85) / image.width;
         const initialscaleHeight = (viewportHeight * 0.85) / image.height;
 
-        let overScale = Math.min(initialscaleWidth, initialscaleHeight);
-        if (overScale != 1) {
+        const overScale = Math.min(initialscaleWidth, initialscaleHeight);
+        if (overScale !== 1) {
             scaleFactor = overScale;
         }
         zoom(1);
@@ -44,7 +54,11 @@ class TinyZoom {
         canvas.style.top = `${viewportHeight / 2 - image.height / 2}px`;
         canvas.style.cursor = 'move';
 
-        let dragStartX, dragStartY, dragged = false;
+        /** @type {number} */
+        let dragStartX = 0;
+        /** @type {number} */
+        let dragStartY = 0;
+        let dragged = false;
 
         canvas.addEventListener('mousedown', (event) => {
             event.preventDefault()
@@ -86,6 +100,6 @@ class TinyZoom {
     }
 }
 
-window.addEventListener("load", () => {
-    new TinyZoom(".TinyZoom");
-});
+// Expose the class globally so inline scripts can use it, and so bundlers
+// (esbuild etc.) can't tree-shake the import away as unused.
+globalThis.TinyZoom = TinyZoom;

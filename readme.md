@@ -65,8 +65,6 @@ AntCMS is **preview software** and is being actively rebuilt. The following func
 
 Contributions are welcome! Open an [issue](https://github.com/AntCMS-org/AntCMS/issues) or submit a [pull request](https://github.com/AntCMS-org/AntCMS/pulls).
 
-See [AGENTS.md](AGENTS.md) for development setup and workflow details.
-
 ## 📄 License
 
 Licensed under the [Apache License 2.0](LICENCE.md).
@@ -79,7 +77,7 @@ Licensed under the [Apache License 2.0](LICENCE.md).
 
 [![Website](https://img.shields.io/badge/Website-antcms.org-blue)](https://antcms.org/)
 [![Documentation](https://img.shields.io/badge/Documentation-Docs-green)](https://antcms.org/docs/gettingstarted)
-[![Plugins & Themes](https://img.shields.io/badge/Plugins--%26-Themes-Explore-orange)](https://antcms.org/plugins)
+[![Plugins & Themes](https://img.shields.io/badge/Plugins_and_Themes-Explore-orange)](https://antcms.org/plugins)
 [![Changelog](https://img.shields.io/badge/Changelog-View%20Logs-lightgrey)](https://antcms.org/changelog)
 
 </div>
