@@ -12,7 +12,7 @@
         "php": ">=8.4",
         "adhocore/cli": "^v1.0.0",
         "antcms/antloader": "^2.0.0",
-        "elgigi/commonmark-emoji": "^2.0",
+        "elgigi/commonmark-emoji": "^2.1",
         "embed/embed": "^4.5.2",
         "flightphp/core": "^3.8",
         "hostbybelle/compressionbuffer": "^1.0",
